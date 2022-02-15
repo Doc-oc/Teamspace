@@ -1,27 +1,36 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 import Signup from "./Signup";
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import { BrowserRouter , Outlet, Navigate, Router, Routes, Route} from 'react-router-dom'
 import Home from "./Home"
 import Login from "./Login"
 
+function PrivateRoute({ children }) {
+  const auth = useAuth();
+  return auth ? children : <Navigate to="/login" />;
+}
+
+
 function App() {
+
   return (
       <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
         <div className="w-100" style={{maxWidth: "400px"}}>
-          <Router> 
+          <BrowserRouter> 
             <AuthProvider>
               <Routes>
-                <Route exact path="/" element={<Home/>} />
+                <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>}/>
                 <Route path="/signup" element={<Signup/>} />
                 <Route path="/login" element={<Login/>} />
               </Routes>
             </AuthProvider>
-          </Router>
+          </BrowserRouter>
         </div>
       </Container>
   )
 }
+
+
 
 export default App;
