@@ -6,6 +6,7 @@ import { BrowserRouter , Outlet, Navigate, Router, Routes, Route} from 'react-ro
 import Home from "./Home"
 import Login from "./Login"
 
+//Checking if user is logged in 
 function PrivateRoute({ children }) {
   const auth = useAuth();
   return auth ? children : <Navigate to="/login" />;
@@ -15,8 +16,7 @@ function PrivateRoute({ children }) {
 function App() {
 
   return (
-      <Container className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
-        <div className="w-100" style={{maxWidth: "400px"}}>
+        <div className="w-100">
           <BrowserRouter> 
             <AuthProvider>
               <Routes>
@@ -27,7 +27,6 @@ function App() {
             </AuthProvider>
           </BrowserRouter>
         </div>
-      </Container>
   )
 }
 
