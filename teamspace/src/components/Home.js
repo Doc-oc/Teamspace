@@ -26,9 +26,9 @@ export default function Home() {
 
   return (
 
-    <Container fluid className="" style={{minHeight: "100vh"}}>
+    <Container fluid className="mt-5" style={{minHeight: "100vh"}}>
         <Row>  
-          <Col className="col-sm-3">
+          <Col className="col-sm-2">
             <Card className="shadow">
               <Card.Body>
                 <h2 className="text-center mb-4">Profile</h2>
@@ -42,7 +42,7 @@ export default function Home() {
               </Button>
             </div>
             </Col>
-            <Col className="col-sm-6">
+            <Col className="col-sm-7">
             <Card className="shadow">
               <Card.Body>
                 <p>Main Section</p>
