@@ -1,0 +1,15 @@
+.card .nav-link {
+    color: black;
+}
+
+.card .logout{
+    color: black;
+    background-color: white;
+    border: 0px;
+}
+
+.card .logout:hover{
+
+    background-color: gray;
+}
+
