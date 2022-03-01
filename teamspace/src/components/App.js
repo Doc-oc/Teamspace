@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import { BrowserRouter , Outlet, Navigate, Router, Routes, Route} from 'react-router-dom'
 import Home from "./Home"
 import Login from "./Login"
+import UserDetails from "./UserDetails";
 
 /*state = { data: null };
 
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>}/>
                 <Route path="/signup" element={<Signup/>} />
                 <Route path="/login" element={<Login/>} />
+                <Route path="/details" element={<UserDetails />} />
               </Routes>
             </AuthProvider>
           </BrowserRouter>

@@ -24,10 +24,10 @@ export default function Home() {
       await logout()
       navigate("/login")
     } catch {
+     
       setError("Failed to log out")
     }
   }
-
   return (
 
     <Container fluid className="mt-5" style={{minHeight: "100vh"}}>
