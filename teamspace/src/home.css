@@ -1,15 +1,17 @@
+body {
+    background-color: rgb(175, 175, 175);
+}
 .card .nav-link {
     color: black;
 }
+.card .nav-link:hover {
+    color: #4176FF;
+}
+
 
 .card .logout{
     color: black;
     background-color: white;
     border: 0px;
-}
-
-.card .logout:hover{
-
-    background-color: gray;
 }
 
