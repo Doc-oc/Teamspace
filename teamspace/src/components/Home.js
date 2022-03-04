@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import { useAuth } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
 
 export default function Home() {
@@ -35,7 +35,7 @@ export default function Home() {
             <Card className="shadow text-center" style={{minHeight: "600px", borderRadius: 15}}>
               <Card.Body>
               <Container>
-              <h6 className="mb-5 " style={{color: "#4176FF"}}>Teamspace</h6>
+              <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                 <br></br>
                 <img src="#" className="img-responsive w-50 mt-5 roundedCircle"></img>
                 <br></br>
@@ -68,7 +68,37 @@ export default function Home() {
             <Col className="col-sm-7">
             <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
               <Card.Body>
-                <p>Main Section</p>
+
+
+
+                <Container>
+                  <Row className="">
+                    <Col className="col-sm-2 mt-1 ">
+                      <h4>Boards</h4>
+                    </Col>
+                    <Col className="col-sm-8 ">
+                      <input type="search" placeholder="Search" className="form-control rounded" />
+                    </Col>
+                    <Col className="col-sm-2 ">
+                      <Button className="logout shadow rounded">
+                        <FontAwesomeIcon icon={faPlusCircle}/> New
+                      </Button>
+                    </Col>
+
+                    {/*}<Col className="col-sm-2 ">
+                      <Button className="logout shadow">
+                        <FontAwesomeIcon icon={faTrash}/> Delete
+                      </Button></Col>*/}
+                    
+                  </Row>
+                </Container>
+
+
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
                 
               </Card.Body>
             </Card>
