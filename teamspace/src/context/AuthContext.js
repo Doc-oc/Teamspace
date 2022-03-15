@@ -7,12 +7,28 @@ export function useAuth(){
     return useContext(AuthContext)
 }
 
+/*const registerWithEmailAndPassword = async (name, email, password) => {
+    try {
+      const res = authosignup(email,password)
+      const user = res.user;
+      await db.collection("users").add({
+        uid: user.uid,
+        authProvider: "local",
+        email,
+      }).then(
+      updateDisplayName(name));
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+};*/
+
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
 
-    function signup(email, password){
-        return auth.createUserWithEmailAndPassword(email, password)
+    function signup(name, email, password){
+        return auth.createUserWithEmailAndPassword(name,email, password)
     }
 
     function login(email, password){

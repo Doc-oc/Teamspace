@@ -1,17 +1,42 @@
 import React, { useState } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { useAuth } from "../context/AuthContext"
+//import { useAuth } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
+import { auth, logout } from '../firebase';
+import db from '../firebase'
+
 
 export default function Home() {
   const [error, setError] = useState("")
-  const { currentUser, logout } = useAuth()
+  //const { currentUser, logout } = useAuth()
   const navigate = useNavigate()
+  const name = auth.currentUser.displayName;
+  const [modal, setModal] = useState(false);
+  const [boardName, setBoardName] = useState();
+  const [boardDesc, setBoardDesc] = useState();
+  const [boardColor, setBoardColor] = useState();
+
+  async function handleCreateBoard(){
+    setModal(false)
+    console.log("function")
+    const boardRef = db.ref('boards');
+        const boards = {
+            boardName,
+            boardDesc,
+            boardColor,
+            name
+        }
+        await boardRef.push(boards);
+        setBoardName('');
+        setBoardDesc('');
+        setBoardDesc('')
+        
+  }
 
   async function handleLogout(e) {
     e.preventDefault()
@@ -40,9 +65,9 @@ export default function Home() {
                 <img src="#" className="img-responsive w-50 mt-5 roundedCircle"></img>
                 <br></br>
                 {error && <Alert variant="danger">{error}</Alert>}
-                {currentUser?.email}
+                {name}
                 <br></br>
-                <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home" conSelect={selectedKey => alert(`selected ${selectedKey}`)}>
+                <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                 <div className="sidebar-sticky"></div>
                   <Nav.Item>
                   <Nav.Link eventKey="Profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
@@ -80,7 +105,7 @@ export default function Home() {
                       <input type="search" placeholder="Search" className="form-control rounded" />
                     </Col>
                     <Col className="col-sm-2 ">
-                      <Button className="logout shadow rounded">
+                      <Button className="logout shadow rounded" onClick={() => setModal(true)}>
                         <FontAwesomeIcon icon={faPlusCircle}/> New
                       </Button>
                     </Col>
@@ -93,11 +118,47 @@ export default function Home() {
                   </Row>
                 </Container>
 
+                <Modal size="lg" show={modal} onHide={() => setModal(false)} aria-labelledby="createBoard">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="createBoard">
+                      Create Team Board
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form>
+                      <Form.Group id="boardName">
+                        <Form.Label>Board Name</Form.Label>
+                        <Form.Control type="text" value={boardName} onInput={(e) => setBoardName(e.target.value)} required />
+                      </Form.Group>
+                      <Form.Group className="mb-3" controlId="boardDesc">
+                        <Form.Label>Board Description</Form.Label>
+                        <Form.Control as="textarea" value={boardDesc} onInput= {(e) => setBoardDesc(e.target.value)} rows={3} />
+                      </Form.Group>
+                    </Form>
+                    <Form.Group className="mb-3" controlId="boardColor">
+                        <Form.Label>Board Theme Color</Form.Label>
+                        <Form.Select value={boardColor} aria-label="selectColor" onInput = {(e) => setBoardColor(e.target.value)}>
+                          <option value="#000000">Default</option>
+                          <option value="#ff575f">Red</option>
+                          <option value="#8fff91">Green</option>
+                          <option value="#69a2ff">Blue</option>
+                          <option value="#fbff80">Yellow</option>
+                          <option value="#cc85ff">Purple</option>
+                        </Form.Select>
+                    </Form.Group>
+                    
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => handleCreateBoard()} >Create Board</Button>
+                  </Modal.Footer>
+                </Modal>
+
 
                 <br></br>
                 <br></br>
                 <br></br>
                 <br></br>
+                
                 <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
                 
               </Card.Body>
@@ -115,5 +176,7 @@ export default function Home() {
             </Col>
           </Row>
       </Container>
+
+
   )
 }
