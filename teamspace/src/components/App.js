@@ -8,7 +8,7 @@ import Login from "./Login"
 import UserDetails from "./UserDetails";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from "../firebase";
-
+import Board from "./Board"
 /*state = { data: null };
 
 function componentDidMount() {
@@ -40,11 +40,13 @@ function App() {
           {user == null? 
               <Routes>
                 <Route path="/login" element={<Login/>} />
+                <Route path="/signup" element={<Signup />} />
               </Routes>
               :
               <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/details" element={<UserDetails />} />
+                <Route path="/board" element={<Board />}/>
               </Routes>
           }
           </BrowserRouter>

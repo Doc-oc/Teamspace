@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
@@ -20,6 +20,11 @@ export default function Home() {
   const [boardName, setBoardName] = useState();
   const [boardDesc, setBoardDesc] = useState();
   const [boardColor, setBoardColor] = useState();
+  const [boards, setBoards] = useState();
+
+  const dbRef = db.ref("boards");
+
+  const userID = auth.currentUser.uid;
 
   async function handleCreateBoard(){
     setModal(false)
@@ -29,14 +34,25 @@ export default function Home() {
             boardName,
             boardDesc,
             boardColor,
-            name
+            userID
         }
         await boardRef.push(boards);
         setBoardName('');
         setBoardDesc('');
-        setBoardDesc('')
-        
+        setBoardDesc('');
   }
+
+  useEffect(() => {
+    dbRef.on("value", (snapshot)=>{
+      const boardsFromDatabase = snapshot.val();
+
+      const boardArray = [];
+      for(let id in boardsFromDatabase){
+          boardArray.push({id, ...boardsFromDatabase[id]});
+      }
+      setBoards(boardArray);
+    })
+  }, [])
 
   async function handleLogout(e) {
     e.preventDefault()
@@ -153,14 +169,28 @@ export default function Home() {
                   </Modal.Footer>
                 </Modal>
 
+                <Row className="">
+                {boards == null?
+                  <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
+                :
+                  boards.map(function(board){
+                    if(board.userID == userID){
+                      return (
+                          <Col className="col-sm-3 mt-5 ml-3">
+                            <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                              <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                              <Link to="/board" style={{textDecoration: 'none', color: "black"}}>
+                                <Card.Footer>{board.boardName}</Card.Footer>
+                              </Link>
+                            </Card>
+                          </Col>
+                      )
+                    }
+                  })
+                }
+                </Row>
 
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                
-                <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
-                
+
               </Card.Body>
             </Card>
               <form action="../post" method="post" className="form">
