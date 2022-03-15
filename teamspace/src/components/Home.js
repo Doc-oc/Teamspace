@@ -170,32 +170,31 @@ export default function Home() {
                 </Modal>
 
                 <Row className="">
-                {boards == null?
-                  <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
-                :
-                  boards.map(function(board){
-                    if(board.userID == userID){
-                      return (
-                          <Col className="col-sm-3 mt-5 ml-3">
-                            <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
-                              <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
-                              <Link to="/board" style={{textDecoration: 'none', color: "black"}}>
-                                <Card.Footer>{board.boardName}</Card.Footer>
-                              </Link>
-                            </Card>
-                          </Col>
-                      )
-                    }
-                  })
-                }
+                  {boards == null?
+                    <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
+                  :
+                    boards.map(function(board){
+                      if(board.userID == userID){
+                        return (
+                            <Col className="col-sm-3 mt-5 ml-3">
+                              <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                                <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                                <Link to="/board" style={{textDecoration: 'none', color: "black"}}>
+                                  <Card.Footer>{board.boardName}</Card.Footer>
+                                </Link>
+                              </Card>
+                            </Col>
+                        )
+                      }
+                    })
+                  }
                 </Row>
 
 
               </Card.Body>
             </Card>
-              <form action="../post" method="post" className="form">
-                <button className="btn-primary rounded shadow" style={{backgroundColor: "#4176FF"}} type="submit">Connect to Server</button>
-              </form>
+
+            
             </Col>
             <Col className="col-sm-3">
             <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
