@@ -22,6 +22,7 @@ export default function Board() {
     const [boardDesc, setBoardDesc] = useState();
     const [boardColor, setBoardColor] = useState();
     const [boards, setBoards] = useState();
+    const [boardsData, setBoardData] = useState();
   
     const dbRef = db.ref("boards");
   
@@ -41,6 +42,18 @@ export default function Board() {
           setBoardName('');
           setBoardDesc('');
           setBoardDesc('');
+    }
+
+    const BoardData = (id) => {
+        const dbBoards = db.ref(`boards/${id}`);
+        dbBoards.on("value", (snapshot)=>{
+            const boardsDB = snapshot.val();
+                const boardsArray = [];
+                for(let id in boardsDB){
+                    boardsArray.push(boardsDB[id]);
+                }
+            setBoardData(boardsArray);
+        });
     }
   
     useEffect(() => {
@@ -148,3 +161,4 @@ export default function Board() {
       </Container>
   )
 }
+
