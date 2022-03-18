@@ -9,6 +9,7 @@ import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } 
 import '../home.css'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
+import boardData from './Board'
 
 
 export default function Home() {
@@ -51,7 +52,10 @@ export default function Home() {
           boardArray.push({id, ...boardsFromDatabase[id]});
       }
       setBoards(boardArray);
+      console.log(boardArray);
     })
+
+
   }, [])
 
   async function handleLogout(e) {
@@ -179,7 +183,7 @@ export default function Home() {
                             <Col className="col-sm-3 mt-5 ml-3">
                               <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
                                 <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
-                                <Link to="/board" style={{textDecoration: 'none', color: "black"}}>
+                                <Link to={{pathname: `/board/${board.id}`, state: {id: board.id}}}  style={{textDecoration: 'none', color: "black"}}>
                                   <Card.Footer>{board.boardName}</Card.Footer>
                                 </Link>
                               </Card>
@@ -194,7 +198,7 @@ export default function Home() {
               </Card.Body>
             </Card>
 
-            
+
             </Col>
             <Col className="col-sm-3">
             <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
