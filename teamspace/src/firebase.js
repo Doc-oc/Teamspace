@@ -24,6 +24,7 @@ const app = firebase.initializeApp(firebaseConfig);
 const auth = app.auth();
 const dbAuth = app.firestore();
 const db = firebase.database();
+const storage = firebase.storage();
 
 const signInWithEmailAndPassword = async (email, password) => {
   try {
@@ -72,12 +73,14 @@ const logout = () => {
   auth.signOut();
   window.location = ("/login");
 };
+
 export {
   auth,
   dbAuth,
   signInWithEmailAndPassword,
   registerWithEmailAndPassword,
   logout,
+  storage
 };
 
 export default db;

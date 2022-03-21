@@ -1,0 +1,17 @@
+#boardHead {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 10px;
+    width: 730px;
+}
+
+#filespaceHeader {
+    margin-top: 20px;
+}
+
+#filespace {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 20px;
+    color: black;
+}

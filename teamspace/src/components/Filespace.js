@@ -5,68 +5,47 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faUpload} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
+import '../home.css'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
-import '../board.css';
 
+export default function Filespace() {
 
-export default function Board() {
+    const { boardID, id } =  useParams();
 
-    const { boardID } =  useParams();
-
+    const [show, setShow] = useState(false);
     const [error, setError] = useState("")
     //const { currentUser, logout } = useAuth()
     const navigate = useNavigate()
     const name = auth.currentUser.displayName;
     const [modal, setModal] = useState(false);
-
-    //teamboards
     const [boardDesc, setBoardDesc] = useState();
     const [boardColor, setBoardColor] = useState();
     const [boardData, setBoardData] = useState();
-
-    //filespace
-    const [filespaceName, setFilespaceName] = useState();
-    const [filespaceDesc, setFilespaceDesc] = useState();
     const [filespaceData, setFilespaceData] = useState();
 
-
-
-    const dbBoards = db.ref(`boards`);
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
-    
+ 
     const userID = auth.currentUser.uid;
-    
-    useEffect(() => {
-        dbBoards.on("value", (snapshot)=>{
-            const boardsDB = snapshot.val();
-            
-            const boardsArray = [];
-            for(let id in boardsDB){
-                boardsArray.push({id, ...boardsDB[id]});
-            }
-        setBoardData(boardsArray);
-        });
-        
-    }, [])
+    const fsData = [];
 
-    //filespaces
     useEffect(() => {
         dbFilespace.on("value", (snapshot)=>{
-            const filespaceDB = snapshot.val();
             
+            const filespaceDB = snapshot.val();
             const filespaceArray = [];
             for(let id in filespaceDB){
                 filespaceArray.push({id, ...filespaceDB[id]});
-            }
-        setFilespaceData(filespaceArray);
+            }        
+            setFilespaceData(filespaceArray)
+
         });
-        
     }, [])
   
     async function handleLogout(e) {
       e.preventDefault()
+      
       setError("")
   
       try {
@@ -79,27 +58,6 @@ export default function Board() {
       }
 
     }
-
-    function test (){
-        alert(boardData)
-    }
-
-
-    async function handleCreateFilespace(){
-        setModal(false)
-        console.log("function filespace")
-        const filespaces = {
-            filespaceName,
-            filespaceDesc,
-            boardID
-        }
-        await dbFilespace.push(filespaces);
-
-        setFilespaceName('');
-        setFilespaceDesc('');
-
-    }
-
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -146,78 +104,26 @@ export default function Board() {
                 <Container>
                 <Row className="">
                     <Col className="col-sm-2 mt-1 ">
-                    {boardData == null? <p>id is null</p>
-                    : 
-                        boardData.map(function(board){
-                            if(board.id == boardID)
-                            return (
-                                <div>
-                                    <div id="boardHead">
-                                        <h5>{board.boardName}</h5> 
-                                        <p>{board.boardDesc}</p>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
-                    </Col>
-                </Row>
-                <Row>
-                    <Col className="col-sm-2 mt-3">
-                        <Button className="logout shadow rounded" onClick={() => setModal(true)}>
-                            <FontAwesomeIcon icon={faPlusCircle}/> New
-                        </Button>
-                    </Col>
-                    <Col className="col-sm-2 mt-3">
-                        <Button className="logout shadow rounded">
-                            <FontAwesomeIcon icon={faUpload}/> Import
-                        </Button>
-                    </Col>
-                    <div id="filespaceHeader">
-                        <p style={{color: "lightgray"}}>Team Filespaces</p>
-                    </div>
-                </Row>
-                <Row>
-                    {filespaceData == null? <p>filespace is empty</p>
-                    :
+                    {filespaceData == null? <p>FSDATA IS NULL</p> :
                     filespaceData.map(function(fs){
+                        if(fs.id == id)
+                        {
                         return (
-                            <Link to={{pathname: `/filespace/${boardID}/${fs.id}`, state: {boardID: boardID, id: fs.id}}}  style={{textDecoration: 'none', color: "black"}}>
-                                <p id="filespace">{fs.filespaceName}</p>
-                            </Link>
+                            <div>
+                                <h5>{fs.filespaceName}</h5> 
+                                <p>{fs.filespaceDesc}</p>
+                                
+                            </div>
                         )
-                        })
+                        }
+                    })
                     }
+                    <Button>Upload</Button>
+                    </Col>
                 </Row>
                 </Container>
             </Card.Body>
             </Card>
-
-
-            <Modal size="lg" show={modal} onHide={() => setModal(false)} aria-labelledby="createBoard">
-                  <Modal.Header closeButton>
-                    <Modal.Title id="createBoard">
-                      Create Team Board
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <Form>
-                      <Form.Group id="boardName">
-                        <Form.Label>Filespace Name</Form.Label>
-                        <Form.Control type="text" value={filespaceName} onInput={(e) => setFilespaceName(e.target.value)} required />
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="boardDesc">
-                        <Form.Label>Filespace Description</Form.Label>
-                        <Form.Control as="textarea" value={filespaceDesc} onInput= {(e) => setFilespaceDesc(e.target.value)} rows={3} />
-                      </Form.Group>
-                    </Form>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button onClick={() => handleCreateFilespace()} >Create Board</Button>
-                  </Modal.Footer>
-            </Modal>
-
-
             <form action="../post" method="post" className="form">
                 <button className="btn-primary rounded shadow" style={{backgroundColor: "#4176FF"}} type="submit">Connect to Server</button>
             </form>
