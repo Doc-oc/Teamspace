@@ -30,10 +30,12 @@ export default function Filespace() {
     const [fileName, setFileName] = useState();
 
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
+    const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
+
  
     const userID = auth.currentUser.uid;
     const [progress, setProgress] = useState(0);
-    
+    const [imageUrl, setImageUrl] = useState();
 
 
     useEffect(() => {
@@ -83,11 +85,21 @@ export default function Filespace() {
             (error) => console.log(error),
             () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log("File available at", downloadURL);
+                databaseFile(downloadURL);
             });
             }
         );
-        };
+    };
+
+    async function databaseFile(url){
+        var httpsReference = storage.refFromURL(url);
+        const fileName = httpsReference.name;
+        const file = {
+            fileName,
+            fileURL: url,
+        }
+        await dbFiles.push(file);
+    }
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
