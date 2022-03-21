@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faUpload } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
-import { auth, logout } from '../firebase';
+import { auth, logout, storage } from '../firebase';
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import db from '../firebase'
+import '../filespace.css'
+
 
 export default function Filespace() {
 
@@ -24,11 +27,14 @@ export default function Filespace() {
     const [boardColor, setBoardColor] = useState();
     const [boardData, setBoardData] = useState();
     const [filespaceData, setFilespaceData] = useState();
+    const [fileName, setFileName] = useState();
 
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
  
     const userID = auth.currentUser.uid;
-    const fsData = [];
+    const [progress, setProgress] = useState(0);
+    
+
 
     useEffect(() => {
         dbFilespace.on("value", (snapshot)=>{
@@ -58,6 +64,30 @@ export default function Filespace() {
       }
 
     }
+    const handleUpload = (e) => {
+        e.preventDefault();
+        const file = e.target[0].files[0];
+        uploadFile(file);
+    };
+
+    const uploadFile = (file) => {
+        //
+        if (!file) return;
+        const storageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+    
+        uploadTask.on("state_changed",(snapshot) => {
+            const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            //setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                console.log("File available at", downloadURL);
+            });
+            }
+        );
+        };
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -108,19 +138,55 @@ export default function Filespace() {
                     filespaceData.map(function(fs){
                         if(fs.id == id)
                         {
-                        return (
-                            <div>
-                                <h5>{fs.filespaceName}</h5> 
-                                <p>{fs.filespaceDesc}</p>
-                                
-                            </div>
-                        )
+                            return (
+                                <div id="filespaceHeader">
+                                    <h5>{fs.filespaceName}</h5> 
+                                    <p>{fs.filespaceDesc}</p>
+                                </div>
+                            )
                         }
                     })
                     }
-                    <Button>Upload</Button>
                     </Col>
                 </Row>
+
+
+                <Row>
+                    <Col className="col-sm-10 mt-4 mr-3">
+                        <input className="form-control" type="text" placeholder="Search" aria-label="Search" />
+                    </Col>
+                    <Col className="col-sm-2">
+                        <Dropdown>
+                            <Dropdown.Toggle id="upload">
+                                <FontAwesomeIcon icon={faPlusCircle}/> New
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setModal(true)}>Upload</Dropdown.Item>
+                                <Dropdown.Item href="#">Create New</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+                </Row>
+                
+                <Modal size="md" show={modal} onHide={() => setModal(false)} aria-labelledby="uploadFile">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="uploadFile">
+                      Upload File
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Form onSubmit={handleUpload}>
+                    <Modal.Body>
+                        <Form.Group id="fileName">
+                            <Form.Control type="file" required />
+                        </Form.Group>
+                    </Modal.Body>
+                    
+                    <Modal.Footer>
+                        <Button type="submit">Upload File</Button>
+                    </Modal.Footer>
+                  </Form>
+                </Modal>
+                
                 </Container>
             </Card.Body>
             </Card>

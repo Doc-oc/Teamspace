@@ -32,7 +32,6 @@ export default function Board() {
     const [filespaceData, setFilespaceData] = useState();
 
 
-
     const dbBoards = db.ref(`boards`);
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     
@@ -173,7 +172,7 @@ export default function Board() {
                             <FontAwesomeIcon icon={faUpload}/> Import
                         </Button>
                     </Col>
-                    <div id="filespaceHeader">
+                    <div id="filespaceHead">
                         <p style={{color: "lightgray"}}>Team Filespaces</p>
                     </div>
                 </Row>
