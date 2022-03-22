@@ -11,6 +11,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import '../texteditor.css'
 import { io } from 'socket.io-client'
 
+const SAVE_INTERVAL_MS = 2000
 const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   [{ font: [] }],
@@ -58,6 +59,32 @@ export default function TextEditor(props){
   const [quill, setQuill] = useState();
 
   useEffect(() => {
+
+  }, [])
+
+  useEffect(() => {
+    if(socket == null || quill == null) return
+
+    socket.once("load-document", document => {
+      quill.setContents (document)
+      quill.enable()
+    })
+
+    socket.emit('get-document', fileID)
+
+    
+  }, [socket, quill, fileID])
+
+  useEffect(() => {
+    if(socket==null || quill == null) return 
+
+    const interval = setInterval(() => {
+      socket.emit("save-document", quill.getContents())
+    }, SAVE_INTERVAL_MS)
+  }, [socket, quill])
+
+
+  useEffect(() => {
     const s = io("http://localhost:8080")
     setSocket(s)
 
@@ -76,6 +103,8 @@ export default function TextEditor(props){
        theme: "snow", 
        modules: {toolbar: TOOLBAR_OPTIONS}
       })
+      q.disable(false)
+      q.setText('Loading...')
       setQuill(q)
   }, [])
 
@@ -106,22 +135,24 @@ export default function TextEditor(props){
     }
   }, [socket, quill])
 
+
+
+
     return (
-        <div className="container" ref={wrapperRef}>
-          {/*{fileData == null? <p>No file Present</p>:
+      <Container>
+          {fileData == null? <p>No file Present</p>:
             fileData.map(function(file){
               if(fileID == file.id)
               return (
-
                 <div id="textEditor">
-                  <h5>{file.fileName}</h5>
-                  <ReactQuill value={fileText} onLoad={fetchFile(file.fileURL)} theme="snow"/>
-                  <Button></Button>
+                  <h5 style={{textAlign: "center", padding: "10px"}}>{file.fileName}</h5>
                 </div>
               )
             })
-          }*/}
+          }
+        <div className="container" ref={wrapperRef}>
         </div>
+        </Container>
     )
 
 }
