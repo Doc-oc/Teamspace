@@ -50,7 +50,7 @@ function App() {
                 <Route path="/details" element={<UserDetails />} />
                 <Route path="/board/:boardID" element={<Board />}/>
                 <Route path="/filespace/:boardID/:id" element={<Filespace />}/>
-                <Route path="/filespace/texteditor/:fileID" element={<TextEditor />}/>
+                <Route path="texteditor/:boardID/:id/:fileID" element={<TextEditor />}/>
               </Routes>
           }
           </BrowserRouter>
