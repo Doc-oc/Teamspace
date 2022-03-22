@@ -10,6 +10,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from "../firebase";
 import Board from "./Board";
 import Filespace from "./Filespace";
+import TextEditor from "./TextEditor";
 /*state = { data: null };
 
 function componentDidMount() {
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/details" element={<UserDetails />} />
                 <Route path="/board/:boardID" element={<Board />}/>
                 <Route path="/filespace/:boardID/:id" element={<Filespace />}/>
+                <Route path="/filespace/textEditor/:fileid" element={<TextEditor />}/>
               </Routes>
           }
           </BrowserRouter>

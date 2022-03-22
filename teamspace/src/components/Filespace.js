@@ -89,11 +89,11 @@ export default function Filespace() {
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     databaseFile(downloadURL);
-
+;
                     const xhr = new XMLHttpRequest();
                     xhr.open('GET', downloadURL);
 
-                    xhr.responseType = 'text';
+                    xhr.responseType = '';
                     xhr.onload = (event) => {
                         if (xhr.readyState === xhr.DONE) {
                             if (xhr.status === 200) {
@@ -102,7 +102,6 @@ export default function Filespace() {
                             }
                         }
                     };
-                    
                     xhr.send();
                 });
             }
@@ -236,10 +235,10 @@ export default function Filespace() {
                     : 
                         fileData.map(function(file){
                             return (
-                                <Col className="col-sm-2 mt-1 ml-3">
-                                <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                                <Col className="col-sm-2 mt-3 ml-3">
+                                <Card className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
-                                    <Link to={file.fileURL}>
+                                    <Link to={file.fileURL} style={{textDecoration: 'none', color: "black"}}>
                                         <Card.Footer>{file.fileName}</Card.Footer>
                                     </Link>
                                 </Card>
