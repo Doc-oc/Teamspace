@@ -8,7 +8,7 @@ export default class TextEditor extends React.Component{
   render() {
     return (
       <div>
-        <Container className="ml-3" >
+        <Container className="ml-3 mt-3" >
           <ReactQuill theme="snow"/>
         </Container>
       </div>

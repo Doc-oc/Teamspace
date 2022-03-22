@@ -23,9 +23,6 @@ export default function Filespace() {
     const navigate = useNavigate()
     const name = auth.currentUser.displayName;
     const [modal, setModal] = useState(false);
-    const [boardDesc, setBoardDesc] = useState();
-    const [boardColor, setBoardColor] = useState();
-    const [boardData, setBoardData] = useState();
     const [filespaceData, setFilespaceData] = useState();
     const [fileName, setFileName] = useState();
     const [fileData, setFileData] = useState();
@@ -33,10 +30,7 @@ export default function Filespace() {
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
 
- 
     const userID = auth.currentUser.uid;
-    const [progress, setProgress] = useState(0);
-    const [imageUrl, setImageUrl] = useState();
 
 
     useEffect(() => {
@@ -238,7 +232,7 @@ export default function Filespace() {
                                 <Col className="col-sm-2 mt-3 ml-3">
                                 <Card className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
-                                    <Link to={file.fileURL} style={{textDecoration: 'none', color: "black"}}>
+                                    <Link to={{pathname: `/filespace/texteditor/${file.id}`, state: {fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
                                         <Card.Footer>{file.fileName}</Card.Footer>
                                     </Link>
                                 </Card>
