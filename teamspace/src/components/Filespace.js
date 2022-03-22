@@ -7,7 +7,7 @@ import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faUpload } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
-import { auth, logout, storage } from '../firebase';
+import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import db from '../firebase'
 import '../filespace.css'
@@ -28,6 +28,7 @@ export default function Filespace() {
     const [boardData, setBoardData] = useState();
     const [filespaceData, setFilespaceData] = useState();
     const [fileName, setFileName] = useState();
+    const [fileData, setFileData] = useState();
 
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
@@ -50,6 +51,8 @@ export default function Filespace() {
 
         });
     }, [])
+
+
   
     async function handleLogout(e) {
       e.preventDefault()
@@ -75,7 +78,7 @@ export default function Filespace() {
     const uploadFile = (file) => {
         //
         if (!file) return;
-        const storageRef = ref(storage, `files/${file.name}`);
+        const storageRef = ref(storage, `files/${file.name}`);        
         const uploadTask = uploadBytesResumable(storageRef, file);
     
         uploadTask.on("state_changed",(snapshot) => {
@@ -84,9 +87,24 @@ export default function Filespace() {
             },
             (error) => console.log(error),
             () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                databaseFile(downloadURL);
-            });
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    databaseFile(downloadURL);
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', downloadURL);
+
+                    xhr.responseType = 'text';
+                    xhr.onload = (event) => {
+                        if (xhr.readyState === xhr.DONE) {
+                            if (xhr.status === 200) {
+                                console.log(xhr.response);
+                                console.log(xhr.responseText);
+                            }
+                        }
+                    };
+                    
+                    xhr.send();
+                });
             }
         );
     };
@@ -100,6 +118,19 @@ export default function Filespace() {
         }
         await dbFiles.push(file);
     }
+
+    useEffect(() => {
+        dbFiles.on("value", (snapshot)=>{
+            const fileDB = snapshot.val();
+            const fileArray = [];
+            for(let id in fileDB){
+                fileArray.push({id, ...fileDB[id]});
+            }        
+            setFileData(fileArray)
+
+        });
+    }, [])
+
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -198,8 +229,26 @@ export default function Filespace() {
                     </Modal.Footer>
                   </Form>
                 </Modal>
-                
                 </Container>
+
+                <Row>
+                    {fileData == null? <p>There is no files</p>
+                    : 
+                        fileData.map(function(file){
+                            return (
+                                <Col className="col-sm-2 mt-1 ml-3">
+                                <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                                    <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                                    <Link to={file.fileURL}>
+                                        <Card.Footer>{file.fileName}</Card.Footer>
+                                    </Link>
+                                </Card>
+                                </Col>
+                            )
+                        })
+                    }
+                    <p id="fileContent"></p>
+                </Row>
             </Card.Body>
             </Card>
             <form action="../post" method="post" className="form">
