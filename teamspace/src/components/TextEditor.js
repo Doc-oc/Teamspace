@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import ReactQuill from 'react-quill';
+import Quill from 'quill';
 import 'react-quill/dist/quill.snow.css';
 import {Container, Button} from 'react-bootstrap';
 import { useParams, useLocation } from 'react-router';
-import Filespace from '../components/Filespace'
+import Filespace from './Filespace'
 import db from '../firebase'
 import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import '../texteditor.css'
+import { io } from 'socket.io-client'
 
-
+const TOOLBAR_OPTIONS = [
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  [{ font: [] }],
+  [{ list: "ordered" }, { list: "bullet" }],
+  ["bold", "italic", "underline"],
+  [{ color: [] }, { background: [] }],
+  [{ script: "sub" }, { script: "super" }],
+  [{ align: [] }],
+  ["image", "blockquote", "code-block"],
+  ["clean"],
+]
 
 export default function TextEditor(props){
   const { boardID, id, fileID } = useParams();
@@ -29,6 +42,7 @@ export default function TextEditor(props){
     xhr.send();
   }
 
+
   useEffect(() => {
     dbFiles.on("value", (snapshot)=>{
         const fileDB = snapshot.val();
@@ -40,13 +54,65 @@ export default function TextEditor(props){
     });
   }, [])
 
+  const [socket, setSocket] = useState();
+  const [quill, setQuill] = useState();
+
+  useEffect(() => {
+    const s = io("http://localhost:8080")
+    setSocket(s)
+
+    return () => {
+      s.disconnect()
+    }
+  }, [])
+
+  const wrapperRef = useCallback((wrapper) => {
+    if(wrapper == null) return
+    wrapper.innerHTML = ''
+
+    const editor = document.createElement("div")
+    wrapper.append(editor)
+    const q = new Quill(editor, {
+       theme: "snow", 
+       modules: {toolbar: TOOLBAR_OPTIONS}
+      })
+      setQuill(q)
+  }, [])
+
+  useEffect(() => {
+    if(socket == null || quill == null) return 
+    const handler = (delta, oldDelta, source) =>{
+      if(source !== 'user') return
+      socket.emit("send-changes", delta)
+    }
+
+    quill.on('text-change', handler)
+
+    return () => {
+      quill.off('text-change', handler )
+    }
+  }, [socket, quill])
+
+  useEffect(() => {
+    if(socket == null || quill == null) return 
+    const handler = (delta, oldDelta, source) =>{
+      quill.updateContents(delta)
+    }
+
+    socket.on('recieve-changes', handler)
+
+    return () => {
+      socket.off('recieve-changes', handler )
+    }
+  }, [socket, quill])
+
     return (
-      <div>
-        <Container className="ml-3 mt-" >
-          {fileData == null? <p>No file Present</p>:
+        <div className="container" ref={wrapperRef}>
+          {/*{fileData == null? <p>No file Present</p>:
             fileData.map(function(file){
               if(fileID == file.id)
               return (
+
                 <div id="textEditor">
                   <h5>{file.fileName}</h5>
                   <ReactQuill value={fileText} onLoad={fetchFile(file.fileURL)} theme="snow"/>
@@ -54,9 +120,8 @@ export default function TextEditor(props){
                 </div>
               )
             })
-          }
-        </Container>
-      </div>
+          }*/}
+        </div>
     )
 
 }
