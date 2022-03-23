@@ -51,7 +51,8 @@ io.on("connection", socket => {
           fileArray.push({id, ...fileDB[id]});
       } 
       fileArray.map(function(f){
-        fetchFile(f.fileURL)
+        if(f.id == file.file)
+          console.log(f.fileData)
       })
     });
 
