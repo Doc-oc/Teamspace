@@ -4,10 +4,6 @@ import "firebase/compat/storage";
 //import { ref } from 'firebase/storage';
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import { initializeApp } from "firebase/app";
-import { useNavigate } from "react-router-dom"
-
-
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,

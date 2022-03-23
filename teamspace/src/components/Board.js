@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container,  Nav, Modal} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faUpload} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
 import '../board.css';
@@ -22,8 +22,6 @@ export default function Board() {
     const [modal, setModal] = useState(false);
 
     //teamboards
-    const [boardDesc, setBoardDesc] = useState();
-    const [boardColor, setBoardColor] = useState();
     const [boardData, setBoardData] = useState();
 
     //filespace
@@ -78,11 +76,6 @@ export default function Board() {
       }
 
     }
-
-    function test (){
-        alert(boardData)
-    }
-
 
     async function handleCreateFilespace(){
         setModal(false)
@@ -196,7 +189,7 @@ export default function Board() {
             <Modal size="lg" show={modal} onHide={() => setModal(false)} aria-labelledby="createBoard">
                   <Modal.Header closeButton>
                     <Modal.Title id="createBoard">
-                      Create Team Board
+                      Create Filespace
                     </Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
@@ -212,7 +205,7 @@ export default function Board() {
                     </Form>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => handleCreateFilespace()} >Create Board</Button>
+                    <Button onClick={() => handleCreateFilespace()} >Create</Button>
                   </Modal.Footer>
             </Modal>
 

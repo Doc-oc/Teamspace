@@ -1,8 +1,7 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 //import { AuthProvider, useAuth } from "../context/AuthContext";
 import Signup from "./Signup";
-import { BrowserRouter , Outlet, Navigate, Router, Routes, Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from "./Home"
 import Login from "./Login"
 import UserDetails from "./UserDetails";

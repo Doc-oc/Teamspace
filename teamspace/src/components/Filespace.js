@@ -29,6 +29,7 @@ export default function Filespace() {
     const [filespaceData, setFilespaceData] = useState();
     const [fileName, setFileName] = useState();
     const [fileData, setFileData] = useState();
+    const [fileText, setFileText] = useState();
 
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
@@ -37,7 +38,7 @@ export default function Filespace() {
 
     useEffect(() => {
         dbFilespace.on("value", (snapshot)=>{
-            
+
             const filespaceDB = snapshot.val();
             const filespaceArray = [];
             for(let id in filespaceDB){
@@ -69,7 +70,6 @@ export default function Filespace() {
         e.preventDefault();
 
         const file = e.target[0].files[0];
-        
         uploadFile(file);
     };
 
@@ -86,33 +86,36 @@ export default function Filespace() {
             (error) => console.log(error),
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    databaseFile(downloadURL);
                     const xhr = new XMLHttpRequest();
+                    var data = '';
                     xhr.open('GET', downloadURL);
-
-                    xhr.responseType = '';
+                    xhr.responseType = 'text';
                     xhr.onload = (event) => {
                         if (xhr.readyState === xhr.DONE) {
                             if (xhr.status === 200) {
-                                console.log(xhr.response);
-                                console.log(xhr.responseText);
+                                data = xhr.responseText;
+                                databaseFile(downloadURL, data);
+
                             }
                         }
                     };
-                    xhr.send();
+                    xhr.send()
                 });
             }
         );
     };
 
-    async function databaseFile(url){
+    async function databaseFile(url, data){
         var httpsReference = storage.refFromURL(url);
         const fileName = httpsReference.name;
         const file = {
             fileName,
             fileURL: url,
+            fileData: data
         }
         await dbFiles.push(file);
+
+        setFileText('');
     }
 
     useEffect(() => {
@@ -232,7 +235,7 @@ export default function Filespace() {
                     : 
                         fileData.map(function(file){
                             return (
-                                <Col className="col-sm-2 mt-3 ml-3">
+                                <Col className="col-sm-2 mt-3">
                                 <Card className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                     <Link to={{pathname: `/texteditor/${boardID}/${id}/${file.id}`, state:{boardID: boardID, id: id, fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>

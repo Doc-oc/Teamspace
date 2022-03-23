@@ -33,15 +33,22 @@ export default function TextEditor(props){
 
   const userID = auth.currentUser.uid;
 
-  const fetchFile = (url) => {
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'text';
-    xhr.onload = (event) => {
-      setFileText(xhr.responseText);
-    };
-    xhr.open('GET', url);
-    xhr.send();
+  /*const storeFile = async (file) => {
+    const fileRef = db.ref(`boards/${boardID}/filespace/${id}/files`)
+    const id = fileRef.id;
+    const storageRef = firebase.storage().ref().child('files/' + id)
+    await storageRef.put(file)
   }
+
+  const updateFile = async (id, file) => {
+      const storageRef = firebase.storage().ref('/files').child(id);
+      // Put the new file in the same child ref.
+      await storageRef.put(file);
+      // Get the new URL
+      const url = await storageRef.getDownloadURL();
+      console.log(url);
+      return url;
+  }*/
 
 
   useEffect(() => {
@@ -58,23 +65,23 @@ export default function TextEditor(props){
   const [socket, setSocket] = useState();
   const [quill, setQuill] = useState();
 
-  useEffect(() => {
-
-  }, [])
-
+  const files = {board: boardID, filespace: id, file: fileID}
+  
+  //loading document
   useEffect(() => {
     if(socket == null || quill == null) return
 
-    socket.once("load-document", document => {
-      quill.setContents (document)
+    socket.once("load-document", fileText => {
+      quill.setContents(fileText)
       quill.enable()
     })
 
-    socket.emit('get-document', fileID)
+    socket.emit('get-document', files)
 
     
   }, [socket, quill, fileID])
 
+  //save document 
   useEffect(() => {
     if(socket==null || quill == null) return 
 
@@ -84,6 +91,7 @@ export default function TextEditor(props){
   }, [socket, quill])
 
 
+  //connection to socket
   useEffect(() => {
     const s = io("http://localhost:8080")
     setSocket(s)
@@ -93,6 +101,7 @@ export default function TextEditor(props){
     }
   }, [])
 
+  //text editor
   const wrapperRef = useCallback((wrapper) => {
     if(wrapper == null) return
     wrapper.innerHTML = ''
@@ -108,6 +117,7 @@ export default function TextEditor(props){
       setQuill(q)
   }, [])
 
+  //broadcasting changes
   useEffect(() => {
     if(socket == null || quill == null) return 
     const handler = (delta, oldDelta, source) =>{
