@@ -28,6 +28,7 @@ export default function TextEditor(props){
   const { boardID, id, fileID } = useParams();
   const [fileData, setFileData] = useState();
   const [fileText, setFileText] = useState();
+  const [fileContent, setFileContent] = useState()
 
   const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
 
@@ -59,6 +60,10 @@ export default function TextEditor(props){
             fileArray.push({id, ...fileDB[id]});
         }        
         setFileData(fileArray)
+        fileArray.map(function(f){
+          if(f.id == fileID)
+            setFileContent(f.fileData)
+        })
     });
   }, [])
 
@@ -66,27 +71,27 @@ export default function TextEditor(props){
   const [quill, setQuill] = useState();
 
   const files = {board: boardID, filespace: id, file: fileID}
-  
+
   //loading document
   useEffect(() => {
     if(socket == null || quill == null) return
 
-    socket.once("load-document", fileText => {
-      quill.setContents(fileText)
+    socket.once("load-document", () => {
+      quill.setText(fileContent)
       quill.enable()
     })
 
     socket.emit('get-document', files)
 
     
-  }, [socket, quill, fileID])
+  }, [socket, quill, files])
 
   //save document 
   useEffect(() => {
     if(socket==null || quill == null) return 
 
     const interval = setInterval(() => {
-      socket.emit("save-document", quill.getContents())
+      //socket.emit("save-document", quill.getContents())
     }, SAVE_INTERVAL_MS)
   }, [socket, quill])
 

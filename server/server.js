@@ -4,11 +4,9 @@ const http = require('https')
 
 
 // Fetch the service account key JSON file contents
-var serviceAccount = require("/Users/dylan/Documents/GitHub/Teamspace/teamspace/utils/teamspace-7f0e3-firebase-adminsdk-wcrme-2964633502.json");
 
 // Initialize the app with a service account, granting admin privileges
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
   // The database URL depends on the location of the database
   databaseURL: "https://teamspace-7f0e3-default-rtdb.europe-west1.firebasedatabase.app"
 });
@@ -59,7 +57,7 @@ io.on("connection", socket => {
     const document = "test"; //function here
 
     socket.join(file.file)
-    socket.emit('load-document', document) // eg.document.dat
+    socket.emit('load-document', file.fileData) // eg.document.dat
 
     socket.on('send-changes', delta => {
       socket.broadcast.to(file.file).emit("recieve-changes", delta)

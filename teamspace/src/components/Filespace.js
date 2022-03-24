@@ -49,8 +49,6 @@ export default function Filespace() {
         });
     }, [])
 
-
-  
     async function handleLogout(e) {
       e.preventDefault()
       
@@ -95,7 +93,6 @@ export default function Filespace() {
                             if (xhr.status === 200) {
                                 data = xhr.responseText;
                                 databaseFile(downloadURL, data);
-
                             }
                         }
                     };
