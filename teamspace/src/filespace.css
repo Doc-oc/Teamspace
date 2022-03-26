@@ -13,3 +13,42 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 15px;
 }
+
+#backButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 10px;
+    color: black;
+    max-width: 110px;
+    font-size: 12px;
+    margin-left: 25px;
+}
+
+#editButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 10px;
+    color: black;
+    max-width: 65px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+#displayFile {
+    margin-left: 2px;
+}
+#fileCard span{
+    visibility: hidden;
+}
+
+#fileCard:hover span{
+    visibility: visible;
+    cursor: pointer;
+}
+
+#editFilespace {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 10px;
+    width: 730px;
+}

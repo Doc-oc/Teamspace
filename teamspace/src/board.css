@@ -15,3 +15,28 @@
     padding: 20px;
     color: black;
 }
+
+#filespace:hover {
+    cursor: pointer;
+    background-color: #f2f2f2;
+    color: black;
+}
+
+#backButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 10px;
+    color: black;
+    max-width: 110px;
+    font-size: 12px;
+}
+
+#editButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 10px;
+    color: black;
+    max-width: 65px;
+    font-size: 12px;
+}
+

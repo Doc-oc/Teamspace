@@ -84,15 +84,15 @@ export default function TextEditor(props){
     socket.emit('get-document', files)
 
     
-  }, [socket, quill, files])
+  }, [socket, quill])
 
   //save document 
   useEffect(() => {
     if(socket==null || quill == null) return 
 
-    const interval = setInterval(() => {
+    /*const interval = setInterval(() => {
       //socket.emit("save-document", quill.getContents())
-    }, SAVE_INTERVAL_MS)
+    }, SAVE_INTERVAL_MS)*/
   }, [socket, quill])
 
 

@@ -10,6 +10,7 @@ import '../home.css'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
 import boardData from './Board'
+import pp from "../img/defaultpp.png"
 
 
 export default function Home() {
@@ -82,7 +83,7 @@ export default function Home() {
               <Container>
               <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                 <br></br>
-                <img src="#" className="img-responsive w-50 mt-5 roundedCircle"></img>
+                <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
                 <br></br>
                 {error && <Alert variant="danger">{error}</Alert>}
                 {name}

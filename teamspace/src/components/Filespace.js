@@ -5,13 +5,14 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faUpload } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faEdit, faArrowAltCircleLeft } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
 import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import db from '../firebase'
 import '../filespace.css'
 import TextEditor from './TextEditor'
+import pp from "../img/defaultpp.png"
 
 
 export default function Filespace() {
@@ -31,6 +32,12 @@ export default function Filespace() {
     const [fileData, setFileData] = useState();
     const [fileText, setFileText] = useState();
 
+    const [filespaceHeader, setFilespaceHeader] = useState();
+    const [filespaceDesc, setFilespaceDesc] = useState();
+
+    const [display, setDisplay] = useState({display: 'none'});
+
+
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
 
@@ -46,7 +53,9 @@ export default function Filespace() {
             }        
             setFilespaceData(filespaceArray)
 
+            
         });
+        
     }, [])
 
     async function handleLogout(e) {
@@ -127,6 +136,30 @@ export default function Filespace() {
         });
     }, [])
 
+    function deleteFile(fileID){
+        console.log(fileID)
+        db.ref(`boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
+    }
+
+    function editDetails(){
+        filespaceData?.map(function(f){
+            if(f.id = id){
+                setFilespaceHeader(f.filespaceName)
+                setFilespaceDesc(f.filespaceDesc)
+            }
+        })
+        document.getElementById("filespaceHeader").style.display = "none"
+        document.getElementById("editFilespace").style.display = "block"
+    }
+
+    //editing filespace info
+    function handleEdit(){
+        dbFilespace.child(id).update({'filespaceName': filespaceHeader})
+        dbFilespace.child(id).update({'filespaceDesc': filespaceDesc})
+
+        document.getElementById("filespaceHeader").style.display = "block"
+        document.getElementById("editFilespace").style.display = "none"
+    }
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -137,11 +170,10 @@ export default function Filespace() {
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                     <br></br>
-                    <img src="#" className="img-responsive w-50 mt-5 roundedCircle"></img>
+                    <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
                     <br></br>
                     {error && <Alert variant="danger">{error}</Alert>}
                     {name}
-                    
                     <br></br>
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
@@ -170,18 +202,43 @@ export default function Filespace() {
             <Col className="col-sm-7">
             <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
             <Card.Body>
+                <Row>
+                    <Col className="col-sm-10">
+                        <Link to={{pathname: `/board/${boardID}`, state: {boardID: boardID}}}  style={{textDecoration: 'none', color: "black"}}>
+                            <p  id="backButton"><FontAwesomeIcon icon={faArrowAltCircleLeft}/> Team Board</p>
+                        </Link>
+                    </Col>
+                    <Col className="col-sm-2">
+                        <p onClick={() => editDetails()}id="editButton"><FontAwesomeIcon icon={faEdit}/> Edit</p>
+                    </Col>
+                </Row>
+
                 <Container>
                 <Row className="">
-                    <Col className="col-sm-2 mt-1 ">
+                    <Col className=" mt-1 ">
                     {filespaceData == null? <p>FSDATA IS NULL</p> :
                     filespaceData.map(function(fs){
                         if(fs.id == id)
                         {
                             return (
-                                <div id="filespaceHeader">
-                                    <h5>{fs.filespaceName}</h5> 
-                                    <p>{fs.filespaceDesc}</p>
+                                <div>
+                                    <div id="filespaceHeader">
+                                        <h5>{fs.filespaceName}</h5> 
+                                        <p>{fs.filespaceDesc}</p>
+                                    </div>
+                                    <div id="editFilespace" style={{display: "none"}}>
+                                        <Form >
+                                        <Form.Group id="fileName">
+                                            <Form.Control type="text" value={filespaceHeader} onInput={(e) => setFilespaceHeader(e.target.value)} required/>
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="boardDesc">
+                                            <Form.Control as="textarea" value={filespaceDesc} onInput={(e) => setFilespaceDesc(e.target.value)} rows={3} />
+                                        </Form.Group>
+                                        <Button style={{textAlign: "right"}}onClick={() => handleEdit()} >Save Changes</Button>
+                                        </Form>
+                                    </div>
                                 </div>
+                                
                             )
                         }
                     })
@@ -227,13 +284,14 @@ export default function Filespace() {
                 </Modal>
                 </Container>
 
-                <Row>
+                <Row id="displayFile">
                     {fileData == null? <p>There is no files</p>
                     : 
                         fileData.map(function(file){
                             return (
                                 <Col className="col-sm-2 mt-3">
-                                <Card className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
+                                <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
+                                    <span id="deleteButton" onClick={() => deleteFile(file.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrash}/></span>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                     <Link to={{pathname: `/texteditor/${boardID}/${id}/${file.id}`, state:{boardID: boardID, id: id, fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
                                         <Card.Footer>{file.fileName}</Card.Footer>
@@ -243,13 +301,9 @@ export default function Filespace() {
                             )
                         })
                     }
-                    <p id="fileContent"></p>
                 </Row>
             </Card.Body>
             </Card>
-            <form action="../post" method="post" className="form">
-                <button className="btn-primary rounded shadow" style={{backgroundColor: "#4176FF"}} type="submit">Connect to Server</button>
-            </form>
             </Col>
                 <Col className="col-sm-3">
                 <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>

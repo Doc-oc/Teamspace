@@ -5,11 +5,11 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faEdit, faArrowAltCircleLeft} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
 import '../board.css';
-
+import pp from "../img/defaultpp.png"
 
 export default function Board() {
 
@@ -102,7 +102,7 @@ export default function Board() {
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                     <br></br>
-                    <img src="#" className="img-responsive w-50 mt-5 roundedCircle"></img>
+                    <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
                     <br></br>
                     {error && <Alert variant="danger">{error}</Alert>}
                     {name}
@@ -208,11 +208,6 @@ export default function Board() {
                     <Button onClick={() => handleCreateFilespace()} >Create</Button>
                   </Modal.Footer>
             </Modal>
-
-
-            <form action="../post" method="post" className="form">
-                <button className="btn-primary rounded shadow" style={{backgroundColor: "#4176FF"}} type="submit">Connect to Server</button>
-            </form>
             </Col>
                 <Col className="col-sm-3">
                 <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
