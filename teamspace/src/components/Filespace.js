@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown, Tabs, Tab} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faCheck, faUndoAlt, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
 import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -27,19 +27,26 @@ export default function Filespace() {
     const navigate = useNavigate()
     const name = auth.currentUser.displayName;
     const [modal, setModal] = useState(false);
+
+    //filespace
     const [filespaceData, setFilespaceData] = useState();
     const [fileName, setFileName] = useState();
     const [fileData, setFileData] = useState();
     const [fileText, setFileText] = useState();
-
     const [filespaceHeader, setFilespaceHeader] = useState();
     const [filespaceDesc, setFilespaceDesc] = useState();
 
+    //todo 
+    const [toDo, setToDo] = useState();
+    const [todoData, setTodoData] = useState();
+    const [completedData, setCompletedData] = useState();
     const [display, setDisplay] = useState({display: 'none'});
 
 
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
+    const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
 
     const userID = auth.currentUser.uid;
 
@@ -160,6 +167,80 @@ export default function Filespace() {
         document.getElementById("filespaceHeader").style.display = "block"
         document.getElementById("editFilespace").style.display = "none"
     }
+
+    function displayToDo(){
+        document.getElementById("toDo").style.display = "block"
+    }
+
+    async function handleToDo(){
+        const todoList = {
+            task: toDo
+        }
+
+        await dbListTodo.push(todoList);
+        setToDo('');
+        document.getElementById("toDo").style.display = "none"
+    }
+
+    useEffect(() => {
+        dbListTodo.on("value", (snapshot)=>{
+            const todoDB = snapshot.val();
+            
+            const todoArray = [];
+            for(let id in todoDB){
+                todoArray.push({id, ...todoDB[id]});
+            }
+        setTodoData(todoArray);
+        });
+    }, [])
+
+    const current = new Date();
+    var date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+
+    function handleClose(){
+        document.getElementById("toDo").style.display = "none"
+    }
+
+    async function handleChecked(e, task){
+        const todoComp = {
+            taskCompleted: task,
+            completed: date
+        }
+        
+        await dbListComp.push(todoComp);
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove();
+        
+    }
+
+    useEffect(() => {
+        dbListComp.on("value", (snapshot)=>{
+            const compDB = snapshot.val();
+            
+            const compArray = [];
+            for(let id in compDB){
+                compArray.push({id, ...compDB[id]});
+            }
+        setCompletedData(compArray);
+        });
+        
+    }, [])
+
+    async function handleDeleteComp(e){
+        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove()
+    }
+
+    async function deleteTodo(e){
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove()
+    }
+
+    async function handleUndoComp(e, task){
+        const undoComp = {
+            task: task
+        }
+        await dbListTodo.push(undoComp);
+        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove();
+    }
+
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -318,23 +399,69 @@ export default function Filespace() {
                             <p style={{marginLeft: "5px"}}>Upcoming</p>
                         </Col>
                         <Col style={{textAlign: "right", marginRight: "10px"}}>
-                            <FontAwesomeIcon id="test" icon={faCalendarPlus} style={{cursor: "pointer"}}/>
+                            <FontAwesomeIcon id="test" onClick={() => displayToDo()} icon={faCalendarPlus} style={{cursor: "pointer"}}/>
                         </Col>
                     </Row>
                     
-                    <Card className="shadow" style={{minHeight: "250px", borderRadius: "15px"}}>
-                        <Card.Body>
-                            <Form id="toDo" style={{display: "none"}}>
-                                <Form.Group>
-                                    <Row>
-                                        <Col>
-                                            <Form.Control id="toDoInput" type="text" placeholder="Enter item..." required>
-                                            </Form.Control>
-                                        </Col>
-                                    </Row>
-                                    
-                                </Form.Group>
-                            </Form>
+                    <Card className="shadow" style={{minHeight: "250px", maxHeight:"250px", borderRadius: "15px", overflow: "hidden"}}>
+                        <Card.Body className="scrollbar-primary"style={{margin: 0,}}>
+                                <Tabs defaultActiveKey="todo" style={{fontSize: "10px"}} className="mb-3">
+                                    <Tab id="tab" eventKey="todo" title="Todo">
+                                        <Form id="toDo" style={{display: "none"}}>
+                                            <Form.Group>
+                                                <Row>
+                                                    <Col className="col-sm-8">
+                                                        <Form.Control id="toDoInput" type="text" placeholder="Enter item..." value={toDo} onInput= {(e) => setToDo(e.target.value)} required>
+                                                        </Form.Control>
+                                                    </Col>
+                                                    <Col className="col-sm-2">
+                                                        <span id="todoButton" onClick={() => handleToDo()}>+</span>
+                                                    </Col>
+                                                    <Col className="col-sm-1">
+                                                        <span id="todoButton" onClick={() => handleClose()}>x</span>
+                                                    </Col>
+                                                </Row>
+                                            </Form.Group>
+                                        </Form>
+                                        <div id="taskContainer">
+                                        {todoData == null? <p>to do is empty</p> :
+                                        todoData.map(function(t){
+                                            return (
+                                                <div id="todoRow">
+                                                    <Row>
+                                                        <Col className="col-sm-1">
+                                                        <FontAwesomeIcon id="checkBox" style={{marginTop: "10px"}} icon={faCheck} onClick={() => handleChecked(t.id, t.task)}/>
+                                                        </Col>
+                                                        <Col className="col-sm-">
+                                                            <p style={{marginTop: "9px"}}>{t.task}</p>
+                                                        </Col>
+                                                        <Col className="col-sm-2">
+                                                            <FontAwesomeIcon  id="removeTodo" style={{marginTop: "13px"}} onClick={() => deleteTodo(t.id)}icon={faTrashAlt}/>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                            )
+                                        })
+                                        }
+                                        </div>
+                                    </Tab>
+                                    <Tab style={{fontSize: "10px"}} eventKey="completed" title="Completed">
+                                        {completedData == null? <p>Nothing Completed</p>: 
+                                            completedData.map(function(c){
+                                                return (
+                                                    <div id="compList">
+                                                        {c.taskCompleted}
+                                                        <span id="removeComp" style={{float: "right"}} onClick={() => handleDeleteComp(c.id)}>x</span>
+                                                        <span id="undoComp" style={{float: "right"}} onClick={() => handleUndoComp(c.id, c.taskCompleted)}> <FontAwesomeIcon icon={faUndoAlt}/></span>
+                                                        <br></br>
+                                                        {"Completed: " + c.completed}    
+                                                    </div>
+                                                )
+                                            })
+                                        }   
+                                    </Tab>
+                                </Tabs>
+                                
                         </Card.Body>
                     </Card>
                     <br></br>
