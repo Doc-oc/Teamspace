@@ -39,7 +39,7 @@ io.on("connection", socket => {
   socket.name = "Guest"+parseInt(Math.random()*1000);
   socket.color = newColor()
 
-  socket.on('get-document', file => {
+  socket.on('get-document', async file => {
 
     var ref = db.ref(`boards/${file.board}/filespace/${file.filespace}/files`);
     ref.once("value", function(snapshot) {
@@ -53,8 +53,6 @@ io.on("connection", socket => {
           console.log(f.fileData)
       })
     });
-
-    const document = "test"; //function here
 
     socket.join(file.file)
     socket.emit('load-document', file.fileData) // eg.document.dat

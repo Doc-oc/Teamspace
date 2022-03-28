@@ -81,10 +81,10 @@ export default function TextEditor(props){
       quill.enable()
     })
 
-    socket.emit('get-document', files)
+    socket.emit('get-document', files.file)
 
     
-  }, [socket, quill])
+  }, [socket, quill, files])
 
   //save document 
   useEffect(() => {
@@ -118,7 +118,7 @@ export default function TextEditor(props){
        modules: {toolbar: TOOLBAR_OPTIONS}
       })
       q.disable(false)
-      q.setText('Loading...')
+      q.setText("Loading...")
       setQuill(q)
   }, [])
 

@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faEdit, faArrowAltCircleLeft } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
 import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -165,7 +165,7 @@ export default function Filespace() {
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
             <Col className="col-sm-2">
-                <Card className="shadow text-center" style={{minHeight: "600px", borderRadius: 15}}>
+                <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
                 <Card.Body>
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
@@ -200,7 +200,7 @@ export default function Filespace() {
             </Col>
                 
             <Col className="col-sm-7">
-            <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
+            <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
             <Card.Body>
                 <Row>
                     <Col className="col-sm-10">
@@ -234,7 +234,7 @@ export default function Filespace() {
                                         <Form.Group className="mb-3" controlId="boardDesc">
                                             <Form.Control as="textarea" value={filespaceDesc} onInput={(e) => setFilespaceDesc(e.target.value)} rows={3} />
                                         </Form.Group>
-                                        <Button style={{textAlign: "right"}}onClick={() => handleEdit()} >Save Changes</Button>
+                                        <Button id="formButton" style={{textAlign: "right"}}onClick={() => handleEdit()} >Save Changes</Button>
                                         </Form>
                                     </div>
                                 </div>
@@ -305,11 +305,46 @@ export default function Filespace() {
             </Card.Body>
             </Card>
             </Col>
-                <Col className="col-sm-3">
-                <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
+            <Col className="col-sm-3">
+                <Card className="" style={{minHeight: "660px", borderRadius: 15, border: 0}}>
+
                 <Card.Body>
-                    <p>Side Bar</p>
+                    <Card className="shadow" style={{borderRadius: "15px"}}>
+                        <Card.Body >Members go here</Card.Body>
+                    </Card>
+                    <br></br>
+                    <Row>
+                        <Col>
+                            <p style={{marginLeft: "5px"}}>Upcoming</p>
+                        </Col>
+                        <Col style={{textAlign: "right", marginRight: "10px"}}>
+                            <FontAwesomeIcon id="test" icon={faCalendarPlus} style={{cursor: "pointer"}}/>
+                        </Col>
+                    </Row>
+                    
+                    <Card className="shadow" style={{minHeight: "250px", borderRadius: "15px"}}>
+                        <Card.Body>
+                            <Form id="toDo" style={{display: "none"}}>
+                                <Form.Group>
+                                    <Row>
+                                        <Col>
+                                            <Form.Control id="toDoInput" type="text" placeholder="Enter item..." required>
+                                            </Form.Control>
+                                        </Col>
+                                    </Row>
+                                    
+                                </Form.Group>
+                            </Form>
+                        </Card.Body>
+                    </Card>
+                    <br></br>
+
+                    <p>Recent Activity</p>
+                    <Card className="shadow" style={{minHeight: 200, borderRadius: "10px"}}>
+                        
+                    </Card>
                 </Card.Body>
+
                 </Card>
                 </Col>
             </Row>

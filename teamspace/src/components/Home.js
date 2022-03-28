@@ -78,7 +78,7 @@ export default function Home() {
     <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
         <Row>  
           <Col className="col-sm-2">
-            <Card className="shadow text-center" style={{minHeight: "600px", borderRadius: 15}}>
+            <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
               <Card.Body>
               <Container>
               <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
@@ -112,7 +112,7 @@ export default function Home() {
           </Card> 
         </Col>
             <Col className="col-sm-7">
-            <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
+            <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
               <Card.Body>
                 <Container>
                   <Row className="">
@@ -179,7 +179,7 @@ export default function Home() {
                       if(board.userID == userID){
                         return (
                             <Col className="col-sm-3 mt-5 ml-3">
-                              <Card className="shadow text-center" style={{minHeight: "120px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                              <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
                                 <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                 <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}}  style={{textDecoration: 'none', color: "black"}}>
                                   <Card.Footer>{board.boardName}</Card.Footer>
@@ -199,7 +199,7 @@ export default function Home() {
 
             </Col>
             <Col className="col-sm-3">
-            <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
+            <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
               <Card.Body>
                 <p>Side Bar</p>
               </Card.Body>

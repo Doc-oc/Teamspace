@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container,  Nav, Modal} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container,  Nav, Modal, Tab, Tabs} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faEdit, faArrowAltCircleLeft} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
 import '../board.css';
@@ -92,12 +92,16 @@ export default function Board() {
 
     }
 
+    function handleToDo(){
+        document.getElementById("toDo").style.display = "block"
+    }
+
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
             <Col className="col-sm-2">
-                <Card className="shadow text-center" style={{minHeight: "600px", borderRadius: 15}}>
+                <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
                 <Card.Body>
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
@@ -133,7 +137,7 @@ export default function Board() {
             </Col>
                 
             <Col className="col-sm-7">
-            <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
+            <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
             <Card.Body>
                 <Container>
                 <Row className="">
@@ -156,12 +160,12 @@ export default function Board() {
                 </Row>
                 <Row>
                     <Col className="col-sm-2 mt-3">
-                        <Button className="logout shadow rounded" onClick={() => setModal(true)}>
+                        <Button id="defaultButton" className="shadow" onClick={() => setModal(true)}>
                             <FontAwesomeIcon icon={faPlusCircle}/> New
                         </Button>
                     </Col>
                     <Col className="col-sm-2 mt-3">
-                        <Button className="logout shadow rounded">
+                        <Button id="defaultButton" className="shadow">
                             <FontAwesomeIcon icon={faUpload}/> Import
                         </Button>
                     </Col>
@@ -208,12 +212,52 @@ export default function Board() {
                     <Button onClick={() => handleCreateFilespace()} >Create</Button>
                   </Modal.Footer>
             </Modal>
+
             </Col>
                 <Col className="col-sm-3">
-                <Card className="shadow" style={{minHeight: "600px", borderRadius: 15}}>
+                <Card className="" style={{minHeight: "660px", borderRadius: 15, border: 0}}>
+
                 <Card.Body>
-                    <p>Side Bar</p>
+                    <Card className="shadow" style={{borderRadius: "15px"}}>
+                        <Card.Body >Members go here</Card.Body>
+                    </Card>
+                    <br></br>
+                    <Row>
+                        <Col>
+                            <p style={{marginLeft: "5px"}}>Upcoming</p> 
+                        </Col>
+                        <Col style={{textAlign: "right", marginRight: "10px"}}>
+                            <FontAwesomeIcon id="test" onClick={() => handleToDo()} icon={faCalendarPlus} style={{cursor: "pointer"}}/>
+                        </Col>
+                    </Row>
+                    
+                    <Card className="shadow" style={{minHeight: "250px", borderRadius: "15px", textAlign: "center"}}>
+                        <Card.Body className="scrollbar-primary"style={{margin: 0}}>
+                                <Tabs defaultActiveKey="todo" style={{fontSize: "10px"}} className="mb-3">
+                                    <Tab id="tab" eventKey="todo" title="Todo">
+                                        <Form id="toDo" style={{display: "none"}}>
+                                            <Form.Group>
+                                                <Form.Control id="toDoInput" type="text" placeholder="Enter item..." required>
+                                                    
+                                                </Form.Control>
+                                            </Form.Group>
+                                        </Form>
+                                    </Tab>
+                                    <Tab style={{fontSize: "10px"}} eventKey="completed" title="Completed">
+                                        <p>Completed</p>
+                                    </Tab>
+                                </Tabs>
+                                
+                        </Card.Body>
+                    </Card>
+                    <br></br>
+
+                    <p>Recent Activity</p>
+                    <Card className="shadow" style={{minHeight: 200, borderRadius: "10px"}}>
+                        
+                    </Card>
                 </Card.Body>
+
                 </Card>
                 </Col>
             </Row>
