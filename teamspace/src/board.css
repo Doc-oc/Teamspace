@@ -58,13 +58,36 @@
     outline: 0;
     border-width: 0 0 2px;
     border-color: #4176FF;
-    
 }
 
-#toDo {
-    max-width: "5px";
-}
+
 
 #tab {
     font-size: 10px;
+}
+#todoButton {
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 0.5px solid lightgray;
+}
+
+#todoButton:hover {
+    cursor: pointer;
+    background-color: #4176FF;
+    color: white;
+}
+
+#todoTask {
+    display: table;
+    width: 100%;
+    padding: 2px;
+    margin-top: 6px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+#taskContainer {
+    height: 170px;
+    overflow-y: scroll;
 }

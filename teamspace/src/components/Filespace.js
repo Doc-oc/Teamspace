@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
 import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -291,7 +291,7 @@ export default function Filespace() {
                             return (
                                 <Col className="col-sm-2 mt-3">
                                 <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
-                                    <span id="deleteButton" onClick={() => deleteFile(file.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrash}/></span>
+                                    <span id="deleteButton" onClick={() => deleteFile(file.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                     <Link to={{pathname: `/texteditor/${boardID}/${id}/${file.id}`, state:{boardID: boardID, id: id, fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
                                         <Card.Footer>{file.fileName}</Card.Footer>

@@ -111,7 +111,7 @@ export default function Home() {
               </div>
           </Card> 
         </Col>
-            <Col className="col-sm-7">
+            <Col className="col-sm-10">
             <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
               <Card.Body>
                 <Container>
@@ -197,13 +197,6 @@ export default function Home() {
             </Card>
 
 
-            </Col>
-            <Col className="col-sm-3">
-            <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
-              <Card.Body>
-                <p>Side Bar</p>
-              </Card.Body>
-            </Card>
             </Col>
           </Row>
       </Container>

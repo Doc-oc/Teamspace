@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faPlus, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
 import '../board.css';
@@ -29,9 +29,15 @@ export default function Board() {
     const [filespaceDesc, setFilespaceDesc] = useState();
     const [filespaceData, setFilespaceData] = useState();
 
+    //todolist
+    const [toDo, setToDo] = useState();
+    const [todoData, setTodoData] = useState();
 
     const dbBoards = db.ref(`boards`);
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
+    const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
+
     
     const userID = auth.currentUser.uid;
     
@@ -92,11 +98,42 @@ export default function Board() {
 
     }
 
-    function handleToDo(){
+    function displayToDo(){
         document.getElementById("toDo").style.display = "block"
     }
 
+    async function handleToDo(){
+        const todoList = {
+            task: toDo
+        }
 
+        await dbListTodo.push(todoList);
+        setToDo('');
+        document.getElementById("toDo").style.display = "none"
+    }
+
+    useEffect(() => {
+        dbListTodo.on("value", (snapshot)=>{
+            const todoDB = snapshot.val();
+            
+            const todoArray = [];
+            for(let id in todoDB){
+                todoArray.push({id, ...todoDB[id]});
+            }
+        setTodoData(todoArray);
+        });
+        
+    }, [])
+
+    function handleClose(){
+        console.log("handleclose")
+        document.getElementById("toDo").style.display = "none"
+    }
+
+    async function handleChecked(){
+
+    }
+    
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -121,7 +158,7 @@ export default function Board() {
                         <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faSlidersH}/> Settings</Nav.Link>
+                        <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
                     </Nav.Item>
                         <Nav.Item>
                     </Nav.Item>
@@ -227,21 +264,50 @@ export default function Board() {
                             <p style={{marginLeft: "5px"}}>Upcoming</p> 
                         </Col>
                         <Col style={{textAlign: "right", marginRight: "10px"}}>
-                            <FontAwesomeIcon id="test" onClick={() => handleToDo()} icon={faCalendarPlus} style={{cursor: "pointer"}}/>
+                            <FontAwesomeIcon id="test" onClick={() => displayToDo()} icon={faCalendarPlus} style={{cursor: "pointer"}}/>
                         </Col>
                     </Row>
                     
-                    <Card className="shadow" style={{minHeight: "250px", borderRadius: "15px", textAlign: "center"}}>
-                        <Card.Body className="scrollbar-primary"style={{margin: 0}}>
+                    <Card className="shadow" style={{minHeight: "250px", maxHeight:"250px", borderRadius: "15px", overflow: "hidden"}}>
+                        <Card.Body className="scrollbar-primary"style={{margin: 0,}}>
                                 <Tabs defaultActiveKey="todo" style={{fontSize: "10px"}} className="mb-3">
                                     <Tab id="tab" eventKey="todo" title="Todo">
                                         <Form id="toDo" style={{display: "none"}}>
                                             <Form.Group>
-                                                <Form.Control id="toDoInput" type="text" placeholder="Enter item..." required>
-                                                    
-                                                </Form.Control>
+                                                <Row>
+                                                    <Col className="col-sm-8">
+                                                        <Form.Control id="toDoInput" type="text" placeholder="Enter item..." value={toDo} onInput= {(e) => setToDo(e.target.value)} required>
+                                                        </Form.Control>
+                                                    </Col>
+                                                    <Col className="col-sm-2">
+                                                        <span id="todoButton" onClick={() => handleToDo()}>+</span>
+                                                    </Col>
+                                                    <Col className="col-sm-1">
+                                                        <span id="todoButton" onClick={() => handleClose()}>x</span>
+                                                    </Col>
+                                                </Row>
                                             </Form.Group>
                                         </Form>
+                                        <div id="taskContainer">
+                                        {todoData == null? <p>to do is empty</p> :
+                                        todoData.map(function(t){
+                                            return (
+                                                
+                                                    <div id="todoTask" >
+                                                        <Row>
+                                                            <Col className="col-sm-10">
+                                                                <p style={{display: "table-cell", verticalAlign: "middle", padding: "5px"}}>{t.task}</p>
+                                                            </Col>
+                                                            <Col className="col-sm-2">
+                                                                <input style={{display: "table-cell", verticalAlign: "middle", padding: "5px", cursor: "pointer"}} type="checkbox" onClick={() => handleChecked()}/>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                
+                                            )
+                                        })
+                                        }
+                                        </div>
                                     </Tab>
                                     <Tab style={{fontSize: "10px"}} eventKey="completed" title="Completed">
                                         <p>Completed</p>
