@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
+import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import db from '../firebase'
 import '../board.css';
@@ -159,6 +159,10 @@ export default function Board() {
 
     async function handleDeleteComp(e){
         db.ref(`boards/${boardID}/boardList/completed/${e}`).remove()
+    }
+
+    async function deleteTodo(e){
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove()
     }
 
     async function handleUndoComp(e, task){
@@ -326,14 +330,16 @@ export default function Board() {
                                         {todoData == null? <p>to do is empty</p> :
                                         todoData.map(function(t){
                                             return (
-                                                
-                                                <div id="todoTask">
+                                                <div id="todoRow">
                                                     <Row>
-                                                        <Col className="col-sm-10">
-                                                            <p style={{display: "table-cell", verticalAlign: "middle", padding: "5px"}}>{t.task}</p>
+                                                        <Col className="col-sm-1">
+                                                        <FontAwesomeIcon id="checkBox" style={{marginTop: "10px"}} icon={faCheck} onClick={() => handleChecked(t.id, t.task)}/>
+                                                        </Col>
+                                                        <Col className="col-sm-">
+                                                            <p style={{marginTop: "9px"}}>{t.task}</p>
                                                         </Col>
                                                         <Col className="col-sm-2">
-                                                            <input style={{display: "table-cell", verticalAlign: "middle", padding: "5px", cursor: "pointer"}} type="checkbox" checked={false} onClick={() => handleChecked(t.id, t.task)}/>
+                                                            <FontAwesomeIcon  id="removeTodo" style={{marginTop: "13px"}} onClick={() => deleteTodo(t.id)}icon={faTrashAlt}/>
                                                         </Col>
                                                     </Row>
                                                 </div>
