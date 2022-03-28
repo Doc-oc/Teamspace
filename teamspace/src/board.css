@@ -91,3 +91,37 @@
     height: 170px;
     overflow-y: scroll;
 }
+
+#compList {
+    color: grey;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-top: 6px;
+}
+#removeComp {
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 0.5px solid lightgray;
+}
+
+#removeComp:hover {
+    cursor: pointer;
+    background-color: #f84d4d;
+    color: white;
+}
+
+#undoComp {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 0.5px solid lightgray;
+}
+
+#undoComp:hover {
+    cursor: pointer;
+    background-color: #4176FF;
+    color: white;
+}
