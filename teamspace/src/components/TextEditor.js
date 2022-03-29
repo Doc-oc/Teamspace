@@ -29,8 +29,9 @@ export default function TextEditor(props){
   const [fileData, setFileData] = useState();
   const [fileText, setFileText] = useState();
   const [fileContent, setFileContent] = useState()
+  const uid = auth.currentUser.uid;
 
-  const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
+  const dbFiles = db.ref(`${uid}/boards/${boardID}/filespace/${id}/files`)
 
   const userID = auth.currentUser.uid;
 

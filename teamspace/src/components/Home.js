@@ -23,22 +23,20 @@ export default function Home() {
   const [boardDesc, setBoardDesc] = useState();
   const [boardColor, setBoardColor] = useState();
   const [boards, setBoards] = useState();
+  const uid = auth.currentUser.uid;
 
-  const dbRef = db.ref("boards");
-
-  const userID = auth.currentUser.uid;
+  const dbRef = db.ref(`${uid}/boards`);
 
   async function handleCreateBoard(){
     setModal(false)
     console.log("function")
-    const boardRef = db.ref('boards');
         const boards = {
             boardName,
             boardDesc,
             boardColor,
-            userID
+            createdBy: uid
         }
-        await boardRef.push(boards);
+        await dbRef.push(boards);
         setBoardName('');
         setBoardDesc('');
         setBoardDesc('');
@@ -176,7 +174,7 @@ export default function Home() {
                     <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
                   :
                     boards.map(function(board){
-                      if(board.userID == userID){
+
                         return (
                             <Col className="col-sm-3 mt-5 ml-3">
                               <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
@@ -187,7 +185,7 @@ export default function Home() {
                               </Card>
                             </Col>
                         )
-                      }
+                      
                     })
                   }
                 </Row>

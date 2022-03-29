@@ -50,10 +50,12 @@ export default function Signup(){
     const [name, setName] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+
     const register = () => {
         if (!name) alert("Please enter name");
         registerWithEmailAndPassword(name, email, password);
     };
+
     useEffect(() => {
         if (loading) return;
         if (user) navigate.replace("/");

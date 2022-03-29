@@ -19,8 +19,6 @@ export default function Filespace() {
 
     const { boardID, id } =  useParams();
 
-    const IDs = {board: boardID, filespace: id}
-
     const [show, setShow] = useState(false);
     const [error, setError] = useState("")
     //const { currentUser, logout } = useAuth()
@@ -41,12 +39,13 @@ export default function Filespace() {
     const [todoData, setTodoData] = useState();
     const [completedData, setCompletedData] = useState();
     const [display, setDisplay] = useState({display: 'none'});
+    const uid = auth.currentUser.uid;
 
 
-    const dbFilespace = db.ref(`boards/${boardID}/filespace`)
-    const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
-    const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
-    const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
+    const dbFilespace = db.ref(`${uid}/boards/${boardID}/filespace`)
+    const dbFiles = db.ref(`${uid}/boards/${boardID}/filespace/${id}/files`)
+    const dbListTodo = db.ref(`${uid}/boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`${uid}/boards/${boardID}/boardList/completed`)
 
     const userID = auth.currentUser.uid;
 
@@ -59,7 +58,6 @@ export default function Filespace() {
                 filespaceArray.push({id, ...filespaceDB[id]});
             }        
             setFilespaceData(filespaceArray)
-
             
         });
         
@@ -145,18 +143,22 @@ export default function Filespace() {
 
     function deleteFile(fileID){
         console.log(fileID)
-        db.ref(`boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
+        db.ref(`${uid}/boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
     }
 
     function editDetails(){
+        
         filespaceData?.map(function(f){
-            if(f.id = id){
+            console.log(id)
+            if(f.id == id){
                 setFilespaceHeader(f.filespaceName)
                 setFilespaceDesc(f.filespaceDesc)
             }
         })
         document.getElementById("filespaceHeader").style.display = "none"
         document.getElementById("editFilespace").style.display = "block"
+
+        ;
     }
 
     //editing filespace info
@@ -166,6 +168,9 @@ export default function Filespace() {
 
         document.getElementById("filespaceHeader").style.display = "block"
         document.getElementById("editFilespace").style.display = "none"
+
+        setFilespaceHeader('');
+        setFilespaceDesc('')
     }
 
     function displayToDo(){
@@ -208,7 +213,7 @@ export default function Filespace() {
         }
         
         await dbListComp.push(todoComp);
-        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove();
+        db.ref(`${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
         
     }
 
@@ -226,11 +231,11 @@ export default function Filespace() {
     }, [])
 
     async function handleDeleteComp(e){
-        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove()
+        db.ref(`${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
     }
 
     async function deleteTodo(e){
-        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove()
+        db.ref(`${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
     }
 
     async function handleUndoComp(e, task){
@@ -238,7 +243,7 @@ export default function Filespace() {
             task: task
         }
         await dbListTodo.push(undoComp);
-        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove();
+        db.ref(`${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
     }
 
 
@@ -290,7 +295,7 @@ export default function Filespace() {
                         </Link>
                     </Col>
                     <Col className="col-sm-2">
-                        <p onClick={() => editDetails()}id="editButton"><FontAwesomeIcon icon={faEdit}/> Edit</p>
+                        <p onClick={() => editDetails()} id="editButton"><FontAwesomeIcon icon={faEdit}/> Edit</p>
                     </Col>
                 </Row>
 
@@ -307,6 +312,7 @@ export default function Filespace() {
                                         <h5>{fs.filespaceName}</h5> 
                                         <p>{fs.filespaceDesc}</p>
                                     </div>
+
                                     <div id="editFilespace" style={{display: "none"}}>
                                         <Form >
                                         <Form.Group id="fileName">
@@ -315,7 +321,7 @@ export default function Filespace() {
                                         <Form.Group className="mb-3" controlId="boardDesc">
                                             <Form.Control as="textarea" value={filespaceDesc} onInput={(e) => setFilespaceDesc(e.target.value)} rows={3} />
                                         </Form.Group>
-                                        <Button id="formButton" style={{textAlign: "right"}}onClick={() => handleEdit()} >Save Changes</Button>
+                                        <Button id="formButton" style={{textAlign: "right"}} onClick={() => handleEdit()} >Save Changes</Button>
                                         </Form>
                                     </div>
                                 </div>

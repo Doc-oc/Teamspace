@@ -8,6 +8,8 @@ import image from '../img/team.jpg';
 import '../login.css'
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import db from '../firebase'
+
 
 function Login(){
 
@@ -31,12 +33,13 @@ function Login(){
         }
         setLoading(false)
        
-    }*/
+    }*/ 
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+
     useEffect(() => {
         if (loading) {
         // maybe trigger a loading screen
@@ -46,6 +49,8 @@ function Login(){
         else navigate("/login");
 
     }, [user, loading]);
+
+
 
     return (
         <Container fluid className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
@@ -85,10 +90,7 @@ function Login(){
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
                                 />
-                                <button
-                                className="login__btn"
-                                onClick={() => signInWithEmailAndPassword(email, password)}
-                                >
+                                <button className="login__btn" onClick={() => signInWithEmailAndPassword(email, password)}>
                                 Login
                                 </button>
                             </div>

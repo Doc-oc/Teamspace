@@ -39,12 +39,16 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       authProvider: "local",
       email,
     }).then(
-    updateDisplayName(name));
+      updateDisplayName(name)
+    );
   } catch (err) {
     console.error(err);
     alert(err.message);
   }
+
 };
+
+
 const updateDisplayName = async (name) => {
   const update = {
     displayName: name,
