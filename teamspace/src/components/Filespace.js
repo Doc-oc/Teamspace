@@ -42,10 +42,10 @@ export default function Filespace() {
     const uid = auth.currentUser.uid;
 
 
-    const dbFilespace = db.ref(`${uid}/boards/${boardID}/filespace`)
-    const dbFiles = db.ref(`${uid}/boards/${boardID}/filespace/${id}/files`)
-    const dbListTodo = db.ref(`${uid}/boards/${boardID}/boardList/todo`)
-    const dbListComp = db.ref(`${uid}/boards/${boardID}/boardList/completed`)
+    const dbFilespace = db.ref(`users/${uid}/boards/${boardID}/filespace`)
+    const dbFiles = db.ref(`users/${uid}/boards/${boardID}/filespace/${id}/files`)
+    const dbListTodo = db.ref(`users/${uid}/boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`users/${uid}/boards/${boardID}/boardList/completed`)
 
     const userID = auth.currentUser.uid;
 
@@ -143,7 +143,7 @@ export default function Filespace() {
 
     function deleteFile(fileID){
         console.log(fileID)
-        db.ref(`${uid}/boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
+        db.ref(`users/${uid}/boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
     }
 
     function editDetails(){
@@ -213,7 +213,7 @@ export default function Filespace() {
         }
         
         await dbListComp.push(todoComp);
-        db.ref(`${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
+        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
         
     }
 
@@ -231,11 +231,11 @@ export default function Filespace() {
     }, [])
 
     async function handleDeleteComp(e){
-        db.ref(`${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
+        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
     }
 
     async function deleteTodo(e){
-        db.ref(`${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
+        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
     }
 
     async function handleUndoComp(e, task){
@@ -243,7 +243,7 @@ export default function Filespace() {
             task: task
         }
         await dbListTodo.push(undoComp);
-        db.ref(`${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
+        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
     }
 
 

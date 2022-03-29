@@ -25,7 +25,7 @@ export default function Home() {
   const [boards, setBoards] = useState();
   const uid = auth.currentUser.uid;
 
-  const dbRef = db.ref(`${uid}/boards`);
+  const dbRef = db.ref(`users/${uid}/boards`);
 
   async function handleCreateBoard(){
     setModal(false)

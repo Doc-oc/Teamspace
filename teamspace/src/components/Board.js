@@ -35,10 +35,10 @@ export default function Board() {
     const [completedData, setCompletedData] = useState();
     const uid = auth.currentUser.uid;
 
-    const dbBoards = db.ref(`${uid}/boards`);
-    const dbFilespace = db.ref(`${uid}/boards/${boardID}/filespace`)
-    const dbListTodo = db.ref(`${uid}/boards/${boardID}/boardList/todo`)
-    const dbListComp = db.ref(`${uid}/boards/${boardID}/boardList/completed`)
+    const dbBoards = db.ref(`users/${uid}/boards`);
+    const dbFilespace = db.ref(`users/${uid}/boards/${boardID}/filespace`)
+    const dbListTodo = db.ref(`users/${uid}/boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`users/${uid}/boards/${boardID}/boardList/completed`)
 
     
 
@@ -140,7 +140,7 @@ export default function Board() {
         }
         
         await dbListComp.push(todoComp);
-        db.ref(`${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
+        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
         
     }
 
@@ -158,11 +158,11 @@ export default function Board() {
     }, [])
 
     async function handleDeleteComp(e){
-        db.ref(`${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
+        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
     }
 
     async function deleteTodo(e){
-        db.ref(`${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
+        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
     }
 
     async function handleUndoComp(e, task){
@@ -170,7 +170,7 @@ export default function Board() {
             task: task
         }
         await dbListTodo.push(undoComp);
-        db.ref(`${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
+        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
     }
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
