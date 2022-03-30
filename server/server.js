@@ -26,8 +26,6 @@ const io = require('socket.io')(8080, {
 
 var text = "test";
 
-
-
 function newColor()
 {
   return '#'+'0123456789abcdef'.split('').map(function(v,i,a){

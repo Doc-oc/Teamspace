@@ -181,26 +181,38 @@ export default function Board() {
                console.log("exists!");
             } else {
                 alert("Do you want to join board?")
+
             }
 
          });
     }
 
     useEffect(() => {
+        const userId = auth.currentUser.uid;
 
-        dbUsers.once('value',function (snapshot) {
-        snapshot.forEach(function(data) {
-            console.log("in")
-            const snap = data.child('boards').child(boardID).val();
-            if (snap != null){
-                console.log(snap);
-                db.ref(`users/${uid}/boards/`).child(boardID).set(snap)
-                //ref(`users/${uid}/boards/${boardID}`).push(snap)
-                /*set(db.ref(`users/${uid}/boards/${boardID}`), {
-                    ${board} : snap
-                });*/
+        db.ref(`users/${userId}/boards/${boardID}/`).once("value", snapshot => {
+            console.log(uid, boardID)
+            console.log("inside snapshot")
+
+            if(snapshot.exists()){
+
+                dbUsers.once('value',function (snapshotVal) {
+                snapshotVal.forEach(function(data) {
+                    console.log("in")
+                    const snap = data.child('boards').child(boardID).val();
+                    if (snap != null){
+                        console.log(snap);
+                        db.ref(`users/${uid}/boards/`).child(boardID).set(snap)
+                        //ref(`users/${uid}/boards/${boardID}`).push(snap)
+                        /*set(db.ref(`users/${uid}/boards/${boardID}`), {
+                            ${board} : snap
+                        });*/
+                    }
+                    });
+                })
+            } else {
+                console.log("board exists")
             }
-            });
         })
     }, [])
 
@@ -222,7 +234,7 @@ export default function Board() {
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                    <Nav.Link eventKey="Profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                    <Nav.Link href="/profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
@@ -263,7 +275,7 @@ export default function Board() {
                                 </div>
                             )
                         else {
-                            {checkUser(boardID)}
+                            <p>No data</p>
                         }
                         })
                     }

@@ -10,6 +10,7 @@ import { auth } from "../firebase";
 import Board from "./Board";
 import Filespace from "./Filespace";
 import TextEditor from "./TextEditor";
+import Profile from "./Profile";
 /*state = { data: null };
 
 function componentDidMount() {
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/board/:boardID" element={<Board />}/>
                 <Route path="/filespace/:boardID/:id" element={<Filespace />}/>
                 <Route path="texteditor/:boardID/:id/:fileID" element={<TextEditor />}/>
+                <Route path="/profile" element={<Profile />}/>
               </Routes>
           }
           </BrowserRouter>

@@ -264,7 +264,7 @@ export default function Filespace() {
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                    <Nav.Link eventKey="Profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                    <Nav.Link href="/profile" ><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>

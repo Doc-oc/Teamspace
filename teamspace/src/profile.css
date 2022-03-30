@@ -1,0 +1,33 @@
+#userPicture {
+    max-width: 100px;
+    display: inline;
+    border-radius: 50%; 
+    position: absolute;
+    margin-left: -850px;
+    margin-top: 90px;
+    box-shadow: "0 12px 16px 0 rgb(0,0,0,0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19)";
+}
+
+#userPicture:hover {
+    cursor: pointer;
+    -webkit-filter: brightness(40%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+#userDetails{
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 20px;
+    color: black;
+}
+
+#userID {
+    color: gray;
+    margin-bottom: 30px;
+    margin-left: 5px;
+
+}
