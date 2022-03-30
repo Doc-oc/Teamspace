@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faCheck, faUndoAlt, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
 import { firebase, auth, logout, storage } from '../firebase';
+import { set } from "firebase/database";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import db from '../firebase'
 import '../filespace.css'
@@ -58,7 +59,6 @@ export default function Filespace() {
                 filespaceArray.push({id, ...filespaceDB[id]});
             }        
             setFilespaceData(filespaceArray)
-            
         });
         
     }, [])

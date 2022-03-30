@@ -82,7 +82,7 @@ export default function TextEditor(props){
       quill.enable()
     })
 
-    socket.emit('get-document', files.file)
+    socket.emit('get-document', files)
 
     
   }, [socket, quill, files])

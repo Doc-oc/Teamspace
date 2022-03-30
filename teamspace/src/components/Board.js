@@ -6,11 +6,11 @@ import Row from 'react-bootstrap/Row';
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
-import { auth, logout } from '../firebase';
+import { auth, logout} from '../firebase';
 import db from '../firebase'
 import '../board.css';
 import pp from "../img/defaultpp.png"
-
+import { ref, set, get, child } from "firebase/database"
 export default function Board() {
 
     const { boardID } =  useParams();
@@ -35,6 +35,7 @@ export default function Board() {
     const [completedData, setCompletedData] = useState();
     const uid = auth.currentUser.uid;
 
+    const dbUsers = db.ref(`users/`);
     const dbBoards = db.ref(`users/${uid}/boards`);
     const dbFilespace = db.ref(`users/${uid}/boards/${boardID}/filespace`)
     const dbListTodo = db.ref(`users/${uid}/boards/${boardID}/boardList/todo`)
@@ -172,6 +173,37 @@ export default function Board() {
         await dbListTodo.push(undoComp);
         db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
     }
+
+    function checkUser(board){
+        console.log("check user")
+        db.ref(`users/${uid}/boards/${board}/`).once("value", snapshot => {
+            if (snapshot.exists()){
+               console.log("exists!");
+            } else {
+                alert("Do you want to join board?")
+            }
+
+         });
+    }
+
+    useEffect(() => {
+
+        dbUsers.once('value',function (snapshot) {
+        snapshot.forEach(function(data) {
+            console.log("in")
+            const snap = data.child('boards').child(boardID).val();
+            if (snap != null){
+                console.log(snap);
+                db.ref(`users/${uid}/boards/`).child(boardID).set(snap)
+                //ref(`users/${uid}/boards/${boardID}`).push(snap)
+                /*set(db.ref(`users/${uid}/boards/${boardID}`), {
+                    ${board} : snap
+                });*/
+            }
+            });
+        })
+    }, [])
+
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -217,18 +249,22 @@ export default function Board() {
                 <Container>
                 <Row className="">
                     <Col className="col-sm-2 mt-1 ">
-                    {boardData == null? <p>id is null</p>
+                    {boardData == null? <p>board data empty</p>
                     : 
                         boardData.map(function(board){
-                            if(board.id == boardID)
+                        if((board.id == boardID))  
                             return (
                                 <div>
+                                    {console.log("insideif")}
                                     <div id="boardHead">
                                         <h5>{board.boardName}</h5> 
                                         <p>{board.boardDesc}</p>
                                     </div>
                                 </div>
                             )
+                        else {
+                            {checkUser(boardID)}
+                        }
                         })
                     }
                     </Col>
