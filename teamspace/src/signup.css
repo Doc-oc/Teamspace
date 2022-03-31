@@ -18,17 +18,12 @@
 }
 
 #backgroundImage {
-
-    content: "";
-
     background: rgb(0, 0, 0) url("img/stockphoto.jpg") no-repeat fixed top;
     -webkit-filter: blur(5px);
     -moz-filter: blur(5px);
     -o-filter: blur(5px);
     -ms-filter: blur(5px);
     filter: blur(5px);
-    /* also change the blend mode to what suits you, from darken, to other 
-    many options as you deem fit*/
     background-size: cover;
     top: 0;
     left: 0;

@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import {useAuth} from '../context/AuthContext'
 import {Link, useNavigate} from "react-router-dom"
-import image from '../img/team.jpg'; 
+import image from '../img/team.jpeg'; 
 import '../login.css'
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -60,10 +60,10 @@ function Login(){
                 <img className="img-responsive w-100" src={image} alt="Logo"></img>
             </Col>
             <Col>
-                <Card className="w-500 shadow rounded">
+                <Card id="loginCard" className="shadow" style={{width: "35rem"}}>
                     <Card.Body>
-                        <h5 className="text-center mb-4">Welcome To Teamspace!</h5>
-                        <p className="text-center mb-4">Login to your account to continue</p>
+                        <h5 className="text-center mb-4" style={{color: "#4176FF"}}>Welcome To Teamspace!</h5>
+                        <p className="text-center mb-4" style={{color: "grey"}}>Login to your account to continue</p>
                         {error && <Alert variant="danger">{error}</Alert>}
                         {/*<Form onSubmit={handleSubmit}>
                             <Form.Group id="email">
@@ -74,27 +74,13 @@ function Login(){
                             </Form.Group>
                             <Button disabled={loading} className="button w-100 mt-3" type="submit">Login</Button>
                         </Form>*/}
-                        <div className="login">
-                            <div className="login__container">
-                                <input
-                                type="text"
-                                className="login__textBox"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="E-mail Address"
-                                />
-                                <input
-                                type="password"
-                                className="login__textBox"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                                />
-                                <button className="login__btn" onClick={() => signInWithEmailAndPassword(email, password)}>
-                                Login
-                                </button>
-                            </div>
-                        </div>
+                            <input type="text" className="loginInput" value={email} onChange={(e) => setEmail(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf0e0;  E-mail Address"/>
+                            <br></br>
+                            <input type="password" className="loginInput" value={password} onChange={(e) => setPassword(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf023;  Password"/>
+                            <br></br>
+                            <button className="loginBtn" onClick={() => signInWithEmailAndPassword(email, password)}>
+                            Login
+                            </button>
                         
                         <div className="w-100 text-center mb-3 mt-2">
                             Need an Account? <Link to="/signup">Sign up</Link>

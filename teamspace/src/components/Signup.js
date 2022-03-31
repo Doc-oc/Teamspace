@@ -72,19 +72,19 @@ export default function Signup(){
             <Card id="registerCard" className="shadow text-center" style={{padding: "20px"}}>
                 <Card.Body>
                     <h5 className="text-center mb-4" style={{color: "#4176FF"}}>Welcome To Teamspace</h5>
-                    <p style={{marginBottom: "20px"}}>Please sign up below to continue!</p>
+                    <p style={{marginBottom: "20px", color: "grey"}}>Please sign up below to continue!</p>
                     {error && <Alert variant="danger">{error}</Alert>}
-                        <label for="file-upload" className="profilePicture">
+                        {/*<label for="file-upload" className="profilePicture">
                             Upload Profile Picture
                         </label>
                         <br></br>
-                        <input id="file-upload" type="file"/>
+                        <input id="file-upload" type="file"/>*/}
                         <br></br>
                         <input type="text" id="registerInput" value={name} onChange={(e) => setName(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf007;  Full Name"/>
                         <br></br>
                         <input type="text" id="registerInput" value={email} onChange={(e) => setEmail(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf0e0;  E-mail Address" />
                         <br></br>
-                        <input type="password" id="registerInput" value={password} onChange={(e) => setPassword(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf023;  Password"/>
+                        <input type="password" id="registerInput" value={password} onChange={(e) => setPassword(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px", marginBottom: "30px"}} placeholder="&#xf023;  Password"/>
                         <br></br>
                         <button className="shadow" id="registerBtn" onClick={register}>Sign Up</button>
                         <br></br>
