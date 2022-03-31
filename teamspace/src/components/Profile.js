@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faPencilAlt } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faPencilAlt, faPaw } from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import pp from "../img/defaultpp.png"
 import { useNavigate, Link } from "react-router-dom"
@@ -72,12 +72,13 @@ export default function Profile() {
 
             {//user.metadata.creationTime
             }
-            <Col className="col-sm-8">
-                <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}} >
+            <Col className="col-sm-7">
+
+                <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
                     <div style={{display: "inline"}}>
                         <Col style={{marginTop: "20px", marginLeft: "20px", marginRight: "20px"}}>
                             <Card.Img className="shadow" variant="top" style={{position: "relative", maxHeight: "150px",borderRadius: 15}} src={cover}/>
-                            <Card.Img id="userPicture" className="" variant="top" style={{}} src={pp}/>
+                            <Card.Img id="userPicture" className="" variant="top" src={pp}/>
                         </Col>
                     </div>
 

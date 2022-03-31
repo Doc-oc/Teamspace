@@ -3,9 +3,9 @@
     display: inline;
     border-radius: 50%; 
     position: absolute;
-    margin-left: -850px;
+    margin-left: -750px;
+    box-shadow: 0 12px 16px 0 rgb(0,0,0,0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
     margin-top: 90px;
-    box-shadow: "0 12px 16px 0 rgb(0,0,0,0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19)";
 }
 
 #userPicture:hover {
@@ -28,6 +28,6 @@
 #userID {
     color: gray;
     margin-bottom: 30px;
+    margin-top: 30px;
     margin-left: 5px;
-
 }

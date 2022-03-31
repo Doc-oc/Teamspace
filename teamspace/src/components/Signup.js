@@ -1,11 +1,14 @@
 import React , {useEffect, useState} from 'react'
-import {Button, Card, Form, Alert} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Row, Container, Col} from 'react-bootstrap';
 import {useAuth} from '../context/AuthContext'
 import { Link, useNavigate} from "react-router-dom"
 import db from '../firebase'
 import {auth, registerWithEmailAndPassword} from "../firebase"
 import { useAuthState } from "react-firebase-hooks/auth";
-
+import '../signup.css'
+import { faUserAlt } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import stock from '../img/stockphoto.jpg'
 
 export default function Signup(){
 
@@ -63,66 +66,34 @@ export default function Signup(){
 
     return (
         <>
-            <Card>
-                <Card.Body>
-                    <h2 className="text-center mb-4">SignUp</h2>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    {/*<Form onSubmit={handleSubmit}>
-                        <Form.Group id="name">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" ref={nameRef} required />
-                        </Form.Group>
-                        <Form.Group id="email">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" ref={emailRef} required />
-                        </Form.Group>
-                        <Form.Group id="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" ref={passwordRef} required />
-                        </Form.Group>
-                        <Form.Group id="passwordConfirm">
-                            <Form.Label>Password Confirmation</Form.Label>
-                            <Form.Control type="password" ref={passwordConfirmRef} required />
-                        </Form.Group>
-                        <Button disabled={loading} className="w-100" type="submit">Sign Up</Button>
-                        </Form>*/}
+        <div id="backgroundImage"></div>
+        <Container style={{width: "35rem"}}>
 
-                        <div className="register">
-                            <div className="register__container">
-                                <input
-                                type="text"
-                                className="register__textBox"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Full Name"
-                                />
-                                <input
-                                type="text"
-                                className="register__textBox"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="E-mail Address"
-                                />
-                                <input
-                                type="password"
-                                className="register__textBox"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                                />
-                                <button className="register__btn" onClick={register}>
-                                Register
-                                </button>
-                                <div>
-                                Already have an account? <Link to="/">Login</Link> now.
-                                </div>
-                            </div>
-                            </div>
+            <Card id="registerCard" className="shadow text-center" style={{padding: "20px"}}>
+                <Card.Body>
+                    <h5 className="text-center mb-4" style={{color: "#4176FF"}}>Welcome To Teamspace</h5>
+                    <p style={{marginBottom: "20px"}}>Please sign up below to continue!</p>
+                    {error && <Alert variant="danger">{error}</Alert>}
+                        <label for="file-upload" className="profilePicture">
+                            Upload Profile Picture
+                        </label>
+                        <br></br>
+                        <input id="file-upload" type="file"/>
+                        <br></br>
+                        <input type="text" id="registerInput" value={name} onChange={(e) => setName(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf007;  Full Name"/>
+                        <br></br>
+                        <input type="text" id="registerInput" value={email} onChange={(e) => setEmail(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf0e0;  E-mail Address" />
+                        <br></br>
+                        <input type="password" id="registerInput" value={password} onChange={(e) => setPassword(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf023;  Password"/>
+                        <br></br>
+                        <button className="shadow" id="registerBtn" onClick={register}>Sign Up</button>
+                        <br></br>
+                        Already have an account? <Link to="/login">Login</Link>
                 </Card.Body>
             </Card>
-            <div className="w-100 text-center mt-2">
-            Already Have an Account? <Link to="/login">Login</Link>
-            </div>
+
+        </Container>
+
         </>
     )
 }
