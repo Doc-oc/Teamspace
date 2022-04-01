@@ -156,7 +156,7 @@ export default function Home() {
                         <Form.Select value={boardColor} aria-label="selectColor" onInput = {(e) => setBoardColor(e.target.value)}>
                           <option value="#000000">Default</option>
                           <option value="#ff575f">Red</option>
-                          <option value="#8fff91">Green</option>
+                          <option value="#41993f">Green</option>
                           <option value="#69a2ff">Blue</option>
                           <option value="#fbff80">Yellow</option>
                           <option value="#cc85ff">Purple</option>

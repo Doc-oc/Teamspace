@@ -145,3 +145,12 @@
 #todoRow {
     margin-bottom: 5px;
 }
+
+#boardHeader {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    font-size: 10px;
+    padding: 5px;
+    color: black;
+    text-align: center;
+}

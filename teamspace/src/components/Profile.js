@@ -49,7 +49,7 @@ export default function Profile() {
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                    <Nav.Link eventKey="Profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                        <Nav.Link eventKey="Profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
@@ -70,10 +70,8 @@ export default function Profile() {
             </Card> 
             </Col>
 
-            {//user.metadata.creationTime
-            }
-            <Col className="col-sm-7">
 
+            <Col className="col-sm-7">
                 <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
                     <div style={{display: "inline"}}>
                         <Col style={{marginTop: "20px", marginLeft: "20px", marginRight: "20px"}}>
@@ -82,9 +80,7 @@ export default function Profile() {
                         </Col>
                     </div>
 
-
-                    <Card.Body style={{}}> 
-                            
+                    <Card.Body style={{}}>                             
                         <Row>
                             <Col className="col-sm-2" style={{marginTop: "40px", fontSize: "10px"}}>
                             </Col>

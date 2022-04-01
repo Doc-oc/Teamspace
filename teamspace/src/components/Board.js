@@ -21,6 +21,7 @@ export default function Board() {
     const name = auth.currentUser.displayName;
     const [modal, setModal] = useState(false);
 
+
     //teamboards
     const [boardData, setBoardData] = useState();
 
@@ -34,6 +35,8 @@ export default function Board() {
     const [todoData, setTodoData] = useState();
     const [completedData, setCompletedData] = useState();
     const uid = auth.currentUser.uid;
+
+    const [searchData, setSearchData] = useState()
 
     const dbUsers = db.ref(`users/`);
     const dbBoards = db.ref(`users/${uid}/boards`);
@@ -187,7 +190,7 @@ export default function Board() {
          });
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         const userId = auth.currentUser.uid;
 
         db.ref(`users/${userId}/boards/${boardID}/`).once("value", snapshot => {
@@ -206,7 +209,7 @@ export default function Board() {
                         //ref(`users/${uid}/boards/${boardID}`).push(snap)
                         /*set(db.ref(`users/${uid}/boards/${boardID}`), {
                             ${board} : snap
-                        });*/
+                        });
                     }
                     });
                 })
@@ -214,7 +217,7 @@ export default function Board() {
                 console.log("board exists")
             }
         })
-    }, [])
+    }, [])*/
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -254,10 +257,28 @@ export default function Board() {
                 </div>
             </Card> 
             </Col>
-                
+            
             <Col className="col-sm-7">
+            
             <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
             <Card.Body>
+                <Row>
+                    <Col className="col-sm-4"></Col>
+                    <Col className="col-sm-4">
+                        {boardData == null? <p>No Board</p>
+                        :
+                        boardData.map(function(f){
+                            if((f.id == boardID))
+                                return(
+                                    <p className="shadow" id="boardHeader" style={{color: "white", backgroundColor: f.boardColor}}><b>Team Boards</b></p>
+                                )
+                        })
+                        }
+                    </Col>
+                    <Col className="col-sm-4">
+                        
+                    </Col>
+                </Row>
                 <Container>
                 <Row className="">
                     <Col className="col-sm-2 mt-1 ">

@@ -40,9 +40,6 @@
     margin-top: 15%;
 }
 
-input[type="file"] {
-    display: none;
-}
 
 .profilePicture {
     border: 1px solid #ccc;

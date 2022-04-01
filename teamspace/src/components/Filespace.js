@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown, Tabs, Tab} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown, Tabs, Tab, FormControl} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
@@ -49,6 +49,10 @@ export default function Filespace() {
     const dbListComp = db.ref(`users/${uid}/boards/${boardID}/boardList/completed`)
 
     const userID = auth.currentUser.uid;
+    const [searchData, setSearchData] = useState();
+    const [search, setSearch] = useState("");
+
+    
 
     useEffect(() => {
         dbFilespace.on("value", (snapshot)=>{
@@ -137,9 +141,10 @@ export default function Filespace() {
                 fileArray.push({id, ...fileDB[id]});
             }        
             setFileData(fileArray)
-
+            setSearchData(fileData.filter((fs) => fs.fileName.toLowerCase().includes(search.toLowerCase())))
         });
-    }, [])
+    }, [search])
+
 
     function deleteFile(fileID){
         console.log(fileID)
@@ -247,6 +252,7 @@ export default function Filespace() {
     }
 
 
+
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -334,22 +340,6 @@ export default function Filespace() {
                 </Row>
 
 
-                <Row>
-                    <Col className="col-sm-10 mt-4 mr-3">
-                        <input className="form-control" type="text" placeholder="Search" aria-label="Search" />
-                    </Col>
-                    <Col className="col-sm-2">
-                        <Dropdown>
-                            <Dropdown.Toggle id="upload">
-                                <FontAwesomeIcon icon={faPlusCircle}/> New
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setModal(true)}>Upload</Dropdown.Item>
-                                <Dropdown.Item href="#">Create New</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </Col>
-                </Row>
                 
                 <Modal size="md" show={modal} onHide={() => setModal(false)} aria-labelledby="uploadFile">
                   <Modal.Header closeButton>
@@ -370,11 +360,45 @@ export default function Filespace() {
                   </Form>
                 </Modal>
                 </Container>
+                <Row>
+                    <Col className="col-sm-9 mt-4 mr-3">
+                        <Form>
+                            <Form.Control type="text" placeholder="Search" onInput={(e) => setSearch(e.target.value)} style={{marginLeft: "30px", marginBottom: "20px"}}/>
+                        </Form>
+                    </Col>
+
+
+                    <Col className="col-sm-2">
+                        <Dropdown>
+                            <Dropdown.Toggle id="upload">
+                                <FontAwesomeIcon icon={faPlusCircle}/> New
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setModal(true)}>Upload</Dropdown.Item>
+                                <Dropdown.Item href="#">Create New</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+                </Row>
+                
 
                 <Row id="displayFile">
-                    {fileData == null? <p>There is no files</p>
+                    {search.length > 0?
+                    searchData?.map(function(s){
+                        return (
+                            <Col className="col-sm-2 mt-3">
+                                <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
+                                    <span id="deleteButton" onClick={() => deleteFile(s.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
+                                    <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                                    <Link to={{pathname: `/texteditor/${boardID}/${id}/${s.id}`, state:{boardID: boardID, id: id, fileID: s.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
+                                        <Card.Footer>{s.fileName}</Card.Footer>
+                                    </Link>
+                                </Card>
+                            </Col>
+                        )
+                    })
                     : 
-                        fileData.map(function(file){
+                        fileData?.map(function(file){
                             return (
                                 <Col className="col-sm-2 mt-3">
                                 <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
