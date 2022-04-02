@@ -10,7 +10,7 @@ import { auth, logout} from '../firebase';
 import db from '../firebase'
 import '../board.css';
 import pp from "../img/defaultpp.png"
-import { ref, set, get, child } from "firebase/database"
+import { ref, set, get, child, orderByChild } from "firebase/database"
 export default function Board() {
 
     const { boardID } =  useParams();
@@ -22,6 +22,7 @@ export default function Board() {
     const [modal, setModal] = useState(false);
     const [modalInvite, setModalInvite] = useState(false);
     const [newData, setNewData] = useState();
+    const [joinModal, setJoinModal] = useState();
 
 
     //teamboards
@@ -50,18 +51,44 @@ export default function Board() {
 
     
     useEffect(() => {
+    
+        db.ref(`boards/${boardID}/members/`).orderByChild('userID').equalTo(uid).once("value", snapshot => {
+            if(snapshot.exists()){
+                    dbBoards.on("value", (snapshot)=>{
+                        const boardsDB = snapshot.val();
+                        
+                        const boardsArray = [];
+                        for(let id in boardsDB){
+                            boardsArray.push({id, ...boardsDB[id]});
+                        }
+                    setBoardData(boardsArray);
 
-        dbBoards.on("value", (snapshot)=>{
-            const boardsDB = snapshot.val();
-            
-            const boardsArray = [];
-            for(let id in boardsDB){
-                boardsArray.push({id, ...boardsDB[id]});
+                    dbFilespace.on("value", (snapshot)=>{
+                        const filespaceDB = snapshot.val();
+                        
+                        const filespaceArray = [];
+                        for(let id in filespaceDB){
+                            filespaceArray.push({id, ...filespaceDB[id]});
+                        }
+                    setFilespaceData(filespaceArray);
+                });; 
+        
+                });
             }
-        setBoardData(boardsArray);
-        });
+            else {
+                setJoinModal(true)
+            }
+            })
         
     }, [])
+
+    function handleJoinModal(){
+        //db.ref(`boards/${boardID}/members/`).push(uid);
+
+        db.ref(`boards/${boardID}/members/`).push({userID: uid, Name: name})
+        window.location.reload()
+        setJoinModal(false)
+    }   
 
     //filespaces
     useEffect(() => {
@@ -78,21 +105,6 @@ export default function Board() {
                 }              
             })
         })*/
-
-
-
-        dbFilespace.on("value", (snapshot)=>{
-            const filespaceDB = snapshot.val();
-            
-            const filespaceArray = [];
-            for(let id in filespaceDB){
-                filespaceArray.push({id, ...filespaceDB[id]});
-            }
-        setFilespaceData(filespaceArray);
-        });; 
-
-
-        
         
     }, [])
   
@@ -168,7 +180,7 @@ export default function Board() {
         }
         
         await dbListComp.push(todoComp);
-        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove();
         
     }
 
@@ -186,11 +198,11 @@ export default function Board() {
     }, [])
 
     async function handleDeleteComp(e){
-        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
+        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove()
     }
 
     async function deleteTodo(e){
-        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove()
     }
 
     async function handleUndoComp(e, task){
@@ -198,10 +210,10 @@ export default function Board() {
             task: task
         }
         await dbListTodo.push(undoComp);
-        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
+        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove();
     }
 
-    function checkUser(board){
+    /*function checkUser(board){
         console.log("check user")
         db.ref(`users/${uid}/boards/${board}/`).once("value", snapshot => {
             if (snapshot.exists()){
@@ -212,7 +224,7 @@ export default function Board() {
             }
 
          });
-    }
+    }*/
 
 
 
@@ -361,6 +373,25 @@ export default function Board() {
                 </Container>
             </Card.Body>
             </Card>
+
+            <Modal size="lg" show={joinModal} onHide={() => setJoinModal(false)} aria-labelledby="createBoard">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="createBoard">
+                      Join Team Board
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form>
+                      <Form.Group id="joinTitle">
+                        <Form.Label>Do you want to join this team board?</Form.Label>
+                      </Form.Group>
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => handleJoinModal()} >Join</Button>
+                    <Button onClick={() => window.location.reload()} >Close</Button>
+                  </Modal.Footer>
+            </Modal>
 
 
             <Modal size="lg" show={modal} onHide={() => setModal(false)} aria-labelledby="createBoard">

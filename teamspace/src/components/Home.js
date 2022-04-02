@@ -25,7 +25,7 @@ export default function Home() {
   const [boards, setBoards] = useState();
   const uid = auth.currentUser.uid;
 
-  const dbRef = db.ref(`boards`);
+  const dbRef = db.ref(`boards/`);
 
   async function handleCreateBoard(){
     setModal(false)
@@ -37,12 +37,15 @@ export default function Home() {
             createdBy: uid
         }
         await dbRef.push(boards);
+
+
         setBoardName('');
         setBoardDesc('');
         setBoardDesc('');
   }
 
   useEffect(() => {
+
     dbRef.on("value", (snapshot)=>{
       const boardsFromDatabase = snapshot.val();
 
@@ -53,6 +56,8 @@ export default function Home() {
       setBoards(boardArray);
       console.log(boardArray);
     })
+
+    
 
 
   }, [])
@@ -71,6 +76,8 @@ export default function Home() {
       setError("Failed to log out")
     }
   }
+
+
   return (
 
     <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -174,12 +181,11 @@ export default function Home() {
                     <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
                   :
                     boards.map(function(board){
-
                         return (
                             <Col className="col-sm-3 mt-5 ml-3">
                               <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
                                 <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
-                                <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}}  style={{textDecoration: 'none', color: "black"}}>
+                                <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}} style={{textDecoration: 'none', color: "black"}}>
                                   <Card.Footer>{board.boardName}</Card.Footer>
                                 </Link>
                               </Card>
