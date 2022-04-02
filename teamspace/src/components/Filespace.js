@@ -43,10 +43,10 @@ export default function Filespace() {
     const uid = auth.currentUser.uid;
 
 
-    const dbFilespace = db.ref(`users/${uid}/boards/${boardID}/filespace`)
-    const dbFiles = db.ref(`users/${uid}/boards/${boardID}/filespace/${id}/files`)
-    const dbListTodo = db.ref(`users/${uid}/boards/${boardID}/boardList/todo`)
-    const dbListComp = db.ref(`users/${uid}/boards/${boardID}/boardList/completed`)
+    const dbFilespace = db.ref(`boards/${boardID}/filespace`)
+    const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
+    const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
 
     const userID = auth.currentUser.uid;
     const [searchData, setSearchData] = useState();
@@ -355,7 +355,7 @@ export default function Filespace() {
                     </Modal.Body>
                     
                     <Modal.Footer>
-                        <Button type="submit">Upload File</Button>
+                        <Button type="submit" onClick={() => setModal(false)}>Upload File</Button>
                     </Modal.Footer>
                   </Form>
                 </Modal>

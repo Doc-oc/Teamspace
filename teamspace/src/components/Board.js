@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
+import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faUserPlus, faCalendarPlus, faInfoCircle } from '@fortawesome/fontawesome-free-solid'
 import { auth, logout} from '../firebase';
 import db from '../firebase'
 import '../board.css';
@@ -20,10 +20,13 @@ export default function Board() {
     const navigate = useNavigate()
     const name = auth.currentUser.displayName;
     const [modal, setModal] = useState(false);
+    const [modalInvite, setModalInvite] = useState(false);
+    const [newData, setNewData] = useState();
 
 
     //teamboards
     const [boardData, setBoardData] = useState();
+
 
     //filespace
     const [filespaceName, setFilespaceName] = useState();
@@ -39,15 +42,15 @@ export default function Board() {
     const [searchData, setSearchData] = useState()
 
     const dbUsers = db.ref(`users/`);
-    const dbBoards = db.ref(`users/${uid}/boards`);
-    const dbFilespace = db.ref(`users/${uid}/boards/${boardID}/filespace`)
-    const dbListTodo = db.ref(`users/${uid}/boards/${boardID}/boardList/todo`)
-    const dbListComp = db.ref(`users/${uid}/boards/${boardID}/boardList/completed`)
-
-    
+    const dbBoards = db.ref(`boards`);
+    const dbFilespace = db.ref(`boards/${boardID}/filespace`)
+    const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
+    const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
+    const dbMembers = db.ref(`boards/${boardID}/members`);
 
     
     useEffect(() => {
+
         dbBoards.on("value", (snapshot)=>{
             const boardsDB = snapshot.val();
             
@@ -62,6 +65,22 @@ export default function Board() {
 
     //filespaces
     useEffect(() => {
+        /*dbUsers.once('value',function (snapshotVal) {
+            snapshotVal.forEach(function(data) {
+                const snap = data.child('boards').child(boardID).val();
+                if (snap != null){
+                    db.ref(`users/${uid}`)
+                        .orderByChild('boards')
+                        .equalTo(boardID)
+                        .once('value', function (snapshot) {
+                            db.ref(`users/${uid}/boards/`).child(boardID).update(snap);
+                        })
+                }              
+            })
+        })*/
+
+
+
         dbFilespace.on("value", (snapshot)=>{
             const filespaceDB = snapshot.val();
             
@@ -70,7 +89,10 @@ export default function Board() {
                 filespaceArray.push({id, ...filespaceDB[id]});
             }
         setFilespaceData(filespaceArray);
-        });
+        });; 
+
+
+        
         
     }, [])
   
@@ -98,6 +120,8 @@ export default function Board() {
             boardID
         }
         await dbFilespace.push(filespaces);
+
+        //db.ref(`users/${uid}/boards/`).child(boardID).update(filespaces)
 
         setFilespaceName('');
         setFilespaceDesc('');
@@ -190,15 +214,15 @@ export default function Board() {
          });
     }
 
+
+
     /*useEffect(() => {
+
         const userId = auth.currentUser.uid;
+        console.log(userId, auth.currentUser.displayName)
 
         db.ref(`users/${userId}/boards/${boardID}/`).once("value", snapshot => {
-            console.log(uid, boardID)
-            console.log("inside snapshot")
-
-            if(snapshot.exists()){
-
+            if(!snapshot.exists()){
                 dbUsers.once('value',function (snapshotVal) {
                 snapshotVal.forEach(function(data) {
                     console.log("in")
@@ -218,6 +242,10 @@ export default function Board() {
             }
         })
     }, [])*/
+
+    async function handleInvite(obj){
+        await db.ref(`users/${uid}/boards/`).child(boardID).update(obj);
+    }
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -263,7 +291,8 @@ export default function Board() {
             <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
             <Card.Body>
                 <Row>
-                    <Col className="col-sm-4"></Col>
+                    <Col className="col-sm-4">
+                    </Col>
                     <Col className="col-sm-4">
                         {boardData == null? <p>No Board</p>
                         :
@@ -276,7 +305,7 @@ export default function Board() {
                         }
                     </Col>
                     <Col className="col-sm-4">
-                        
+                        <p onClick={() => setModalInvite(true)} id="inviteButton"><FontAwesomeIcon icon={faUserPlus}/> Invite</p>
                     </Col>
                 </Row>
                 <Container>
@@ -354,6 +383,24 @@ export default function Board() {
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={() => handleCreateFilespace()} >Create</Button>
+                  </Modal.Footer>
+            </Modal>
+
+            <Modal size="lg" show={modalInvite} onHide={() => setModalInvite(false)} aria-labelledby="createBoard">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="createBoard">
+                      Invite Users <FontAwesomeIcon icon={faUserPlus}/>
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form>
+                      <Form.Group id="boardName">
+                        <Form.Label>Invite Link: <b style={{color: "#4176FF"}}>{window.location.href}</b>  <FontAwesomeIcon icon={faClipboard} style={{cursor: "pointer"}} onClick={() =>  navigator.clipboard.writeText(window.location.href)}Copy/></Form.Label>
+                      </Form.Group>
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => setModalInvite(false)}>Close</Button>
                   </Modal.Footer>
             </Modal>
 

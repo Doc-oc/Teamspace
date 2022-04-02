@@ -154,3 +154,21 @@
     color: black;
     text-align: center;
 }
+
+#inviteButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding-left: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    color: black;
+    max-width: 85px;
+    font-size: 12px;
+    margin-left: 120px;
+}
+
+#inviteButton:hover {
+    background-color: #4176FF;
+    cursor: pointer;
+    color: white;
+}
