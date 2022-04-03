@@ -40,12 +40,14 @@ export default function Filespace() {
     const [completedData, setCompletedData] = useState();
     const [display, setDisplay] = useState({display: 'none'});
     const uid = auth.currentUser.uid;
-
+    const [membersData, setMembersData] = useState();
 
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
     const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
     const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
+    const dbMembers = db.ref(`boards/${boardID}/members`);
+
 
     const userID = auth.currentUser.uid;
     const [searchData, setSearchData] = useState();
@@ -63,6 +65,17 @@ export default function Filespace() {
             }        
             setFilespaceData(filespaceArray)
         });
+
+        dbMembers.on("value", (snapshot)=>{
+            const membersDB = snapshot.val();
+            const membersArray = [];
+
+            for(let id in membersDB){
+                membersArray.push({id, ...membersDB[id]});
+            }
+
+            setMembersData(membersArray);
+        })
         
     }, [])
 
@@ -147,7 +160,7 @@ export default function Filespace() {
 
     function deleteFile(fileID){
         console.log(fileID)
-        db.ref(`users/${uid}/boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
+        db.ref(`boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
     }
 
     function editDetails(){
@@ -217,7 +230,7 @@ export default function Filespace() {
         }
         
         await dbListComp.push(todoComp);
-        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove();
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove();
         
     }
 
@@ -235,11 +248,11 @@ export default function Filespace() {
     }, [])
 
     async function handleDeleteComp(e){
-        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove()
+        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove()
     }
 
     async function deleteTodo(e){
-        db.ref(`users/${uid}/boards/${boardID}/boardList/todo/${e}`).remove()
+        db.ref(`boards/${boardID}/boardList/todo/${e}`).remove()
     }
 
     async function handleUndoComp(e, task){
@@ -247,7 +260,7 @@ export default function Filespace() {
             task: task
         }
         await dbListTodo.push(undoComp);
-        db.ref(`users/${uid}/boards/${boardID}/boardList/completed/${e}`).remove();
+        db.ref(`boards/${boardID}/boardList/completed/${e}`).remove();
     }
 
 
@@ -419,9 +432,19 @@ export default function Filespace() {
                 <Card className="" style={{minHeight: "660px", borderRadius: 15, border: 0}}>
 
                 <Card.Body>
-                    <Card className="shadow" style={{borderRadius: "15px"}}>
-                        <Card.Body >Members go here</Card.Body>
-                    </Card>
+                    <Card className="shadow" style={{minWidth: "20px", overflowY: "scroll", borderRadius: "15px"}}>
+                            <Card.Body >
+                                {membersData == null? <p>No members</p> :
+                                membersData.map(function(m){
+                                    return(
+                                        <div style={{display: "inline"}}>
+                                            <img style={{height: "30px", marginRight: "5px"}} src={m.photoURL}/>
+                                        </div>
+                                    )   
+                                })
+                                }
+                            </Card.Body>
+                        </Card>
                     <br></br>
                     <Row>
                         <Col>

@@ -11,6 +11,7 @@ import db from '../firebase'
 import '../board.css';
 import { ref, set, get, child, orderByChild } from "firebase/database"
 import ScrollMenu from 'react-horizontal-scrolling-menu';
+import ReactTooltip from 'react-tooltip';
 
 
 export default function Board() {
@@ -58,6 +59,7 @@ export default function Board() {
         
         db.ref(`boards/${boardID}/members/`).orderByChild('userID').equalTo(uid).once("value", snapshot => {
             if(snapshot.exists()){
+
                     dbBoards.on("value", (snapshot)=>{
                         const boardsDB = snapshot.val();
                         
@@ -462,7 +464,8 @@ export default function Board() {
                             membersData.map(function(m){
                                 return(
                                     <div style={{display: "inline"}}>
-                                        <img style={{height: "30px", marginRight: "5px"}} src={m.photoURL}/>
+                                        <img id="memberImage" style={{height: "30px", marginRight: "5px"}} data-tip={m.Name} src={m.photoURL}/>
+                                        <ReactTooltip />
                                     </div>
                                 )   
                             })
