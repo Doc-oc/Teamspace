@@ -3,7 +3,7 @@ import {Button, Card, Form, Alert, Row, Container, Col} from 'react-bootstrap';
 import {useAuth} from '../context/AuthContext'
 import { Link, useNavigate} from "react-router-dom"
 import db from '../firebase'
-import {auth, registerWithEmailAndPassword} from "../firebase"
+import {auth, registerWithEmailAndPassword, storage} from "../firebase"
 import { useAuthState } from "react-firebase-hooks/auth";
 import '../signup.css'
 import { faUserAlt } from '@fortawesome/fontawesome-free-solid'
@@ -57,11 +57,13 @@ export default function Signup(){
     const register = () => {
         if (!name) alert("Please enter name");
         registerWithEmailAndPassword(name, email, password);
+
+
     };
 
     useEffect(() => {
         if (loading) return;
-        if (user) navigate.replace("/");
+        if (user) navigate("/");
     }, [user, loading]);
 
     return (

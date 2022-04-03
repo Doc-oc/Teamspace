@@ -13,7 +13,6 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import db from '../firebase'
 import '../filespace.css'
 import TextEditor from './TextEditor'
-import pp from "../img/defaultpp.png"
 
 
 export default function Filespace() {
@@ -262,7 +261,7 @@ export default function Filespace() {
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                     <br></br>
-                    <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
+                    <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
                     <br></br>
                     {error && <Alert variant="danger">{error}</Alert>}
                     {name}

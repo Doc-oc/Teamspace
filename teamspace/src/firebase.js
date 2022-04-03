@@ -33,7 +33,9 @@ const signInWithEmailAndPassword = async (email, password) => {
   }
 };
 const registerWithEmailAndPassword = async (name, email, password) => {
+  
   try {
+ 
     const res = await auth.createUserWithEmailAndPassword(email, password);
     const user = res.user;
     await dbAuth.collection("users").add({
@@ -41,7 +43,8 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       authProvider: "local",
       email,
     }).then(
-      updateDisplayName(name)
+      updateDisplayName(name),
+      
     );
   } catch (err) {
     console.error(err);
@@ -50,13 +53,19 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 
 };
 
-
 const updateDisplayName = async (name) => {
+
+  storage.ref(`ProfilePictures/defaultpp.png`).getDownloadURL()
+  .then((url) => {
+      auth.currentUser.updateProfile({ photoURL: url })    
+  })
+
   const update = {
     displayName: name,
   };
   console.log(auth);
   await auth.currentUser.updateProfile(update);
+  
   console.log("finished");
   window.location = ("/");
 }

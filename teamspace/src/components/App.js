@@ -4,7 +4,6 @@ import Signup from "./Signup";
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from "./Home"
 import Login from "./Login"
-import UserDetails from "./UserDetails";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from "../firebase";
 import Board from "./Board";
@@ -47,7 +46,6 @@ function App() {
               :
               <Routes>
                 <Route path="/" element={<Home />}/>
-                <Route path="/details" element={<UserDetails />} />
                 <Route path="/board/:boardID" element={<Board />}/>
                 <Route path="/filespace/:boardID/:id" element={<Filespace />}/>
                 <Route path="texteditor/:boardID/:id/:fileID" element={<TextEditor />}/>

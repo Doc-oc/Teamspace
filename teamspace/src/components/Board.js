@@ -9,8 +9,10 @@ import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, f
 import { auth, logout} from '../firebase';
 import db from '../firebase'
 import '../board.css';
-import pp from "../img/defaultpp.png"
 import { ref, set, get, child, orderByChild } from "firebase/database"
+import ScrollMenu from 'react-horizontal-scrolling-menu';
+
+
 export default function Board() {
 
     const { boardID } =  useParams();
@@ -19,10 +21,12 @@ export default function Board() {
     //const { currentUser, logout } = useAuth()
     const navigate = useNavigate()
     const name = auth.currentUser.displayName;
+    const photo = auth.currentUser.photoURL;
     const [modal, setModal] = useState(false);
     const [modalInvite, setModalInvite] = useState(false);
     const [newData, setNewData] = useState();
     const [joinModal, setJoinModal] = useState();
+    const [membersData, setMembersData] = useState();
 
 
     //teamboards
@@ -51,7 +55,7 @@ export default function Board() {
 
     
     useEffect(() => {
-    
+        
         db.ref(`boards/${boardID}/members/`).orderByChild('userID').equalTo(uid).once("value", snapshot => {
             if(snapshot.exists()){
                     dbBoards.on("value", (snapshot)=>{
@@ -71,6 +75,18 @@ export default function Board() {
                             filespaceArray.push({id, ...filespaceDB[id]});
                         }
                     setFilespaceData(filespaceArray);
+
+                    dbMembers.on("value", (snapshot)=>{
+                        const membersDB = snapshot.val();
+                        const membersArray = [];
+
+                        for(let id in membersDB){
+                            membersArray.push({id, ...membersDB[id]});
+                        }
+
+                        setMembersData(membersArray);
+                    })
+
                 });; 
         
                 });
@@ -85,7 +101,7 @@ export default function Board() {
     function handleJoinModal(){
         //db.ref(`boards/${boardID}/members/`).push(uid);
 
-        db.ref(`boards/${boardID}/members/`).push({userID: uid, Name: name})
+        db.ref(`boards/${boardID}/members/`).push({userID: uid, Name: name, photoURL: photo})
         window.location.reload()
         setJoinModal(false)
     }   
@@ -268,7 +284,7 @@ export default function Board() {
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                     <br></br>
-                    <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
+                    <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
                     <br></br>
                     {error && <Alert variant="danger">{error}</Alert>}
                     {name}
@@ -332,7 +348,7 @@ export default function Board() {
                                     {console.log("insideif")}
                                     <div id="boardHead">
                                         <h5>{board.boardName}</h5> 
-                                        <p>{board.boardDesc}</p>
+                                        <p style={{color: "grey"}}>{board.boardDesc}</p>
                                     </div>
                                 </div>
                             )
@@ -367,7 +383,7 @@ export default function Board() {
                                 <p id="filespace">{fs.filespaceName}</p>
                             </Link>
                         )
-                        })
+                    })
                     }
                 </Row>
                 </Container>
@@ -438,10 +454,20 @@ export default function Board() {
             </Col>
                 <Col className="col-sm-3">
                 <Card className="" style={{minHeight: "660px", borderRadius: 15, border: 0}}>
-
+                
                 <Card.Body>
-                    <Card className="shadow" style={{borderRadius: "15px"}}>
-                        <Card.Body >Members go here</Card.Body>
+                    <Card className="shadow" style={{minWidth: "20px", overflowY: "scroll", borderRadius: "15px"}}>
+                        <Card.Body >
+                            {membersData == null? <p>No members</p> :
+                            membersData.map(function(m){
+                                return(
+                                    <div style={{display: "inline"}}>
+                                        <img style={{height: "30px", marginRight: "5px"}} src={m.photoURL}/>
+                                    </div>
+                                )   
+                            })
+                            }
+                        </Card.Body>
                     </Card>
                     <br></br>
                     <Row>

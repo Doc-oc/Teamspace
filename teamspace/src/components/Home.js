@@ -7,10 +7,10 @@ import { useNavigate, Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
 import '../home.css'
-import { auth, logout } from '../firebase';
+import { auth, logout, storage} from '../firebase';
 import db from '../firebase'
-import boardData from './Board'
-import pp from "../img/defaultpp.png"
+import boardData from './Board';
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 
 export default function Home() {
@@ -23,6 +23,10 @@ export default function Home() {
   const [boardDesc, setBoardDesc] = useState();
   const [boardColor, setBoardColor] = useState();
   const [boards, setBoards] = useState();
+  const [url, setURL] = useState();
+  const [members, setMembers] = useState();
+  const [boardID, setBoardID] = useState();
+
   const uid = auth.currentUser.uid;
 
   const dbRef = db.ref(`boards/`);
@@ -45,19 +49,16 @@ export default function Home() {
   }
 
   useEffect(() => {
+    
 
     dbRef.on("value", (snapshot)=>{
       const boardsFromDatabase = snapshot.val();
-
       const boardArray = [];
       for(let id in boardsFromDatabase){
           boardArray.push({id, ...boardsFromDatabase[id]});
       }
       setBoards(boardArray);
-      console.log(boardArray);
     })
-
-    
 
 
   }, [])
@@ -78,6 +79,34 @@ export default function Home() {
   }
 
 
+  /*function handlePP(){
+    const storageRef = ref(storage, `ProfilePictures/defaultpp.png`);        
+        const uploadTask = uploadBytesResumable(storageRef, file);
+    
+        /*uploadTask.on("state_changed",(snapshot) => {
+            const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            //setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                  setURL(downloadURL)
+                })
+          })
+  }*/
+  
+  function handleJoined(boardID){
+    db.ref(`boards/${boardID}/members/`).on("value", (snapshot)=>{
+        const membersFromDatabase = snapshot.val();
+  
+        const membersArray = [];
+        for(let id in membersFromDatabase){
+            membersArray.push({id, ...membersFromDatabase[id]});
+        }
+        setMembers(membersArray);
+    })
+  }
+
   return (
 
     <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -88,7 +117,7 @@ export default function Home() {
               <Container>
               <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                 <br></br>
-                <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
+                <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
                 <br></br>
                 {error && <Alert variant="danger">{error}</Alert>}
                 {name}
@@ -175,28 +204,67 @@ export default function Home() {
                     <Button onClick={() => handleCreateBoard()} >Create Board</Button>
                   </Modal.Footer>
                 </Modal>
+                      
+                <Row>
+                  <div id="homeHead">
+                        <p style={{color: "lightgray"}}>Created Boards</p>
+                    </div>
+                </Row>
 
                 <Row className="">
+
                   {boards == null?
                     <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
                   :
                     boards.map(function(board){
+                      if(board.createdBy == uid)
                         return (
-                            <Col className="col-sm-3 mt-5 ml-3">
-                              <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
-                                <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
-                                <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}} style={{textDecoration: 'none', color: "black"}}>
-                                  <Card.Footer>{board.boardName}</Card.Footer>
-                                </Link>
-                              </Card>
-                            </Col>
+                          <Col className="col-sm-3 mt-2 ml-3">
+                            <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                              <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                              <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}} style={{textDecoration: 'none', color: "black"}}>
+                                <Card.Footer>{board.boardName}</Card.Footer>
+                              </Link>
+                            </Card>
+                          </Col>
                         )
-                      
                     })
                   }
                 </Row>
 
-
+                <Row>
+                  <div id="homeHead">
+                     <p style={{color: "lightgray", marginTop: "20px"}}>Joined Boards</p>
+                  </div>
+                </Row>
+                <Row>
+                {boards == null?
+                    <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
+                  :
+                    boards.map(function (board) {
+                        if(board.members != null){
+                          return(
+                            Object.values(board?.members).map(function(m){
+                              if(m.userID == uid && board.createdBy != uid){
+                                return(
+                                  <Col className="col-sm-3 mt-2 ml-3">
+                                    <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                                      <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                                      <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}} style={{textDecoration: 'none', color: "black"}}>
+                                        <Card.Footer>{board.boardName}</Card.Footer>
+                                    </Link>
+                                    </Card>
+                                  </Col>
+                                )
+                              }
+                            })
+                          )
+                        }
+                        
+                    })
+                    
+                  }
+                </Row>
               </Card.Body>
             </Card>
 

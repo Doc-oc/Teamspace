@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faPencilAlt, faPaw } from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
-import pp from "../img/defaultpp.png"
 import { useNavigate, Link } from "react-router-dom"
 import cover from "../img/testcover.jpg"
 import '../profile.css';
@@ -41,7 +40,7 @@ export default function Profile() {
                 <Container>
                 <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
                     <br></br>
-                    <img src={pp} className="img-responsive w-50 mt-5 roundedCircle"></img>
+                    <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
                     <br></br>
                     {error && <Alert variant="danger">{error}</Alert>}
                     {name}
@@ -76,7 +75,7 @@ export default function Profile() {
                     <div style={{display: "inline"}}>
                         <Col style={{marginTop: "20px", marginLeft: "20px", marginRight: "20px"}}>
                             <Card.Img className="shadow" variant="top" style={{position: "relative", maxHeight: "150px",borderRadius: 15}} src={cover}/>
-                            <Card.Img id="userPicture" className="" variant="top" src={pp}/>
+                            <Card.Img id="userPicture" className="" variant="top" src={auth.currentUser.photoURL}/>
                         </Col>
                     </div>
 
