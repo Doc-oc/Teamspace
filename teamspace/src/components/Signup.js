@@ -1,6 +1,5 @@
 import React , {useEffect, useState} from 'react'
 import {Button, Card, Form, Alert, Row, Container, Col} from 'react-bootstrap';
-import {useAuth} from '../context/AuthContext'
 import { Link, useNavigate} from "react-router-dom"
 import db from '../firebase'
 import {auth, registerWithEmailAndPassword, storage} from "../firebase"
