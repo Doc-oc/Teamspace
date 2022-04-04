@@ -13,6 +13,8 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import db from '../firebase'
 import '../filespace.css'
 import TextEditor from './TextEditor'
+import ReactTooltip from 'react-tooltip';
+
 
 
 export default function Filespace() {
@@ -33,6 +35,7 @@ export default function Filespace() {
     const [fileText, setFileText] = useState();
     const [filespaceHeader, setFilespaceHeader] = useState();
     const [filespaceDesc, setFilespaceDesc] = useState();
+    const [boardData, setBoardData] = useState();
 
     //todo 
     const [toDo, setToDo] = useState();
@@ -47,6 +50,7 @@ export default function Filespace() {
     const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
     const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
     const dbMembers = db.ref(`boards/${boardID}/members`);
+    const dbBoards = db.ref(`boards`);
 
 
     const userID = auth.currentUser.uid;
@@ -75,6 +79,16 @@ export default function Filespace() {
             }
 
             setMembersData(membersArray);
+        })
+
+        dbBoards.on("value", (snapshot)=>{
+            const boardsDB = snapshot.val();
+            
+            const boardsArray = [];
+            for(let id in boardsDB){
+                boardsArray.push({id, ...boardsDB[id]});
+            }
+        setBoardData(boardsArray);
         })
         
     }, [])
@@ -307,13 +321,24 @@ export default function Filespace() {
             <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
             <Card.Body>
                 <Row>
-                    <Col className="col-sm-10">
+                    <Col className="col-sm-4">
                         <Link to={{pathname: `/board/${boardID}`, state: {boardID: boardID}}}  style={{textDecoration: 'none', color: "black"}}>
                             <p  id="backButton"><FontAwesomeIcon icon={faArrowAltCircleLeft}/> Team Board</p>
                         </Link>
                     </Col>
-                    <Col className="col-sm-2">
-                        <p onClick={() => editDetails()} id="editButton"><FontAwesomeIcon icon={faEdit}/> Edit</p>
+                    <Col className="col-sm-4">
+                        {boardData == null? <p>No Board</p>
+                        :
+                        boardData.map(function(f){
+                            if((f.id == boardID))
+                                return(
+                                    <p className="shadow" id="boardHeader" style={{color: "white", backgroundColor: f.boardColor}}><b>Filespace</b></p>
+                                )
+                        })
+                        }
+                    </Col>
+                    <Col className="col-sm-4">
+                        <p onClick={() => editDetails()} id="editFilespaceButton"><FontAwesomeIcon icon={faEdit}/> Edit</p>
                     </Col>
                 </Row>
 
@@ -343,7 +368,6 @@ export default function Filespace() {
                                         </Form>
                                     </div>
                                 </div>
-                                
                             )
                         }
                     })
@@ -438,7 +462,8 @@ export default function Filespace() {
                                 membersData.map(function(m){
                                     return(
                                         <div style={{display: "inline"}}>
-                                            <img style={{height: "30px", marginRight: "5px"}} src={m.photoURL}/>
+                                            <img style={{height: "30px", marginRight: "5px"}} data-tip={m.Name} src={m.photoURL}/>
+                                            <ReactTooltip />
                                         </div>
                                     )   
                                 })

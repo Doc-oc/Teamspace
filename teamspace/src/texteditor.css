@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 
-body {
+#wholePage {
     background-color: #f3f3f3;
 }
 
@@ -27,7 +27,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1;
-    background-color: #f3f3f3;
+    background-color: white;
     border: none;
     box-shadow: 0 0 5px 0 rgba(0,0,0,.5);
 
@@ -54,4 +54,42 @@ body {
     .container > .ql-toolbar.ql-snow {
         display: none;
     }
+}
+
+#textButtons {
+    border: 0px;
+    font-size: 12px;
+    background-color: white;
+    color:black;
+}
+
+#joinedContainer {
+    max-width: 200px;
+    background-color: #4176FF;
+    color: white;
+}
+
+#joinedMessage {
+    font-size: 12px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+#xButton {
+    margin-right: 5px;
+    padding: 2px;
+
+}
+
+#xButton:hover {
+    cursor: pointer;
+}
+
+#backToButton {
+    border: 0px;
+    font-size: 12px;
+    padding: 6px;
+    width: 100px;
+    background-color: white;
+    color:black;
 }

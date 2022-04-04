@@ -24,43 +24,39 @@ const io = require('socket.io')(8080, {
   
 })
 
-var text = "test";
-
-function newColor()
-{
-  return '#'+'0123456789abcdef'.split('').map(function(v,i,a){
-  return i>5 ? null : a[Math.floor(Math.random()*16)] }).join('');
-}
-  
 io.on("connection", socket => {
 
-  socket.name = "Guest"+parseInt(Math.random()*1000);
-  socket.color = newColor()
-
   socket.on('get-document', async file => {
+    // and then later
+
+    /*socket.on('joined', (socket) => {
+      socket.broadcast.to(file.file).emit("hello", "world");
+    });*/
 
     var ref = db.ref(`boards/${file.board}/filespace/${file.filespace}/files`);
     ref.once("value", function(snapshot) {
       const fileDB = snapshot.val();
       const fileArray = [];
       for(let id in fileDB){
-          fileArray.push({id, ...fileDB[id]});
+        fileArray.push({id, ...fileDB[id]});
       } 
-      fileArray.map(function(f){
-        if(f.id == file.file)
-          console.log(f.fileData)
-      })
     });
 
     socket.join(file.file)
+  
     socket.emit('load-document', file.fileData) // eg.document.dat
 
     socket.on('send-changes', delta => {
       socket.broadcast.to(file.file).emit("recieve-changes", delta)
     })
 
+    socket.on('joinedUser', data => {
+      //socket.broadcast.emit(message);
+      socket.broadcast.emit("recieve-joined", data)
+    })
+  
     socket.on("save-document", async data => {
-       //await function
+      db.ref(`boards/${file.board}/filespace/${file.filespace}/files/${file.file}`).update({fileData: data});
     })
   })
 })

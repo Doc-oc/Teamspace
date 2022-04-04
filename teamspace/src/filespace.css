@@ -25,15 +25,12 @@
     margin-left: 25px;
 }
 
-#editButton {
-    border: 1px solid lightgray;
-    border-radius: 15px;
-    padding: 10px;
-    color: black;
-    max-width: 65px;
-    font-size: 12px;
-    margin-left: 10px;
+#backButton:hover {
+    cursor: pointer;
+    background-color: #4176FF;
+    color: white;
 }
+
 
 #displayFile {
     margin-left: 2px;
@@ -54,13 +51,45 @@
     width: 730px;
 }
 
-#editButton:hover {
+
+#editFilespaceButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding-left: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    color: black;
+    max-width: 85px;
+    font-size: 12px;
+    margin-left: 120px;
+}
+#editFilespaceButton:hover {
     cursor: pointer;
+    background-color: #4176FF;
+    color: white;
 }
 
+#inviteButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding-left: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    color: black;
+    max-width: 85px;
+    font-size: 12px;
+    margin-left: 120px;
+}
+
+#inviteButton:hover {
+    background-color: #4176FF;
+    cursor: pointer;
+    color: white;
+}
 #formButton {
     background-color: #4176FF;
     border-radius: 10px;
     border: 0px;
     font-size: 12px;
+    text-align: center;
 }
