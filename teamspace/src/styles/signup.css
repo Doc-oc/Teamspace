@@ -18,7 +18,7 @@
 }
 
 #backgroundImage {
-    background: rgb(0, 0, 0) url("img/stockphoto.jpg") no-repeat fixed top;
+    background: rgb(0, 0, 0) url("../img/stockphoto.jpg") no-repeat fixed top;
     -webkit-filter: blur(5px);
     -moz-filter: blur(5px);
     -o-filter: blur(5px);

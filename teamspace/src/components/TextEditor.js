@@ -12,7 +12,7 @@ import { firebase, auth, logout, storage } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { faSave, faWindowClose, faArrowAltCircleLeft} from '@fortawesome/fontawesome-free-solid'
 
-import '../texteditor.css'
+import '../styles/texteditor.css'
 import { io } from 'socket.io-client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

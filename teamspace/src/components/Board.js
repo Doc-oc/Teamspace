@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faUserPlus, faCalendarPlus, faInfoCircle } from '@fortawesome/fontawesome-free-solid'
 import { auth, logout} from '../firebase';
 import db from '../firebase'
-import '../board.css';
+import '../styles/board.css';
 import { ref, set, get, child, orderByChild } from "firebase/database"
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import ReactTooltip from 'react-tooltip';

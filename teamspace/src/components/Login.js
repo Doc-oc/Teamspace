@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import {useAuth} from '../context/AuthContext'
 import {Link, useNavigate} from "react-router-dom"
 import image from '../img/team.jpeg'; 
-import '../login.css'
+import '../styles/login.css'
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import db from '../firebase'

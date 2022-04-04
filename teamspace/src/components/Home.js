@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { useNavigate, Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
-import '../home.css'
+import '../styles/home.css'
 import { auth, logout, storage} from '../firebase';
 import db from '../firebase'
 import boardData from './Board';

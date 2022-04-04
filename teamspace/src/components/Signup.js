@@ -5,7 +5,7 @@ import { Link, useNavigate} from "react-router-dom"
 import db from '../firebase'
 import {auth, registerWithEmailAndPassword, storage} from "../firebase"
 import { useAuthState } from "react-firebase-hooks/auth";
-import '../signup.css'
+import '../styles/signup.css'
 import { faUserAlt } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import stock from '../img/stockphoto.jpg'

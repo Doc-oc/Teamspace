@@ -7,7 +7,7 @@ import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faPencilAl
 import { auth, logout } from '../firebase';
 import { useNavigate, Link } from "react-router-dom"
 import cover from "../img/testcover.jpg"
-import '../profile.css';
+import '../styles/profile.css';
 import moment from 'moment-timezone';
 
 
