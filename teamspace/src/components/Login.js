@@ -6,9 +6,10 @@ import Row from 'react-bootstrap/Row';
 import {Link, useNavigate} from "react-router-dom"
 import image from '../img/team.jpeg'; 
 import '../styles/login.css'
-import { auth, signInWithEmailAndPassword } from "../firebase";
+import { auth, signInWithEmailAndPassword, sendPasswordResetEmail } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import db from '../firebase'
+import cloud from '../img/cloud.png'
 
 
 function Login(){
@@ -37,6 +38,8 @@ function Login(){
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [resetEmail, setResetEmail] = useState("");
+
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -50,10 +53,14 @@ function Login(){
 
     }, [user, loading]);
 
-
+    function handleShowReset(){
+        document.getElementById("resetCard").style.display = "block"
+        document.getElementById("loginCard").style.display = "none"
+    }
 
     return (
-        <Container fluid className="d-flex align-items-center justify-content-center" style={{minHeight: "100vh"}}>
+        <div>
+        <Container fluid className="d-flex align-items-center justify-content-center" style={{minHeight: "95vh"}}>
         <Row>  
             <Col>
                 <h5 style={{color: "#4176FF"}}>Teamspace</h5>
@@ -65,18 +72,12 @@ function Login(){
                         <h5 className="text-center mb-4" style={{color: "#4176FF"}}>Welcome To Teamspace!</h5>
                         <p className="text-center mb-4" style={{color: "grey"}}>Login to your account to continue</p>
                         {error && <Alert variant="danger">{error}</Alert>}
-                        {/*<Form onSubmit={handleSubmit}>
-                            <Form.Group id="email">
-                                <Form.Control type="email" placeholder="Email" ref={emailRef} required />
-                            </Form.Group>
-                            <Form.Group id="password">
-                                <Form.Control type="password" placeholder="Password" ref={passwordRef} required />
-                            </Form.Group>
-                            <Button disabled={loading} className="button w-100 mt-3" type="submit">Login</Button>
-                        </Form>*/}
+
                             <input type="text" className="loginInput" value={email} onChange={(e) => setEmail(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf0e0;  E-mail Address"/>
                             <br></br>
                             <input type="password" className="loginInput" value={password} onChange={(e) => setPassword(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf023;  Password"/>
+                            <br></br>
+                            <p style={{fontSize: "10px"}}><a href="#" onClick={() => handleShowReset()}>Forgot password?</a></p>
                             <br></br>
                             <button className="loginBtn" onClick={() => signInWithEmailAndPassword(email, password)}>
                             Login
@@ -87,11 +88,34 @@ function Login(){
                         </div>
                     </Card.Body>
                 </Card>
+
+                    <Card id="resetCard" className="shadow" style={{width: "35rem", display: "none"}}>
+                    <Card.Body>
+                        <h5 className="text-center mb-4" style={{color: "#4176FF"}}>Reset Your Password</h5>
+                            <input type="text" className="resetInput" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} style={{fontFamily: "Arial, sans-serif, FontAwesome", fontSize: "14px"}} placeholder="&#xf0e0;  E-mail Address"/>
+                            <br></br>
+                            <button className="resetBtn" onClick={() => sendPasswordResetEmail(resetEmail)}>
+                            Send Reset Link
+                            </button>
+                    </Card.Body>
+                    </Card>
             </Col>
         </Row>
-        
         </Container>
 
+        <Row style={{backgroundColor: "#4176FF", maxHeight: "600px"}}>
+            <Col className="col-sm-1 "></Col>
+            <Col className="col-sm-5 text-center mt-5" style={{marginTop: "10px"}}>
+                <h4 style={{color: "white"}}> About Teamspace </h4>
+                <p style={{color: "white", width: "90%", marginLeft: "30px"}} className="mt-5">Teamspace is a web application that is designed to improve the online experience when working in a team. Teamspace allows users to store and share team related files in an organised manner while being able to view, edit or delete files at the same time in real time. </p>
+                <p style={{color: "white", width: "90%", marginLeft: "30px"}} className="mt-5">Teamspace isn’t about solving all problems in relation to online collaboration, it is about creating a smoother experience for teams and catering for all types of users in creating a simple to use but effective tool.</p>
+            </Col>
+            <Col className="col-sm-5 text-center mt-5" style={{marginTop: "10px"}}>
+                <img className="rounded" style={{height: "50%"}} src={cloud}/>
+            </Col>
+            <Col className="col-sm-1 "></Col>
+        </Row>
+    </div>                   
     )
 }
 

@@ -70,15 +70,16 @@ const updateDisplayName = async (name) => {
   window.location = ("/");
 }
 
-/*const sendPasswordResetEmail = async (email) => {
+const sendPasswordResetEmail = async (email) => {
   try {
     await auth.sendPasswordResetEmail(email);
-    alert("Password reset link sent!");
+    alert("Password reset link sent! It may appear in your junk folder.");
+    window.location.reload()
   } catch (err) {
     console.error(err);
     alert(err.message);
   }
-};*/
+};
 
 const logout = () => {
   auth.signOut();
@@ -91,6 +92,7 @@ export {
   signInWithEmailAndPassword,
   registerWithEmailAndPassword,
   logout,
+  sendPasswordResetEmail,
   storage
 };
 

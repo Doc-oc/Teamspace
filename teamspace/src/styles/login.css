@@ -24,3 +24,29 @@
     border-radius: 15px;
     text-align: center;
 }
+
+.resetInput {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    height: 40px;
+}
+
+.resetBtn {
+    border-radius: 10px;
+    background-color: #4176FF;
+    color: white;
+    width: 50%;
+    height: 40px;
+    border: 0px;
+    margin-bottom: 30px;
+}
+
+
+#resetCard {
+    border-radius: 15px;
+    text-align: center;
+}
+
