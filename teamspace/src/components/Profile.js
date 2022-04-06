@@ -15,8 +15,12 @@ import moment from 'moment-timezone';
 export default function Profile() {
     const [error, setError] = useState("")
     const name = auth.currentUser.displayName;
+    const email = auth.currentUser.email;
     const navigate = useNavigate()
+    const [ newName, setNewName] = useState();
+    const [ newEmail, setNewEmail] = useState();
 
+    const [editModal, setEditModal] = useState(false)
     async function handleLogout(e) {
         e.preventDefault()
         
@@ -29,6 +33,14 @@ export default function Profile() {
          
           setError("Failed to log out")
         }
+    }
+
+    function editDetails(){
+        
+    }
+
+    function deleteAccount(){
+
     }
 
     return (
@@ -48,7 +60,7 @@ export default function Profile() {
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                        <Nav.Link eventKey="Profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                        <Nav.Link eventKey="Profile" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
@@ -70,7 +82,7 @@ export default function Profile() {
             </Col>
 
 
-            <Col className="col-sm-7">
+            <Col className="col-sm-10">
                 <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>
                     <div style={{display: "inline"}}>
                         <Col style={{marginTop: "20px", marginLeft: "20px", marginRight: "20px"}}>
@@ -84,9 +96,37 @@ export default function Profile() {
                             <Col className="col-sm-2" style={{marginTop: "40px", fontSize: "10px"}}>
                             </Col>
                             <Col className="col-sm-3">
-                                <h5>{name} <FontAwesomeIcon style={{fontSize: "14px"}} icon={faPencilAlt}/></h5>
+                                <h5>{name} <i style={{fontSize: "10px"}} id="editDetailsButton" onClick={() => setEditModal(true)}><FontAwesomeIcon style={{fontSize: "14px", marginLeft: "10px"}} icon={faPencilAlt} />  Edit Details</i></h5>
                             </Col>
                         </Row>
+
+                        <Modal size="lg" show={editModal} onHide={() => setEditModal(false)} aria-labelledby="changeDetails">
+                            <Modal.Header closeButton>
+                                <Modal.Title id="changeDetails">
+                                Change Details
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form>
+                                <Form.Group id="changeName">
+                                    <Form.Label>Change Name</Form.Label>
+                                    <Form.Control type="text" value={name} onInput={(e) => setNewName(e.target.value)} required />
+                                </Form.Group>
+                                <Form.Group id="changeEmail">
+                                    <Form.Label>Change Email</Form.Label>
+                                    <Form.Control type="text" value={email} onInput={(e) => setNewEmail(e.target.value)} required />
+                                </Form.Group>
+                                <Form.Group id="delete" style={{marginTop: "20px"}}>
+                                    <Form.Label>Delete Account</Form.Label>
+                                    <br></br>
+                                    <Button style={{backgroundColor: "red", border: 0}}onClick={() => deleteAccount()} >Delete</Button>
+                                </Form.Group>
+                                </Form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={() => editDetails()} >Save</Button>
+                            </Modal.Footer>
+                        </Modal>
 
                         <Row>
                             <Col className="co"></Col>
@@ -95,7 +135,7 @@ export default function Profile() {
 
                         <Row>
                             <Col className="col-sm-12">
-                            <p id="userDetails"><b>Email</b>: {auth.currentUser.email}</p>   
+                                <p id="userDetails"><b>Email</b>: {auth.currentUser.email}</p>
                             </Col>
                         </Row> 
 

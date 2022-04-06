@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faUserPlus, faCalendarPlus, faInfoCircle } from '@fortawesome/fontawesome-free-solid'
+import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faUserPlus, faCalendarPlus, faQuestionCircle} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout} from '../firebase';
 import db from '../firebase'
 import '../styles/board.css';
@@ -25,13 +25,18 @@ export default function Board() {
     const photo = auth.currentUser.photoURL;
     const [modal, setModal] = useState(false);
     const [modalInvite, setModalInvite] = useState(false);
+    const [modalInfo, setModalInfo] = useState(false)
     const [newData, setNewData] = useState();
     const [joinModal, setJoinModal] = useState();
     const [membersData, setMembersData] = useState();
 
 
+
     //teamboards
     const [boardData, setBoardData] = useState();
+    const [boardInfoName, setBoardInfoName] = useState();
+    const [boardInfoDesc, setBoardInfoDesc] = useState();
+    const [createdBy, setCreatedBy] = useState();
 
 
     //filespace
@@ -277,6 +282,31 @@ export default function Board() {
         await db.ref(`users/${uid}/boards/`).child(boardID).update(obj);
     }
 
+    async function deleteBoard(){
+        await dbBoards.child(boardID).remove();
+        setModalInfo(false)
+        navigate("/")
+    }
+
+    function handleBoardInfo(){
+        setModalInfo(true)
+        boardData?.map(function(b){
+            if(b.id == boardID){
+                setBoardInfoName(b.boardName)
+                setBoardInfoDesc(b.boardDesc)
+                setCreatedBy(b.createdBy)
+            }
+        })
+    }
+
+    async function handleEditBoard(){
+        dbBoards.child(boardID).update({'boardName': boardInfoName})
+        dbBoards.child(boardID).update({'boardDesc': boardInfoDesc})
+
+        setModalInfo(false)
+
+    }
+
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -322,6 +352,7 @@ export default function Board() {
             <Card.Body>
                 <Row>
                     <Col className="col-sm-4">
+                        <p onClick={() => handleBoardInfo()} id="infoButton"><FontAwesomeIcon icon={faQuestionCircle}/> Info</p>
                     </Col>
                     <Col className="col-sm-4">
                         {boardData == null? <p>No Board</p>
@@ -350,7 +381,7 @@ export default function Board() {
                                     {console.log("insideif")}
                                     <div id="boardHead">
                                         <h5>{board.boardName}</h5> 
-                                        <p style={{color: "grey"}}>{board.boardDesc}</p>
+                                        <p style={{color: "grey", fontSize: "12px"}}>{board.boardDesc}</p>
                                     </div>
                                 </div>
                             )
@@ -391,6 +422,33 @@ export default function Board() {
                 </Container>
             </Card.Body>
             </Card>
+
+            <Modal size="lg" show={modalInfo} onHide={() => setModalInfo(false)} aria-labelledby="boardInfo">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="viewBoard">
+                      Board Information
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form>
+                      <Form.Group id="boardEditTitle">
+                        <Form.Label>Board Name </Form.Label>
+                        <Form.Control type="text" value={boardInfoName} onInput={(e) => setBoardInfoName(e.target.value)} required/>
+                      </Form.Group>
+                      <Form.Group id="boardEditDesc" style={{marginTop: "10px"}}>
+                        <Form.Label>Board Description </Form.Label>
+                        <Form.Control type="text" value={boardInfoDesc} onInput={(e) => setBoardInfoDesc(e.target.value)} rows={3} required/>
+                      </Form.Group>
+                      <Form.Group id="boardCreatedBy" style={{marginTop: "40px", color: "grey"}}>
+                        <Form.Label>Created By: {createdBy}</Form.Label>
+                      </Form.Group>
+                      <Button style={{backgroundColor: "red", border: 0, marginTop: "20px"}}onClick={() => deleteBoard()}><FontAwesomeIcon icon={faTrashAlt}/> Delete Board</Button>
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => handleEditBoard()} >Save</Button>
+                  </Modal.Footer>
+            </Modal>
 
             <Modal size="lg" show={joinModal} onHide={() => setJoinModal(false)} aria-labelledby="createBoard">
                   <Modal.Header closeButton>

@@ -172,3 +172,21 @@
     cursor: pointer;
     color: white;
 }
+
+#infoButton {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding-left: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    color: black;
+    max-width: 70px;
+    font-size: 12px;
+    margin-left: 10%;
+}
+
+#infoButton:hover {
+    background-color: #4176FF;
+    cursor: pointer;
+    color: white;
+}

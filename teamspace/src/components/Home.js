@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faTrash, faPlusCircle } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faCog, faPlusCircle, faTrashAlt } from '@fortawesome/fontawesome-free-solid'
 import '../styles/home.css'
 import { auth, logout, storage} from '../firebase';
 import db from '../firebase'
@@ -26,6 +26,8 @@ export default function Home() {
   const [url, setURL] = useState();
   const [members, setMembers] = useState();
   const [boardID, setBoardID] = useState();
+  const [display, setDisplay] = useState({display: 'none'});
+
 
   const uid = auth.currentUser.uid;
 
@@ -78,6 +80,10 @@ export default function Home() {
     }
   }
 
+  async function deleteBoard(id){
+    db.ref(`boards/${id}`).remove()
+  }
+
 
   /*function handlePP(){
     const storageRef = ref(storage, `ProfilePictures/defaultpp.png`);        
@@ -128,10 +134,10 @@ export default function Home() {
                   <Nav.Link href="/profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
+                    <Nav.Link href="/" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faSlidersH}/> Settings</Nav.Link>
+                    <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
                   </Nav.Item>
                     <Nav.Item>
                   </Nav.Item>
@@ -182,7 +188,7 @@ export default function Home() {
                         <Form.Label>Board Name</Form.Label>
                         <Form.Control type="text" value={boardName} onInput={(e) => setBoardName(e.target.value)} required />
                       </Form.Group>
-                      <Form.Group className="mb-3" controlId="boardDesc">
+                      <Form.Group className="mb-3 mt-3" controlId="boardDesc">
                         <Form.Label>Board Description</Form.Label>
                         <Form.Control as="textarea" value={boardDesc} onInput= {(e) => setBoardDesc(e.target.value)} rows={3} />
                       </Form.Group>
@@ -194,8 +200,9 @@ export default function Home() {
                           <option value="#ff575f">Red</option>
                           <option value="#41993f">Green</option>
                           <option value="#69a2ff">Blue</option>
-                          <option value="#fbff80">Yellow</option>
+                          <option value="#02a6ac">Aqua</option>
                           <option value="#cc85ff">Purple</option>
+                          <option value="#e06e38">Orange</option>
                         </Form.Select>
                     </Form.Group>
                     
@@ -221,7 +228,19 @@ export default function Home() {
                         return (
                           <Col className="col-sm-3 mt-2 ml-3">
                             <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
-                              <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                              <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+
+                                <Dropdown drop="end" style={{position: "absolute", top: "5px", right: "5px", marginRight: "35px", outline: "none"}}>
+                                  <Dropdown.Toggle id="deleteBoard"  style={{backgroundColor: board.boardColor}}>
+                                    ...
+                                  </Dropdown.Toggle>
+                                  <Dropdown.Menu   style={{fontSize: "10px", minWidth: "50px"}}>
+                                    <Dropdown.Item onClick={() => deleteBoard(board.id)}><FontAwesomeIcon icon={faTrashAlt}/> Delete</Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              
+                              
+                              </Card.Body>
                               <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}} style={{textDecoration: 'none', color: "black"}}>
                                 <Card.Footer>{board.boardName}</Card.Footer>
                               </Link>
@@ -249,7 +268,8 @@ export default function Home() {
                                 return(
                                   <Col className="col-sm-3 mt-2 ml-3">
                                     <Card className="shadow text-center" style={{fontSize: "12px", minHeight: "100px", maxWidth: "150px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
-                                      <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
+                                      <Card.Body style={{backgroundColor: board.boardColor, borderTopLeftRadius: 15, borderTopRightRadius: 15}}>
+                                      </Card.Body>
                                       <Link to={{pathname: `/board/${board.id}`, state: {boardID: board.id}}} style={{textDecoration: 'none', color: "black"}}>
                                         <Card.Footer>{board.boardName}</Card.Footer>
                                     </Link>

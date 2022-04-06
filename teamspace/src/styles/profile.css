@@ -3,7 +3,7 @@
     display: inline;
     border-radius: 50%; 
     position: absolute;
-    margin-left: -750px;
+    margin-left: -1080px;
     box-shadow: 0 12px 16px 0 rgb(0,0,0,0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
     margin-top: 90px;
 }
@@ -32,3 +32,11 @@
     margin-left: 5px;
 }
 
+#editDetailsButton {
+    margin-left: 20px;
+}
+
+#editDetailsButton:hover {
+    color: #4176FF;
+    cursor: pointer;
+}
