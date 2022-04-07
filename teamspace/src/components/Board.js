@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container,  Nav, Modal, Tab, Tabs} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container,  Nav, Modal, Tab, Tabs, Dropdown} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faUserPlus, faCalendarPlus, faQuestionCircle} from '@fortawesome/fontawesome-free-solid'
+import { faTrashAlt, faCheck, faClipboard, faUser, faSignOutAlt, faPlusCircle, faUpload, faCog, faUndoAlt, faUserPlus, faCalendarPlus, faEllipsisH, faQuestionCircle} from '@fortawesome/fontawesome-free-solid'
 import { auth, logout} from '../firebase';
 import db from '../firebase'
 import '../styles/board.css';
@@ -37,6 +37,7 @@ export default function Board() {
     const [boardInfoName, setBoardInfoName] = useState();
     const [boardInfoDesc, setBoardInfoDesc] = useState();
     const [createdBy, setCreatedBy] = useState();
+    const [boardInfoColor, setBoardInfoColor] = useState();
 
 
     //filespace
@@ -302,6 +303,7 @@ export default function Board() {
     async function handleEditBoard(){
         dbBoards.child(boardID).update({'boardName': boardInfoName})
         dbBoards.child(boardID).update({'boardDesc': boardInfoDesc})
+        dbBoards.child(boardID).update({'boardColor': boardInfoColor})
 
         setModalInfo(false)
 
@@ -328,7 +330,7 @@ export default function Board() {
                     <Nav.Link href="/profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
+                        <Nav.Link href="/" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard} />  Boards</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
@@ -407,14 +409,24 @@ export default function Board() {
                         <p style={{color: "lightgray"}}>Team Filespaces</p>
                     </div>
                 </Row>
-                <Row>
+                <Row >
                     {filespaceData == null? <p>filespace is empty</p>
                     :
                     filespaceData.map(function(fs){
                         return (
-                            <Link to={{pathname: `/filespace/${boardID}/${fs.id}`, state: {boardID: boardID, id: fs.id}}}  style={{textDecoration: 'none', color: "black"}}>
-                                <p id="filespace">{fs.filespaceName}</p>
-                            </Link>
+                            <div id="filespaceDiv">
+                                <Link to={{pathname: `/filespace/${boardID}/${fs.id}`, state: {boardID: boardID, id: fs.id}}}  style={{textDecoration: 'none', color: "black"}}>
+                                    <p id="boardFilespaceName">{fs.filespaceName}</p>
+                                </Link>
+                                <Dropdown id="boardEditFilespace" drop="end" style={{maxWidth: "20%"}}>
+                                    <Dropdown.Toggle id="filespaceToggle" style={{backgroundColor: "white", border: 0}}>
+                                        ...
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu   style={{fontSize: "10px", minWidth: "50px"}}>
+                                        <Dropdown.Item onClick={() => deleteBoard()}><FontAwesomeIcon icon={faTrashAlt}/> Delete</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </div>
                         )
                     })
                     }
@@ -439,6 +451,17 @@ export default function Board() {
                         <Form.Label>Board Description </Form.Label>
                         <Form.Control type="text" value={boardInfoDesc} onInput={(e) => setBoardInfoDesc(e.target.value)} rows={3} required/>
                       </Form.Group>
+                      <Form.Group className="mb-3" style={{marginTop: "10px"}} controlId="boardColor">
+                        <Form.Label>Board Theme Color</Form.Label>
+                        <Form.Select value={boardInfoColor} aria-label="selectColor" onInput = {(e) => setBoardInfoColor(e.target.value)}>
+                          <option value="#ff575f">Red</option>
+                          <option value="#41993f">Green</option>
+                          <option value="#69a2ff">Blue</option>
+                          <option value="#02a6ac">Aqua</option>
+                          <option value="#cc85ff">Purple</option>
+                          <option value="#e06e38">Orange</option>
+                        </Form.Select>
+                    </Form.Group>
                       <Form.Group id="boardCreatedBy" style={{marginTop: "40px", color: "grey"}}>
                         <Form.Label>Created By: {createdBy}</Form.Label>
                       </Form.Group>
@@ -604,8 +627,13 @@ export default function Board() {
                     <br></br>
 
                     <p>Recent Activity</p>
+
                     <Card className="shadow" style={{minHeight: 200, borderRadius: "10px"}}>
-                        
+                        <Card.Body>
+                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "#4176FF"}}>uploaded</b> <u>File.txt</u></p>
+                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "green"}}>Edited</b> <u>File.txt</u> with John Doe</p>
+                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "red"}}>Deleted</b> <u>File.txt</u></p>
+                        </Card.Body>
                     </Card>
                 </Card.Body>
 

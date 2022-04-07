@@ -9,17 +9,23 @@
     margin-top: 20px;
 }
 
-#filespace {
+#filespaceDiv {
     border: 1px solid lightgray;
     border-radius: 15px;
-    padding: 20px;
+    padding-top: 15px;
     color: black;
+    margin-bottom: 15px;
+    max-width: 96%;
+    margin-left: 10px;
 }
 
-#filespace:hover {
+#boardFilespaceName {
+    display: inline;
+}
+
+#boardFilespaceName:hover {
     cursor: pointer;
-    background-color: #f2f2f2;
-    color: black;
+    color: #4176FF;
 }
 
 #backButton {
@@ -189,4 +195,25 @@
     background-color: #4176FF;
     cursor: pointer;
     color: white;
+}
+
+#boardEditFilespace {
+    display: inline;
+    float: right;
+}
+
+#filespaceToggle {
+    background-color: "white";
+    border: 0;
+    color: black;
+    margin-bottom: 20%;
+}
+
+#filespaceToggle:focus {
+    outline: none !important;
+    box-shadow: none;
+}
+
+#filespaceToggle::after {
+    content: none;
 }
