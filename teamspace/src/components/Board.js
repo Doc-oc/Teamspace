@@ -566,7 +566,7 @@ export default function Board() {
                     <Card className="shadow" style={{minHeight: "250px", maxHeight:"250px", borderRadius: "15px", overflow: "hidden"}}>
                         <Card.Body className="scrollbar-primary"style={{margin: 0,}}>
                                 <Tabs defaultActiveKey="todo" style={{fontSize: "10px"}} className="mb-3">
-                                    <Tab id="tab" eventKey="todo" title="Todo">
+                                    <Tab id="tab" eventKey="todo" title="To do">
                                         <Form id="toDo" style={{display: "none"}}>
                                             <Form.Group>
                                                 <Row>

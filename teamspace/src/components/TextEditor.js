@@ -34,9 +34,10 @@ export default function TextEditor(props){
   const [fileData, setFileData] = useState();
   const [fileText, setFileText] = useState();
   const [fileContent, setFileContent] = useState()
+  const [fileViews, setFileViews] = useState();
   const uid = auth.currentUser.uid;
 
-  const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files`)
+  const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files/`)
 
   const userID = auth.currentUser.uid;
   const name = auth.currentUser.displayName;
@@ -71,8 +72,10 @@ export default function TextEditor(props){
         fileArray.map(function(f){
           if(f.id == fileID)
             setFileContent(f.fileData)
+            setFileViews(f.setFileViews)
         })
     });
+
   }, [])
 
   const [socket, setSocket] = useState();
@@ -93,6 +96,7 @@ export default function TextEditor(props){
   //const message = `${name} has joined!`
   //loading document
   useEffect(() => {
+
     if(socket == null || quill == null) return
 
     socket.once("load-document", () => {
@@ -109,18 +113,23 @@ export default function TextEditor(props){
 
     socket.emit('get-document', files)
 
-    /*socket.emit('joinedUser', `${name} is here!` );
+    socket.emit('joinedUser', `${name} is here!`);
 
     socket.on('recieve-joined', function(data){
       setMessage(data)
       document.getElementById("joinedContainer").style.visibility = "visible"
-    })*/
+    })
 
     
   }, [socket, quill, files])
 
   function saveFile(){
     socket.emit("save-document", quill.getContents())
+  }
+
+  function addViews(){
+    db.ref(`boards/${boardID}/filespace/${id}/files/$`).update({'fileViews': fileViews + 1})
+
   }
 
   useEffect(() => {

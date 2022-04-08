@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faCheck, faUndoAlt, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus} from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faCheck, faUndoAlt, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus, faEye} from '@fortawesome/fontawesome-free-solid'
 import { firebase, auth, logout, storage } from '../firebase';
 import { set } from "firebase/database";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -35,6 +35,7 @@ export default function Filespace() {
     const [filespaceHeader, setFilespaceHeader] = useState();
     const [filespaceDesc, setFilespaceDesc] = useState();
     const [boardData, setBoardData] = useState();
+    const [fileViews, setFileViews] = useState();
 
     //todo 
     const [toDo, setToDo] = useState();
@@ -56,7 +57,7 @@ export default function Filespace() {
     const [searchData, setSearchData] = useState();
     const [search, setSearch] = useState("");
 
-    
+    const [count, setCount] = useState(0)
 
     useEffect(() => {
         dbFilespace.on("value", (snapshot)=>{
@@ -151,7 +152,8 @@ export default function Filespace() {
         const file = {
             fileName,
             fileURL: url,
-            fileData: data
+            fileData: data,
+            fileViews: 0
         }
         await dbFiles.push(file);
 
@@ -167,6 +169,7 @@ export default function Filespace() {
             }        
             setFileData(fileArray)
             setSearchData(fileData.filter((fs) => fs.fileName.toLowerCase().includes(search.toLowerCase())))
+        
         });
     }, [search])
 
@@ -276,7 +279,10 @@ export default function Filespace() {
         db.ref(`boards/${boardID}/boardList/completed/${e}`).remove();
     }
 
-
+    function increaseCount(fileID, fileViews){
+        db.ref(`boards/${boardID}/filespace/${id}/files/${fileID}/`).update({"fileViews": fileViews + 1})
+        
+    }
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -298,7 +304,7 @@ export default function Filespace() {
                     <Nav.Link href="/profile" ><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
+                        <Nav.Link href="/" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faSlidersH}/> Settings</Nav.Link>
@@ -417,11 +423,11 @@ export default function Filespace() {
                 </Row>
                 
 
-                <Row id="displayFile">
+                <Row id="displayFile" style={{marginLeft: "10px"}}>
                     {search.length > 0?
                     searchData?.map(function(s){
                         return (
-                            <Col className="col-sm-2 mt-3">
+                            <Col className="col-sm-2 mt-3" >
                                 <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
                                     <span id="deleteButton" onClick={() => deleteFile(s.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
@@ -436,11 +442,13 @@ export default function Filespace() {
                         fileData?.map(function(file){
                             return (
                                 <Col className="col-sm-2 mt-3">
-                                <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", maxWidth: "90px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
+                                <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", minWidth: "110px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
                                     <span id="deleteButton" onClick={() => deleteFile(file.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                     <Link to={{pathname: `/texteditor/${boardID}/${id}/${file.id}`, state:{boardID: boardID, id: id, fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
-                                        <Card.Footer>{file.fileName}</Card.Footer>
+                                        <Card.Footer onClick={() => increaseCount(file.id, file.fileViews)}>
+                                            {file.fileName}  <b style={{fontSize: "8px", marginLeft: "8px"}}><FontAwesomeIcon style={{fontSize: "8px", marginLeft: "5px"}} icon={faEye}/> {file.fileViews}</b>
+                                        </Card.Footer>
                                     </Link>
                                 </Card>
                                 </Col>
