@@ -116,6 +116,17 @@
     color: white;
 }
 
+#removeActivity {
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 8px;
+}
+
+#removeActivity:hover {
+    cursor: pointer;
+    color: red;
+}
+
 #undoComp {
     font-size: 12px;
     padding: 2px 8px;

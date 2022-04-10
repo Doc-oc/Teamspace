@@ -324,6 +324,11 @@ export default function Board() {
 
     }
 
+    async function removeActivity(activityID){
+        await dbRecent.child(activityID).remove();
+
+    }
+
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -644,33 +649,46 @@ export default function Board() {
                     <p>Recent Activity</p>
 
                     <Card className="shadow" style={{minHeight: 200, borderRadius: "10px"}}>
-                        <Card.Body>
+                        <Card.Body style={{height: "150px", overflowY: "scroll", marginLeft: 5, marginBottm: 5}}>
                             {recentData == null? <p>Nothing to show</p> 
                             :
                             recentData.slice(0).reverse().map(function(r){
                                 if(r.activity == "Edited")
                                 return (
-                                    <div>
-                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "#4176FF"}}> {r.activity}</b> <u> {r.fileName}</u></p>
-                                    </div>
+                                    <Row style={{paddingBottom: "5px"}}>
+                                        <Col className="col-sm-9">
+                                            <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "#4176FF"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                        </Col>
+                                        <Col className="col-sm-3">
+                                            <span id="removeActivity" onClick={() => removeActivity(r.id)} style={{float: "right"}}>x</span>
+                                        </Col>
+                                    </Row>
                                 )
                                 else if(r.activity == "Deleted")
                                 return (
-                                    <div>
-                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "red"}}> {r.activity}</b> <u> {r.fileName}</u></p>
-                                    </div>
+                                    <Row style={{paddingBottom: "5px"}}>
+                                        <Col className="col-sm-9">
+                                            <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "red"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                        </Col>
+                                        <Col className="col-sm-3">
+                                            <span id="removeActivity" onClick={() => removeActivity(r.id)} style={{float: "right"}}>x</span>
+                                        </Col>
+                                    </Row>
                                 )
                                 else if(r.activity == "Uploaded")
                                 return (
-                                    <div>
-                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "green"}}> {r.activity}</b> <u> {r.fileName}</u></p>
-                                    </div>
+                                    <Row style={{paddingBottom: "5px"}}>
+                                        <Col className="col-sm-9">
+                                            <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "green"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                        </Col>
+                                        <Col className="col-sm-3">
+                                            <span id="removeActivity" onClick={() => removeActivity(r.id)} style={{float: "right"}}>x</span>
+                                        </Col>
+                                    </Row>
                                 )
                             })
                             }
-                        {/*<p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "#4176FF"}}>uploaded</b> <u>File.txt</u></p>
-                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "green"}}>Edited</b> <u>File.txt</u> with John Doe</p>
-                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "red"}}>Deleted</b> <u>File.txt</u></p>*/}
+
                         </Card.Body>
                     </Card>
                 </Card.Body>
