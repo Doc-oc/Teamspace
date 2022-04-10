@@ -51,6 +51,7 @@ export default function Board() {
     const [completedData, setCompletedData] = useState();
     const uid = auth.currentUser.uid;
 
+    const [recentData, setRecentData] = useState();
     const [searchData, setSearchData] = useState()
 
     const dbUsers = db.ref(`users/`);
@@ -59,6 +60,8 @@ export default function Board() {
     const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
     const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
     const dbMembers = db.ref(`boards/${boardID}/members`);
+    const dbRecent = db.ref(`boards/${boardID}/recentActivity/`)
+
 
     
     useEffect(() => {
@@ -94,6 +97,19 @@ export default function Board() {
 
                         setMembersData(membersArray);
                     })
+
+                    dbRecent.on("value", (snapshot)=>{
+                        const recentDB = snapshot.val();
+                        const recentArray = [];
+
+                        for(let id in recentDB){
+                            recentArray.push({id, ...recentDB[id]});
+                        }
+
+                        setRecentData(recentArray);
+                    })
+
+
 
                 });; 
         
@@ -144,7 +160,6 @@ export default function Board() {
        
         setError("Failed to log out")
       }
-
     }
 
     async function handleCreateFilespace(){
@@ -630,9 +645,32 @@ export default function Board() {
 
                     <Card className="shadow" style={{minHeight: 200, borderRadius: "10px"}}>
                         <Card.Body>
-                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "#4176FF"}}>uploaded</b> <u>File.txt</u></p>
+                            {recentData == null? <p>Nothing to show</p> 
+                            :
+                            recentData.slice(0).reverse().map(function(r){
+                                if(r.activity == "Edited")
+                                return (
+                                    <div>
+                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "#4176FF"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                    </div>
+                                )
+                                else if(r.activity == "Deleted")
+                                return (
+                                    <div>
+                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "red"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                    </div>
+                                )
+                                else if(r.activity == "Uploaded")
+                                return (
+                                    <div>
+                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "green"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                    </div>
+                                )
+                            })
+                            }
+                        {/*<p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "#4176FF"}}>uploaded</b> <u>File.txt</u></p>
                         <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "green"}}>Edited</b> <u>File.txt</u> with John Doe</p>
-                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "red"}}>Deleted</b> <u>File.txt</u></p>
+                        <p style={{fontSize: "11px"}}>Dylan O'Connor <b style={{color: "red"}}>Deleted</b> <u>File.txt</u></p>*/}
                         </Card.Body>
                     </Card>
                 </Card.Body>

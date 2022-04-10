@@ -34,13 +34,15 @@ export default function TextEditor(props){
   const [fileData, setFileData] = useState();
   const [fileText, setFileText] = useState();
   const [fileContent, setFileContent] = useState()
-  const [fileViews, setFileViews] = useState();
   const uid = auth.currentUser.uid;
 
   const dbFiles = db.ref(`boards/${boardID}/filespace/${id}/files/`)
+  const dbRecent = db.ref(`boards/${boardID}/recentActivity/`)
+
 
   const userID = auth.currentUser.uid;
   const name = auth.currentUser.displayName;
+  const [fileName, setFileName] = useState();
   const [message, setMessage] = useState()
 
   /*const storeFile = async (file) => {
@@ -71,8 +73,8 @@ export default function TextEditor(props){
         setFileData(fileArray)
         fileArray.map(function(f){
           if(f.id == fileID)
-            setFileContent(f.fileData)
-            setFileViews(f.setFileViews)
+            setFileContent(f.fileData);
+            setFileName(f.fileName);
         })
     });
 
@@ -125,11 +127,19 @@ export default function TextEditor(props){
 
   function saveFile(){
     socket.emit("save-document", quill.getContents())
+    updateActivity()
   }
 
-  function addViews(){
-    db.ref(`boards/${boardID}/filespace/${id}/files/$`).update({'fileViews': fileViews + 1})
+  async function updateActivity(){
+    //we every time we save we want to add edit
+    // file name, user, edit
+    const recentActivity = {
+      fileName,
+      user: name,
+      activity: "Edited"
+    }
 
+    await dbRecent.push(recentActivity);
   }
 
   useEffect(() => {

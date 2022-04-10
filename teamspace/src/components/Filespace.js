@@ -51,7 +51,9 @@ export default function Filespace() {
     const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
     const dbMembers = db.ref(`boards/${boardID}/members`);
     const dbBoards = db.ref(`boards`);
+    const dbRecent = db.ref(`boards/${boardID}/recentActivity/`)
 
+    const [recentData, setRecentData] = useState();
 
     const userID = auth.currentUser.uid;
     const [searchData, setSearchData] = useState();
@@ -90,6 +92,18 @@ export default function Filespace() {
             }
         setBoardData(boardsArray);
         })
+
+        dbRecent.on("value", (snapshot)=>{
+            const recentDB = snapshot.val();
+            const recentArray = [];
+
+            for(let id in recentDB){
+                recentArray.push({id, ...recentDB[id]});
+            }
+
+            setRecentData(recentArray);
+        })
+
         
     }, [])
 
@@ -157,6 +171,7 @@ export default function Filespace() {
         }
         await dbFiles.push(file);
 
+        updateActivityUpload(fileName);
         setFileText('');
     }
 
@@ -174,10 +189,38 @@ export default function Filespace() {
     }, [search])
 
 
-    function deleteFile(fileID){
+    function deleteFile(fileID, fileName){
         console.log(fileID)
+        updateActivityDelete(fileName)
         db.ref(`boards/${boardID}/filespace/${id}/files/${fileID}`).remove()
+        
     }
+
+    async function updateActivityDelete(fileName){
+        //we every time we save we want to add edit
+        // file name, user, edit
+        const recentActivity = {
+        fileName,
+        user: name,
+        activity: "Deleted"
+        }
+
+        await dbRecent.push(recentActivity);
+    }
+
+    async function updateActivityUpload(fileName){
+        //we every time we save we want to add edit
+        // file name, user, edit
+        const recentActivity = {
+          fileName,
+          user: name,
+          activity: "Uploaded"
+        }
+    
+        await dbRecent.push(recentActivity);
+      }
+
+
 
     function editDetails(){
         
@@ -443,7 +486,7 @@ export default function Filespace() {
                             return (
                                 <Col className="col-sm-2 mt-3">
                                 <Card  id="fileCard" className="shadow text-center" style={{minHeight: "80px", minWidth: "110px", borderRadius: 15, borderTopLeftRadius: 15, borderTopRightRadius: 15, fontSize: "12px"}}>
-                                    <span id="deleteButton" onClick={() => deleteFile(file.id)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
+                                    <span id="deleteButton" onClick={() => deleteFile(file.id, file.fileName)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                     <Link to={{pathname: `/texteditor/${boardID}/${id}/${file.id}`, state:{boardID: boardID, id: id, fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
                                         <Card.Footer onClick={() => increaseCount(file.id, file.fileViews)}>
@@ -552,7 +595,31 @@ export default function Filespace() {
 
                     <p>Recent Activity</p>
                     <Card className="shadow" style={{minHeight: 200, borderRadius: "10px"}}>
-                        
+                        <Card.Body>
+                        {recentData == null? <p>Nothing to show</p> 
+                            :
+                            recentData.slice(0).reverse().map(function(r){
+                                if(r.activity == "Edited")
+                                return (
+                                    <div>
+                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "#4176FF"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                    </div>
+                                )
+                                else if(r.activity == "Deleted")
+                                return (
+                                    <div>
+                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "red"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                    </div>
+                                )
+                                else if(r.activity == "Uploaded")
+                                return (
+                                    <div>
+                                    <p style={{fontSize: "11px"}}>{r.user} <b style={{color: "green"}}> {r.activity}</b> <u> {r.fileName}</u></p>
+                                    </div>
+                                )
+                            })
+                        }
+                        </Card.Body>
                     </Card>
                 </Card.Body>
 
