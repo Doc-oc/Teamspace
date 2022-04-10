@@ -10,7 +10,9 @@ import Board from "./Board";
 import Filespace from "./Filespace";
 import TextEditor from "./TextEditor";
 import Profile from "./Profile";
+import Settings from "./Settings"
 /*state = { data: null };
+
 
 function componentDidMount() {
   this.callBackendAPI()
@@ -50,6 +52,7 @@ function App() {
                 <Route path="/filespace/:boardID/:id" element={<Filespace />}/>
                 <Route path="texteditor/:boardID/:id/:fileID" element={<TextEditor />}/>
                 <Route path="/profile" element={<Profile />}/>
+                <Route path="/settings" element = {<Settings />}/>
               </Routes>
           }
           </BrowserRouter>

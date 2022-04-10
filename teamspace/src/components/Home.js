@@ -137,7 +137,7 @@ export default function Home() {
                     <Nav.Link href="/" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
+                    <Nav.Link  href="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
                   </Nav.Item>
                     <Nav.Item>
                   </Nav.Item>

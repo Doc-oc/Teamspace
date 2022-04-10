@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { faSlidersH, faClipboard, faUser, faSignOutAlt, faPlusCircle, faPencilAlt, faPaw } from '@fortawesome/fontawesome-free-solid'
+import { faSlidersH, faClipboard, faUser, faSignOutAlt, faCog, faPencilAlt, faPaw } from '@fortawesome/fontawesome-free-solid'
 import { auth, logout } from '../firebase';
 import { useNavigate, Link } from "react-router-dom"
 import cover from "../img/testcover.jpg"
@@ -60,13 +60,13 @@ export default function Profile() {
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                        <Nav.Link eventKey="Profile" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                        <Nav.Link href="/profile" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="Settings"><FontAwesomeIcon icon={faSlidersH}/> Settings</Nav.Link>
+                        <Nav.Link  href="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
                     </Nav.Item>
                         <Nav.Item>
                     </Nav.Item>
