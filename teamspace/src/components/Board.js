@@ -590,7 +590,7 @@ export default function Board() {
                                         <Form id="toDo" style={{display: "none"}}>
                                             <Form.Group>
                                                 <Row>
-                                                    <Col className="col-sm-8">
+                                                    <Col className="col-sm-8 mb-3">
                                                         <Form.Control id="toDoInput" type="text" placeholder="Enter item..." value={toDo} onInput= {(e) => setToDo(e.target.value)} required>
                                                         </Form.Control>
                                                     </Col>

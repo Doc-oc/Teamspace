@@ -87,7 +87,7 @@ export default function TextEditor(props){
 
   //connection to socket
   useEffect(() => {
-    const s = io("http://localhost:8080")
+    const s = io("http://192.168.0.108:8080")
     setSocket(s)
   
     return () => {
@@ -106,24 +106,25 @@ export default function TextEditor(props){
       if(typeof(fileContent) == "string")
       {
         quill.setText(fileContent)
+        quill.enable()
       } else {
         quill.setContents(fileContent)
+        quill.enable()
       }
-      quill.enable()
+      
       
     })
 
     socket.emit('get-document', files)
 
-    socket.emit('joinedUser', `${name} is here!`);
+    /*socket.emit('joinedUser', `${name} is here!`);
 
     socket.on('recieve-joined', function(data){
       setMessage(data)
       document.getElementById("joinedContainer").style.visibility = "visible"
-    })
-
+    })*/
     
-  }, [socket, quill, files])
+  }, [socket, quill, files.fileID])
 
   function saveFile(){
     socket.emit("save-document", quill.getContents())
@@ -144,7 +145,8 @@ export default function TextEditor(props){
 
   useEffect(() => {
     if(socket == null || quill == null) return 
-    const handler = (delta, oldDelta, source) =>{
+
+    const handler = delta =>{
       quill.updateContents(delta)
     }
 

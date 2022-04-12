@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlidersH, faCheck, faUndoAlt, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus, faEye} from '@fortawesome/fontawesome-free-solid'
+import { faCog, faCheck, faUndoAlt, faClipboard, faUser, faSignOutAlt, faTrashAlt, faPlusCircle, faEdit, faArrowAltCircleLeft, faCalendarPlus, faEye} from '@fortawesome/fontawesome-free-solid'
 import { firebase, auth, logout, storage } from '../firebase';
 import { set } from "firebase/database";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -324,7 +324,6 @@ export default function Filespace() {
 
     function increaseCount(fileID, fileViews){
         db.ref(`boards/${boardID}/filespace/${id}/files/${fileID}/`).update({"fileViews": fileViews + 1})
-        
     }
 
     async function removeActivity(activityID){
@@ -355,7 +354,7 @@ export default function Filespace() {
                         <Nav.Link href="/" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="/settings"><FontAwesomeIcon icon={faSlidersH}/> Settings</Nav.Link>
+                        <Nav.Link href="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
                     </Nav.Item>
                         <Nav.Item>
                     </Nav.Item>
@@ -406,13 +405,13 @@ export default function Filespace() {
                                 <div>
                                     <div id="filespaceHeader">
                                         <h5>{fs.filespaceName}</h5> 
-                                        <p>{fs.filespaceDesc}</p>
+                                        <p style={{color: "grey", fontSize: "12px"}}>{fs.filespaceDesc}</p>
                                     </div>
 
                                     <div id="editFilespace" style={{display: "none"}}>
                                         <Form >
                                         <Form.Group id="fileName">
-                                            <Form.Control type="text" value={filespaceHeader} onInput={(e) => setFilespaceHeader(e.target.value)} required/>
+                                            <Form.Control className="mb-3" type="text" value={filespaceHeader} onInput={(e) => setFilespaceHeader(e.target.value)} required/>
                                         </Form.Group>
                                         <Form.Group className="mb-3" controlId="boardDesc">
                                             <Form.Control as="textarea" value={filespaceDesc} onInput={(e) => setFilespaceDesc(e.target.value)} rows={3} />
@@ -494,7 +493,7 @@ export default function Filespace() {
                                     <span id="deleteButton" onClick={() => deleteFile(file.id, file.fileName)} style={{textAlign: "right", margin: 5, fontSize: "16px"}}><FontAwesomeIcon display={display} icon={faTrashAlt}/></span>
                                     <Card.Body style={{backgroundColor: "white", borderTopLeftRadius: 15, borderTopRightRadius: 15}}></Card.Body>
                                     <Link to={{pathname: `/texteditor/${boardID}/${id}/${file.id}`, state:{boardID: boardID, id: id, fileID: file.id}}}  style={{textDecoration: 'none', color: "black"}} style={{textDecoration: 'none', color: "black"}}>
-                                        <Card.Footer onClick={() => increaseCount(file.id, file.fileViews)}>
+                                        <Card.Footer id="fileCardFooter" onClick={() => increaseCount(file.id, file.fileViews)}>
                                             {file.fileName}  <b style={{fontSize: "8px", marginLeft: "8px"}}><FontAwesomeIcon style={{fontSize: "8px", marginLeft: "5px"}} icon={faEye}/> {file.fileViews}</b>
                                         </Card.Footer>
                                     </Link>
