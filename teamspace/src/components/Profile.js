@@ -36,10 +36,14 @@ export default function Profile() {
     }
 
     function editDetails(){
+        document.getElementById("nameDisplay").style.display ="block"
+        document.getElementById("editNameForm").style.display = "none"
         
     }
 
-    function deleteAccount(){
+    function editName(){
+        document.getElementById("nameDisplay").style.display ="none"
+        document.getElementById("editNameForm").style.display = "block"
 
     }
 
@@ -96,37 +100,24 @@ export default function Profile() {
                             <Col className="col-sm-2" style={{marginTop: "40px", fontSize: "10px"}}>
                             </Col>
                             <Col className="col-sm-3">
-                                <h5>{name} <i style={{fontSize: "10px"}} id="editDetailsButton" onClick={() => setEditModal(true)}><FontAwesomeIcon style={{fontSize: "14px", marginLeft: "10px"}} icon={faPencilAlt} />  Edit Details</i></h5>
+                                <h5 id="nameDisplay">{name} <i style={{fontSize: "10px"}} id="editDetailsButton" onClick={() => editName()}><FontAwesomeIcon style={{fontSize: "14px", marginLeft: "10px"}} icon={faPencilAlt} />  Edit Name</i></h5>
+                                <Form id="editNameForm" style={{display: "none"}}>
+                                    <Form.Group id="changeName">
+                                        <Row>
+                                            <Col sm={8}>
+                                                <Form.Control type="text" value={name} onInput={(e) => setNewName(e.target.value)} required />
+                                            </Col>
+                                            <Col sm={3}>
+                                                <Button className="mt-1" style={{fontSize: "12px"}} onClick={() => editDetails()} >Save</Button>
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
+                                </Form>
                             </Col>
                         </Row>
 
-                        <Modal size="lg" show={editModal} onHide={() => setEditModal(false)} aria-labelledby="changeDetails">
-                            <Modal.Header closeButton>
-                                <Modal.Title id="changeDetails">
-                                Change Details
-                                </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <Form>
-                                <Form.Group id="changeName">
-                                    <Form.Label>Change Name</Form.Label>
-                                    <Form.Control type="text" value={name} onInput={(e) => setNewName(e.target.value)} required />
-                                </Form.Group>
-                                <Form.Group id="changeEmail">
-                                    <Form.Label>Change Email</Form.Label>
-                                    <Form.Control type="text" value={email} onInput={(e) => setNewEmail(e.target.value)} required />
-                                </Form.Group>
-                                <Form.Group id="delete" style={{marginTop: "20px"}}>
-                                    <Form.Label>Delete Account</Form.Label>
-                                    <br></br>
-                                    <Button style={{backgroundColor: "red", border: 0}}onClick={() => deleteAccount()} >Delete</Button>
-                                </Form.Group>
-                                </Form>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button onClick={() => editDetails()} >Save</Button>
-                            </Modal.Footer>
-                        </Modal>
+                        
+    
 
                         <Row>
                             <Col className="co"></Col>

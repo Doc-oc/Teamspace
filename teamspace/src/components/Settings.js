@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown, Accordion} from 'react-bootstrap';
+import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown, Accordion, Tab, ListGroup} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
@@ -30,6 +30,10 @@ export default function Settings() {
 
 
   const uid = auth.currentUser.uid;
+  const [email, setEmail] = useState(auth.currentUser.email)
+  const [newPassword, setNewPassword] = useState();
+  const [oldPassword, setOldPassword] = useState();
+  const [newPassConfirm, setNewPassConfirm] = useState();
 
   const dbRef = db.ref(`boards/`);
 
@@ -113,6 +117,14 @@ export default function Settings() {
     })
   }
 
+  async function handleNewEmail(){
+
+  }
+
+  async function handleNewPass(){
+
+  }
+
   return (
 
     <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -159,38 +171,108 @@ export default function Settings() {
             <Accordion>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>About</Accordion.Header>
-                    <Accordion.Body>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                    est laborum.
+                    <Accordion.Body style={{fontSize: "11px" , textAlign: "Left", maxHeight: "200px", overflowY: "scroll"}}>
+                    The breakout of COVID-19 has forced many workers and students to relocate from their traditional work or college environments to a workspace at home which can be unsuitable to many individuals. As explored by a lot of research, this massive change 
+                    from work environments to virtual environments due to COVID-19 has dealt a big blow to collaboration among teams. Collaboration among teams is key to delivering goals and meeting deadlines.
+                    The virtual environment makes it difficult to achieve this effectively as tools can be overly complicated or simply don’t have good enough team features.
+                    <br></br>
+                    <br></br>
+                    Teamspace is a web application that is designed to improve the online experience when working in a team. Teamspace allows users to store and share team related files in an organised manner while being able to view, edit or delete files at the same time in real time.
+                    The overall aim of this project is to provide a platform that improves the online collaboration experience for a team that needs to store and work on files together.
+                    The name of this Web app Teamspace, comes from having a space for a team to collaborate in. The tools team choose are a major part of improving the experience.
+
+
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
                     <Accordion.Header>Account</Accordion.Header>
-                    <Accordion.Body>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                    est laborum.
+                    <Accordion.Body style={{fontSize: "11px" , textAlign: "Left", maxHeight: "200px", overflowY: "scroll"}}>
+                        <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+                            <Row>
+                                <Col sm={4}>
+                                <ListGroup>
+                                    <ListGroup.Item action href="#link1">
+                                        Change Email
+                                    </ListGroup.Item>
+                                    <ListGroup.Item action href="#link2">
+                                        Change Password
+                                    </ListGroup.Item>
+                                    <ListGroup.Item action href="#link3">
+                                        Delete Account
+                                    </ListGroup.Item>
+                                </ListGroup>
+                                </Col>
+                                <Col sm={8}>
+                                <Tab.Content>
+                                    <Tab.Pane eventKey="#link1">
+                                        <Form >
+                                            <Form.Group className="mb-3" controlId="newEmail">
+                                                <Form.Label>Enter New Email:</Form.Label>
+                                                <Form.Control style={{fontSize: "12px"}} className="mb-3" type="text" value={email} onInput={(e) => setEmail(e.target.value)} required/>
+                                            </Form.Group>
+                                            <Button id="formButton" style={{textAlign: "right"}} onClick={() => handleNewEmail()} >Save Email</Button>
+                                        </Form>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="#link2">
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="newEmail">
+                                                <Form.Label>Enter Old Password: </Form.Label>
+                                                <Form.Control style={{fontSize: "12px"}} className="mb-3" type="text"  onInput={(e) => setOldPassword(e.target.value)} required/>
+                                                <Form.Label>Enter New Password: </Form.Label>
+                                                <Form.Control style={{fontSize: "12px"}} className="mb-3" type="text"  onInput={(e) => setNewPassword(e.target.value)} required/>
+                                            </Form.Group>
+                                            <Button id="formButton" style={{textAlign: "right"}} onClick={() => handleNewPass()} >Change Password</Button>
+                                        </Form>
+                                    </Tab.Pane>
+                                    <Tab.Pane eventKey="#link3">
+                                        <Form>
+                                            <Form.Label>Enter phrase to delete account: <i style={{color: "grey"}}>Delete Teamspace Account</i> </Form.Label>
+                                            <Form.Control style={{fontSize: "12px"}}className="mb-3" type="text"  onInput={(e) => setOldPassword(e.target.value)} required/>
+                                            <Button style={{color: "white", backgroundColor: "red", fontSize:"12px", border: 0}}><FontAwesomeIcon icon={faTrashAlt}/> Delete Account</Button>
+                                        </Form>
+                                    </Tab.Pane>
+                                </Tab.Content>
+                                </Col>
+                            </Row>
+                        </Tab.Container>
                     </Accordion.Body>
                 </Accordion.Item>
-                <Accordion.Item eventKey="2">
+                <Accordion.Item eventKey="2" >
                     <Accordion.Header>Help</Accordion.Header>
-                    <Accordion.Body>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                    est laborum.
+                    <Accordion.Body style={{fontSize: "11px" , textAlign: "Left", maxHeight: "200px", overflowY: "scroll"}}>
+                    <b>What is a Team Board?</b>
+                    <p>A team board is used to store and manage team related files using Filespaces. It is aimed to encourage users to stay organised and keep all team related files 
+                        on the same platform that is accessible to all team members. Team boards are invite only. Users can manage tasks using the minimal to-do list feature
+                    </p>
+                    
+                    <br></br>
+                    <b>What is a Filespace?</b>
+                    <p>A filespace is essentially a space for users files. It acts as a folder inside of the team boards. Filespaces are used to encourage
+                        users to seperate their files into appropriate folders so they are easy accessible and easier to find. For example one filespace could be for UI/UX, another 
+                        could be for the marketing team etc..
+                    </p>
+                    <br></br>
+                    <b>How can I collaborate with team members on a file?</b>
+                    <p>It is as simple as joining the same file at the same time. Once on the file begin typing and the other user(s) that are present in the file
+                        can see what is being typed. Once the file is saved it is saved for all users.
+                    </p>
+                    <br></br>
+                    <b>How do I create a Team board?</b>
+                    <p>Any user can create a team board for their team. It is as simple as selecting the "New" button that is located on the home page for the users boards
+                        . This will then prompt the user to enter in the board details into a form, once the form is completed just select create board. 
+                    </p>
+                    <br></br>
+                    <b>What is the point of choosing a Board Color?</b>
+                    <p>The idea of the board theme color is so that users can colour coordinate their boards. Users can label their boards by colour. For example
+                        all boards related to work can be green, while all personal boards can be blue etc..
+                    </p>
+                    <b>Can a another user view my profile?</b>
+                    <p>In the current version of Teamspace, only a user can view their own profile, other members of teamspace, do not have the capability to 
+                        view a another users profile. This may be changed and added in future.
+                    </p>
+
+
+                    
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="3">
