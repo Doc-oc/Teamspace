@@ -5,6 +5,37 @@ How to Run Code
 
 ## Important to change URL to Network Address if using two seperate machines to test
 ## Localhost is fine for testing on single machine
+Ensure both client and server are allowing access from the same URL that is being used to access Teamspace eg. localhost or network IP
+
+Lines of code that set connections on client and server
+
+Client:
+```
+    const s = io("http://192.168.0.108:8080") 
+
+```
+or
+```
+    const s = io("http://localhost:8080")
+    
+```
+Server: 
+```
+   cors: {
+    origin: 'http://192.168.0.108:3000',
+    methods: ['GET', 'POST'],
+  }
+
+```
+or 
+
+```
+cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  }
+
+```
 
 Download or Clone repository
 
