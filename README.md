@@ -79,6 +79,8 @@ npm start
   } 
   ```
 
+If page doesnt load, enter URL localhost:3000/login where you will be presented with login form.
+
 
 To run Teamspace server: 
 
