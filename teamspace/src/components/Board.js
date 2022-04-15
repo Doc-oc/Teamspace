@@ -329,6 +329,14 @@ export default function Board() {
 
     }
 
+    async function removeActivity(activityID){
+        await dbRecent.child(activityID).remove();
+    }
+
+    async function deleteFilespace(id){
+        await dbFilespace.child(id).remove();
+    }
+
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -443,7 +451,7 @@ export default function Board() {
                                         ...
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu   style={{fontSize: "10px", minWidth: "50px"}}>
-                                        <Dropdown.Item onClick={() => deleteBoard()}><FontAwesomeIcon icon={faTrashAlt}/> Delete</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => deleteFilespace(fs.id)}><FontAwesomeIcon icon={faTrashAlt}/> Delete</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>
