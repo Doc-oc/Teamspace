@@ -335,7 +335,14 @@ export default function Filespace() {
     }
 
     async function createNewFile(){
-        setCreateModal(false)
+        const newFile = {
+            fileName: newFileName,
+            fileURL: null,
+            fileData: "",
+            fileViews: 0
+        }
+        await dbFiles.push(newFile);
+        setCreateModal(false);
     }
 
     return (
