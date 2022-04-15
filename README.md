@@ -8,7 +8,9 @@ Download or Clone repository
 To Run Teamspace Front End:
 
 cd teamspace
+
 npm install 
+
 npm start
 
  ```json
@@ -81,7 +83,9 @@ npm start
 To run Teamspace server: 
 
 cd server
+
 npm install
+
 nodemon server.js / npm run devStart
 
 ```json
