@@ -3,6 +3,9 @@ Teamspace is a project for my final year dissertation. It is designed to improve
 
 How to Run Code 
 
+##Important to change URL to Network Address if using two seperate machines to test
+##Localhost is fine for testing on single machine
+
 Download or Clone repository
 
 To Run Teamspace Front End:
