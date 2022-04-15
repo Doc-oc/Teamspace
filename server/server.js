@@ -41,10 +41,10 @@ io.on("connection", socket => {
       socket.broadcast.to(file.file).emit("recieve-changes", delta)
     })
 
-    /*socket.on('joinedUser', data => {
+    socket.on('joinedUser', data => {
       //socket.broadcast.emit(message);
       socket.broadcast.emit("recieve-joined", data)
-    })*/ 
+    })
   
     socket.on("save-document", async data => {
       db.ref(`boards/${file.board}/filespace/${file.filespace}/files/${file.file}`).update({fileData: data});

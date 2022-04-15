@@ -117,12 +117,12 @@ export default function TextEditor(props){
 
     socket.emit('get-document', files)
 
-    /*socket.emit('joinedUser', `${name} is here!`);
+    socket.emit('joinedUser', `${name} is here!`);
 
     socket.on('recieve-joined', function(data){
       setMessage(data)
       document.getElementById("joinedContainer").style.visibility = "visible"
-    })*/
+    })
     
   }, [socket, quill, files.fileID])
 
