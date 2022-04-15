@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 //import { AuthProvider, useAuth } from "../context/AuthContext";
 import Signup from "./Signup";
-import { BrowserRouter, Routes, Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useNavigate} from 'react-router-dom'
 import Home from "./Home"
 import Login from "./Login"
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -40,8 +40,10 @@ function App() {
         <div className="w-100">
 
           <BrowserRouter> 
+          
           {user == null? 
               <Routes>
+
                 <Route path="/login" element={<Login/>} />
                 <Route path="/signup" element={<Signup />} />
               </Routes>
@@ -53,6 +55,7 @@ function App() {
                 <Route path="texteditor/:boardID/:id/:fileID" element={<TextEditor />}/>
                 <Route path="/profile" element={<Profile />}/>
                 <Route path="/settings" element = {<Settings />}/>
+                <Route path="/*" element={<h1>404: Page not Found</h1>} />
               </Routes>
           }
           </BrowserRouter>

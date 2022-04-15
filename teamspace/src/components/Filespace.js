@@ -334,7 +334,7 @@ export default function Filespace() {
 
     }
 
-    async function createNewFile(){
+    /*async function createNewFile(){
         const newFile = {
             fileName: newFileName,
             fileURL: null,
@@ -343,7 +343,7 @@ export default function Filespace() {
         }
         await dbFiles.push(newFile);
         setCreateModal(false);
-    }
+    }*/
 
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
@@ -477,14 +477,13 @@ export default function Filespace() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={() => setModal(true)}>Upload</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setCreateModal(true)}>Create New</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
                 </Row>
                 
 
-                <Modal size="md" show={createModal} onHide={() => setCreateModal(false)} aria-labelledby="uploadFile">
+                {/*<Modal size="md" show={createModal} onHide={() => setCreateModal(false)} aria-labelledby="uploadFile">
                   <Modal.Header closeButton>
                     <Modal.Title id="newFileTitle">
                         File Name
@@ -501,7 +500,7 @@ export default function Filespace() {
                     <Modal.Footer>
                         <Button type="submit" onClick={() => createNewFile()}>Create</Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal>*/}
 
                 <Row id="displayFile" style={{marginLeft: "10px"}}>
                     {search.length > 0?
