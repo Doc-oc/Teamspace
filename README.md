@@ -11,7 +11,8 @@ cd teamspace
 npm install 
 npm start
 
-  "dependencies": {
+ ```json
+ "dependencies": {
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
     "@fortawesome/fontawesome": "^1.1.8",
@@ -73,7 +74,8 @@ npm start
     "enzyme-adapter-react-16": "^1.15.6",
     "jest": "^27.5.1",
     "react-test-renderer": "^18.0.0"
-  }
+  } 
+  ```
 
 
 To run Teamspace server: 
@@ -82,6 +84,7 @@ cd server
 npm install
 nodemon server.js / npm run devStart
 
+```json
 {
   "name": "server",
   "version": "1.0.0",
@@ -101,5 +104,6 @@ nodemon server.js / npm run devStart
     "socket.io": "^4.4.1"
   }
 }
+```
 
 
