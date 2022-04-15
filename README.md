@@ -7,11 +7,11 @@ Download or Clone repository
 
 To Run Teamspace Front End:
 
-cd teamspace
+```cd teamspace```
 
-npm install 
+```npm install ```
 
-npm start
+```npm start```
 
  ```json
  "dependencies": {
@@ -84,11 +84,11 @@ If page doesnt load, enter URL localhost:3000/login where you will be presented 
 
 To run Teamspace server: 
 
-cd server
+```cd server```
 
-npm install
+```npm install```
 
-nodemon server.js / npm run devStart
+```nodemon server.js / npm run devStart```
 
 ```json
 {
