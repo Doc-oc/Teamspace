@@ -112,7 +112,6 @@ export default function TextEditor(props){
         quill.enable()
       }
       
-      
     })
 
     socket.emit('get-document', files)
@@ -126,16 +125,16 @@ export default function TextEditor(props){
     
   }, [socket, quill, files.fileID])
 
-  function saveFile(){
+  function saveFile(editedFileName){
     socket.emit("save-document", quill.getContents())
-    updateActivity()
+    updateActivity(editedFileName)
   }
 
-  async function updateActivity(){
+  async function updateActivity(editedFileName){
     //we every time we save we want to add edit
     // file name, user, edit
     const recentActivity = {
-      fileName,
+      fileName: editedFileName,
       user: name,
       activity: "Edited"
     }
@@ -215,7 +214,7 @@ export default function TextEditor(props){
                       <h5 style={{textAlign: "center", padding: "10px"}}>{file.fileName}</h5>
                     </Col>
                     <Col className="col-sm-1" style={{marginLeft: "80px"}}>
-                      <Button className="shadow" id="textButtons" onClick={() => saveFile()}><FontAwesomeIcon icon={faSave}/> Save</Button>
+                      <Button className="shadow" id="textButtons" onClick={() => saveFile(file.fileName)}><FontAwesomeIcon icon={faSave}/> Save</Button>
                     </Col>
                   </Row>
                 </div>
