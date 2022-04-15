@@ -61,6 +61,9 @@ export default function Filespace() {
 
     const [count, setCount] = useState(0)
 
+    const [createModal, setCreateModal] = useState(false);
+    const [newFileName, setNewFileName] = useState();
+
     useEffect(() => {
         dbFilespace.on("value", (snapshot)=>{
 
@@ -331,6 +334,17 @@ export default function Filespace() {
 
     }
 
+    async function createNewFile(){
+        const newFile = {
+            fileName: newFileName,
+            fileURL: null,
+            fileData: "",
+            fileViews: 0
+        }
+        await dbFiles.push(newFile);
+        setCreateModal(false);
+    }
+
     return (
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
@@ -463,12 +477,31 @@ export default function Filespace() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={() => setModal(true)}>Upload</Dropdown.Item>
-                                <Dropdown.Item href="#">Create New</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setCreateModal(true)}>Create New</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
                 </Row>
                 
+
+                <Modal size="md" show={createModal} onHide={() => setCreateModal(false)} aria-labelledby="uploadFile">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="newFileTitle">
+                        File Name
+                    </Modal.Title>
+                  </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group id="newFileName">
+                                <Form.Control type="text" value={newFileName} onInput={(e) => setNewFileName(e.target.value)} required />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    
+                    <Modal.Footer>
+                        <Button type="submit" onClick={() => createNewFile()}>Create</Button>
+                    </Modal.Footer>
+                </Modal>
 
                 <Row id="displayFile" style={{marginLeft: "10px"}}>
                     {search.length > 0?
