@@ -3,7 +3,7 @@ import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown} from
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 //import { useAuth } from "../context/AuthContext"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, Navigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faCog, faPlusCircle, faTrashAlt } from '@fortawesome/fontawesome-free-solid'
 import '../styles/home.css'
@@ -114,7 +114,6 @@ export default function Home() {
   }
 
   return (
-
     <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
         <Row>  
           <Col className="col-sm-2">
@@ -130,14 +129,14 @@ export default function Home() {
                 <br></br>
                 <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                 <div className="sidebar-sticky"></div>
-                  <Nav.Item>
-                  <Nav.Link href="/profile"><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                  <Nav.Item >
+                  <Nav.Link><Link id ="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link href="/" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
+                    <Nav.Link to={"/"} className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id ="navlink" to={"/profile"} style={{textDecoration: 'none'}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link  href="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
+                    <Nav.Link to={"/settings"}><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
                   </Nav.Item>
                     <Nav.Item>
                   </Nav.Item>

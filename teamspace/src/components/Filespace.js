@@ -362,13 +362,13 @@ export default function Filespace() {
                     <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                    <Nav.Link href="/profile" ><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                    <Nav.Link><Link id="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="/" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
+                        <Nav.Link className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id="navlink" to={"/"}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
+                        <Nav.Link><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
                     </Nav.Item>
                         <Nav.Item>
                     </Nav.Item>

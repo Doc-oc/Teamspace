@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
@@ -9,6 +9,7 @@ import { useNavigate, Link } from "react-router-dom"
 import cover from "../img/testcover.jpg"
 import '../styles/profile.css';
 import moment from 'moment-timezone';
+import {updateProfile } from "firebase/auth";
 
 
 
@@ -36,12 +37,17 @@ export default function Profile() {
     }
 
     function editDetails(){
-        document.getElementById("nameDisplay").style.display ="block"
-        document.getElementById("editNameForm").style.display = "none"
-        
+        updateProfile(auth.currentUser, {
+            displayName: newName, 
+          }).then(() => {
+            window.location.reload()
+
+            
+          })
     }
 
     function editName(){
+        setNewName(name)
         document.getElementById("nameDisplay").style.display ="none"
         document.getElementById("editNameForm").style.display = "block"
 
@@ -61,16 +67,16 @@ export default function Profile() {
                     {error && <Alert variant="danger">{error}</Alert>}
                     {name}
                     <br></br>
-                    <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
+                    <Nav className="col-md-12 d-none d-md-block mb-5 sidebar text-center navbar-custom"  style={{marginTop: "53px"}} activeKey="/home">
                     <div className="sidebar-sticky"></div>
                     <Nav.Item>
-                        <Nav.Link href="/profile" className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><FontAwesomeIcon icon={faUser}/> Profile</Nav.Link>
+                        <Nav.Link className="rounded" style={{marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link href="/"><FontAwesomeIcon icon={faClipboard}/>  Boards</Nav.Link>
+                        <Nav.Link><Link id="navlink" to={"/"}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link  href="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Nav.Link>
+                        <Nav.Link ><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
                     </Nav.Item>
                         <Nav.Item>
                     </Nav.Item>
@@ -105,7 +111,7 @@ export default function Profile() {
                                     <Form.Group id="changeName">
                                         <Row>
                                             <Col sm={8}>
-                                                <Form.Control type="text" value={name} onInput={(e) => setNewName(e.target.value)} required />
+                                                <Form.Control type="text" value={newName} onInput={(e) => setNewName(e.target.value)} required />
                                             </Col>
                                             <Col sm={3}>
                                                 <Button className="mt-1" style={{fontSize: "12px"}} onClick={() => editDetails()} >Save</Button>

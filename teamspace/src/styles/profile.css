@@ -17,6 +17,14 @@
     -ms-transition: all 1s ease;
     transition: all 1s ease;
 }
+#navlink {
+    text-decoration: none;
+    color: black;
+}
+
+#navlink:hover {
+    color: #4176FF
+}
 
 #userDetails{
     border: 1px solid lightgray;

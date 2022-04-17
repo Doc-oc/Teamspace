@@ -109,3 +109,11 @@
 #fileCardFooter:hover {
     color: #4176FF;
 }
+#navlink {
+    text-decoration: none;
+    color: black;
+}
+
+#navlink:hover {
+    color: #4176FF
+}
