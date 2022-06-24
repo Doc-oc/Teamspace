@@ -15,6 +15,7 @@ import { faSave, faWindowClose, faArrowAltCircleLeft} from '@fortawesome/fontawe
 import '../styles/texteditor.css'
 import { io } from 'socket.io-client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Sidebar from "./EditorSideBar"
 
 const SAVE_INTERVAL_MS = 5000
 const TOOLBAR_OPTIONS = [
@@ -87,7 +88,7 @@ export default function TextEditor(props){
 
   //connection to socket
   useEffect(() => {
-    const s = io("http://192.168.0.108:8080")
+    const s = io("http://localhost:8080")
     setSocket(s)
   
     return () => {
@@ -121,6 +122,10 @@ export default function TextEditor(props){
     socket.on('recieve-joined', function(data){
       setMessage(data)
       document.getElementById("joinedContainer").style.visibility = "visible"
+      setTimeout(function(){
+        document.getElementById("joinedContainer").style.visibility = "hidden"
+
+      }, 5000)
     })
     
   }, [socket, quill, files.fileID])
@@ -194,6 +199,7 @@ export default function TextEditor(props){
   }
 
     return (
+
       <Container>
           {fileData == null? <p>No file Present</p>:
             fileData.map(function(file){
@@ -221,9 +227,18 @@ export default function TextEditor(props){
               )
             })
           }
-        <div className="container" ref={wrapperRef}>
-        </div>
+          <Row>
+            <Col className="col-sm-1">
+              <Sidebar />
+            </Col>
+            <Col className="col-sm-10">
+            <div className="container" ref={wrapperRef}></div>
+            </Col>
+          </Row>
+
         </Container>
+
+
     )
 
 }

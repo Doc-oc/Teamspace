@@ -18,7 +18,7 @@ var db = admin.database();
 
 const io = require('socket.io')(8080, {
   cors: {
-    origin: 'http://192.168.0.108:3000',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
   }
   

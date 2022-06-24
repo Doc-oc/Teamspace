@@ -1,0 +1,69 @@
+/* FADE ANIMATIONS */
+.fade-enter {
+    opacity: 0;
+  }
+  
+  .fade-enter-active {
+    opacity: 1;
+    transition: opacity 400ms;
+  }
+  
+  .fade-exit {
+    opacity: 1;
+  }
+  
+  .fade-exit-active {
+    opacity: 0;
+    transition: opacity 400ms;
+  }
+  
+  /* SIDEBAR */
+  
+  .editorSidebarButton {
+    background: transparent;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 4px;
+    color: white;
+    transition: 0.3s linear;
+  }
+  
+  .editorSidebar {
+    min-width: 75px;
+    background: white;
+    border: 0.5px solid lightgray;
+    margin-top: 55px;
+
+    border-radius: 10px;
+    padding: 20px;
+    color: black;
+    transition: 0.4s ease-in;
+  }
+  
+  .editorSidebar-closed {
+    min-width: 40px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .editorSidebarListItem {
+    margin: 25px 10px;
+    height: 20px;
+  }
+
+  .editorSidebarListItem:hover {
+    cursor: pointer;
+    color:  #4176FF;
+  }
+  
+  .editorSidebarListItem span {
+    white-space: nowrap;
+  }
+  
+  .sidebarIcon {
+    margin: 0 15px 0 0;
+  }
+  
