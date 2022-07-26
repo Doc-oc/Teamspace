@@ -213,14 +213,14 @@ export default function TextEditor(props){
                   <Row className="text-center" style={{marginTop: "20px"}}>
                     <Col className="col-sm-1">
                       <Link to={{pathname: `/filespace/${boardID}/${id}`, state: {boardID: boardID, id: id}}}  style={{textDecoration: 'none', color: "black"}}>
-                        <p className="shadow rounded" id="backToButton"><FontAwesomeIcon icon={faArrowAltCircleLeft}/> Teamspace</p>
+                        <Button id="editorButtons"><FontAwesomeIcon icon={faArrowAltCircleLeft}/> Teamspace</Button>
                         </Link>
                     </Col>
                     <Col className="col-sm-9">
                       <h5 style={{textAlign: "center", padding: "10px"}}>{file.fileName}</h5>
                     </Col>
                     <Col className="col-sm-1" style={{marginLeft: "80px"}}>
-                      <Button className="shadow" id="textButtons" onClick={() => saveFile(file.fileName)}><FontAwesomeIcon icon={faSave}/> Save</Button>
+                      <Button id="editorButtons" onClick={() => saveFile(file.fileName)}><FontAwesomeIcon icon={faSave}/> Save</Button>
                     </Col>
                   </Row>
                 </div>

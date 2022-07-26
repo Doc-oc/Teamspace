@@ -13,7 +13,7 @@ import {
   faFileCirclePlus
 } from "@fortawesome/free-solid-svg-icons";
 import cx from "classnames";
-import editorSidebar from "../styles/editorSidebar.css"
+import "../styles/editorSidebar.css"
 
 const menuItems = [
   { title: "Add Note", icon: faStickyNote },
@@ -28,7 +28,7 @@ const Sidebar = () => {
 
   return (
     <div className="editorSidebar">
-      <ul>
+      <ul className="sideBarUL">
         {menuItems.map(item => (
           <li key={item.title}>
             <div className={"editorSidebarListItem"}>

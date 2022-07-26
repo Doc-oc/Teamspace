@@ -56,11 +56,19 @@
     }
 }
 
-#textButtons {
-    border: 0px;
+#editorButtons {
     font-size: 12px;
     background-color: white;
+    border-radius: 10px;
+    width: 120px;
+    padding: 10px;
+    border: 0.5px solid lightgray;
     color:black;
+}
+
+#editorButtons:hover {
+    color: #4176FF;
+    border: 0.5px solid #4176FF;
 }
 
 #joinedContainer {
@@ -84,13 +92,3 @@
 #xButton:hover {
     cursor: pointer;
 }
-
-#backToButton {
-    border: 0px;
-    font-size: 12px;
-    padding: 6px;
-    width: 100px;
-    background-color: white;
-    color:black;
-}
-
