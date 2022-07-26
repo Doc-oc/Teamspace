@@ -14,7 +14,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import cx from "classnames";
 import "../styles/editorSidebar.css"
-
 const menuItems = [
   { title: "Add Note", icon: faStickyNote },
   { title: "Users", icon: faUsers },

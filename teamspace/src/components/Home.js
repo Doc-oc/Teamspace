@@ -11,6 +11,7 @@ import { auth, logout, storage} from '../firebase';
 import db from '../firebase'
 import boardData from './Board';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import Sidebar from "./SideBar"
 
 
 export default function Home() {
@@ -65,20 +66,6 @@ export default function Home() {
 
   }, [])
 
-  async function handleLogout(e) {
-    e.preventDefault()
-    
-    setError("")
-
-    try {
-
-      await logout()
-      navigate("/login")
-    } catch {
-     
-      setError("Failed to log out")
-    }
-  }
 
   async function deleteBoard(id){
     db.ref(`boards/${id}`).remove()
@@ -101,54 +88,12 @@ export default function Home() {
           })
   }*/
   
-  function handleJoined(boardID){
-    db.ref(`boards/${boardID}/members/`).on("value", (snapshot)=>{
-        const membersFromDatabase = snapshot.val();
-  
-        const membersArray = [];
-        for(let id in membersFromDatabase){
-            membersArray.push({id, ...membersFromDatabase[id]});
-        }
-        setMembers(membersArray);
-    })
-  }
 
   return (
     <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
         <Row>  
           <Col className="col-sm-2">
-            <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
-              <Card.Body>
-              <Container>
-              <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
-                <br></br>
-                <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
-                <br></br>
-                {error && <Alert variant="danger">{error}</Alert>}
-                {name}
-                <br></br>
-                <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
-                <div className="sidebar-sticky"></div>
-                  <Nav.Item >
-                  <Nav.Link><Link id ="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link to={"/"} className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id ="navlink" to={"/profile"} style={{textDecoration: 'none'}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link to={"/settings"}><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
-                  </Nav.Item>
-                    <Nav.Item>
-                  </Nav.Item>
-                </Nav>
-              </Container>
-              </Card.Body>
-              <div className="w-100 text-center mt-2">
-                <Button className="logout mb-2" onClick={handleLogout}>
-                  <FontAwesomeIcon icon={faSignOutAlt}/> Log Out
-                </Button>
-              </div>
-          </Card> 
+            <Sidebar></Sidebar>
         </Col>
             <Col className="col-sm-10">
             <Card className="shadow" style={{minHeight: "660px", borderRadius: 15}}>

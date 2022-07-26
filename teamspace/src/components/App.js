@@ -17,8 +17,8 @@ function App() {
 
 
   const ProtectedRoute = props => {
+    
     const location = useLocation();
-  
     const [isLoggedIn, setIsLoggedIn] = useState(); // neither true nor false
   
     useEffect(() => {
