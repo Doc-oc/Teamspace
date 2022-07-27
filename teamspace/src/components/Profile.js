@@ -10,6 +10,7 @@ import cover from "../img/testcover.jpg"
 import '../styles/profile.css';
 import moment from 'moment-timezone';
 import {updateProfile } from "firebase/auth";
+import Sidebar from "./SideBar"
 
 
 
@@ -57,38 +58,7 @@ export default function Profile() {
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
         <Row>  
             <Col className="col-sm-2">
-                <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
-                <Card.Body>
-                <Container>
-                <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
-                    <br></br>
-                    <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
-                    <br></br>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    {name}
-                    <br></br>
-                    <Nav className="col-md-12 d-none d-md-block mb-5 sidebar text-center navbar-custom"  style={{marginTop: "53px"}} activeKey="/home">
-                    <div className="sidebar-sticky"></div>
-                    <Nav.Item>
-                        <Nav.Link className="rounded" style={{marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link><Link id="navlink" to={"/"}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link ><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
-                    </Nav.Item>
-                        <Nav.Item>
-                    </Nav.Item>
-                    </Nav>
-                </Container>
-                </Card.Body>
-                <div className="w-100 text-center mt-2">
-                    <Button className="logout mb-2" onClick={handleLogout}>
-                    <FontAwesomeIcon icon={faSignOutAlt}/> Log Out
-                    </Button>
-                </div>
-            </Card> 
+                <Sidebar />
             </Col>
 
 

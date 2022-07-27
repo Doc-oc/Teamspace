@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react"
 import {Button, Card, Form, Alert, Container, Navbar, Nav, Modal, Dropdown} from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
+
 //import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link, Navigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlidersH, faClipboard, faUser, faSignOutAlt, faCog, faPlusCircle, faTrashAlt } from '@fortawesome/fontawesome-free-solid'
 import { auth, logout, storage} from '../firebase';
+import "../styles/sidebar.css"
 
 
-function SideBar() 
-{
+function SideBar() {
+
     const [error, setError] = useState("")
     const name = auth.currentUser.displayName;
     const navigate = useNavigate()
+    const [isActive, setActive] = useState();
 
     async function handleLogout(e) {
         e.preventDefault()
@@ -28,9 +29,20 @@ function SideBar()
          
           setError("Failed to log out")
         }
-      }
+    }
 
-  return (
+    function navHighlight(navId){
+
+
+
+    document.getElementById(navId).style.color = "red";
+           
+
+
+        // style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}
+    }
+      
+    return (
     <>
         <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
             <Card.Body>
@@ -44,17 +56,15 @@ function SideBar()
                 <br></br>
                 <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
                 <div className="sidebar-sticky"></div>
-                <Nav.Item >
-                <Nav.Link><Link id ="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
+                <Nav.Item onClick = {() => navHighlight("navlinkProfile")}>
+                    <Nav.Link to={"/profile"}><Link id="navlinkProfile" to={"/profile"} style={{textDecoration: 'none', color: "black"}}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link to={"/"} className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id ="navlink" to={"/profile"} style={{textDecoration: 'none'}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
+                <Nav.Item onClick = {() => navHighlight("navlinkHome")}>
+                    <Nav.Link to={"/"} className="rounded" ><Link id ="navlinkHome" to={"/"} style={{textDecoration: 'none', color: "black"}}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link to={"/settings"}> <Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
-                </Nav.Item>
-                    <Nav.Item>
-                </Nav.Item>
+                <Nav.Item onClick = {() => navHighlight("navlinkSettings")}>
+                    <Nav.Link to={"/settings"}> <Link id="navlinkSettings" to={"/settings"} style={{textDecoration: 'none', color: "black"}}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
+                </Nav.Item >
                 </Nav>
             </Container>
             </Card.Body>

@@ -13,6 +13,7 @@ import db from '../firebase'
 import '../styles/filespace.css'
 import TextEditor from './TextEditor'
 import ReactTooltip from 'react-tooltip';
+import Sidebar from './SideBar'
 
 
 
@@ -349,38 +350,7 @@ export default function Filespace() {
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
             <Col className="col-sm-2">
-                <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
-                <Card.Body>
-                <Container>
-                <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
-                    <br></br>
-                    <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
-                    <br></br>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    {name}
-                    <br></br>
-                    <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
-                    <div className="sidebar-sticky"></div>
-                    <Nav.Item>
-                    <Nav.Link><Link id="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id="navlink" to={"/"}><FontAwesomeIcon icon={faClipboard}/>  Boards</Link></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
-                    </Nav.Item>
-                        <Nav.Item>
-                    </Nav.Item>
-                    </Nav>
-                </Container>
-                </Card.Body>
-                <div className="w-100 text-center mt-2">
-                    <Button className="logout mb-2" onClick={handleLogout}>
-                    <FontAwesomeIcon icon={faSignOutAlt}/> Log Out
-                    </Button>
-                </div>
-            </Card> 
+                <Sidebar />
             </Col>
                 
             <Col className="col-sm-7">

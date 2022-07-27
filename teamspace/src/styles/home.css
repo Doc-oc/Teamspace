@@ -17,14 +17,7 @@
     margin-top: 20px;
 }
 
-#navlink {
-    text-decoration: none;
-    color: black;
-}
 
-#navlink:hover {
-    color: #4176FF
-}
 
 #deleteBoard {
     font-size: "8px";
