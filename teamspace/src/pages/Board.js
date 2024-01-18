@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect} from "react"
 import {Button, Card, Form, Alert, Container,  Nav, Modal, Tab, Tabs, Dropdown} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -12,7 +12,7 @@ import '../styles/board.css';
 import { ref, set, get, child, orderByChild } from "firebase/database"
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import ReactTooltip from 'react-tooltip';
-
+import NavBar from '../components/NavBar';
 
 export default function Board() {
 
@@ -43,7 +43,7 @@ export default function Board() {
     //filespace
     const [filespaceName, setFilespaceName] = useState();
     const [filespaceDesc, setFilespaceDesc] = useState();
-    const [filespaceData, setFilespaceData] = useState();
+    const [filespaceData, setFilespaceData] = useState([]);
 
     //todolist
     const [toDo, setToDo] = useState();
@@ -54,12 +54,12 @@ export default function Board() {
     const [recentData, setRecentData] = useState();
     const [searchData, setSearchData] = useState()
 
-    const dbUsers = db.ref(`users/`);
-    const dbBoards = db.ref(`boards`);
+    const dbUsers = db.ref(`users/`)
+    const dbBoards = db.ref(`boards`)
     const dbFilespace = db.ref(`boards/${boardID}/filespace`)
     const dbListTodo = db.ref(`boards/${boardID}/boardList/todo`)
     const dbListComp = db.ref(`boards/${boardID}/boardList/completed`)
-    const dbMembers = db.ref(`boards/${boardID}/members`);
+    const dbMembers = db.ref(`boards/${boardID}/members`)
     const dbRecent = db.ref(`boards/${boardID}/recentActivity/`)
 
 
@@ -337,43 +337,11 @@ export default function Board() {
         await dbFilespace.child(id).remove();
     }
 
-    return (
+    return (    
         <Container fluid className="mt-3" style={{minHeight: "100vh"}}>
             <Row>  
             <Col className="col-sm-2">
-                <Card className="shadow text-center" style={{minHeight: "660px", borderRadius: 15}}>
-                <Card.Body>
-                <Container>
-                <h6 className="mb-5 mt-3" style={{color: "#4176FF"}}>Teamspace</h6>
-                    <br></br>
-                    <img src={auth.currentUser.photoURL} className="img-responsive w-50 mt-5 roundedCircle"></img>
-                    <br></br>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    {name}
-                    
-                    <br></br>
-                    <Nav className="col-md-12 d-none d-md-block mt-5 mb-5 sidebar text-center navbar-custom" activeKey="/home">
-                    <div className="sidebar-sticky"></div>
-                    <Nav.Item>
-                    <Nav.Link><Link id="navlink" to={"/profile"}><FontAwesomeIcon icon={faUser}/> Profile</Link></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link className="rounded" style={{marginTop: "5px", marginBottom: "5px", backgroundColor: "#eef2fd", color: "black", padding: 3}}><Link id="navlink" to={"/"}><FontAwesomeIcon icon={faClipboard} />  Boards</Link></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link><Link id="navlink" to={"/settings"}><FontAwesomeIcon icon={faCog}/> Settings</Link></Nav.Link>
-                    </Nav.Item>
-                        <Nav.Item>
-                    </Nav.Item>
-                    </Nav>
-                </Container>
-                </Card.Body>
-                <div className="w-100 text-center mt-2">
-                    <Button className="logout mb-2" onClick={handleLogout}>
-                    <FontAwesomeIcon icon={faSignOutAlt}/> Log Out
-                    </Button>
-                </div>
-            </Card> 
+                <NavBar />
             </Col>
             
             <Col className="col-sm-7">
@@ -438,9 +406,10 @@ export default function Board() {
                     </div>
                 </Row>
                 <Row >
-                    {filespaceData == null? <p>filespace is empty</p>
+                    {typeof filespaceData == null? <p>33xxw</p>
                     :
-                    filespaceData.map(function(fs){
+                    filespaceData?.map(function(fs){
+                        if(fs.id.length > 0){
                         return (
                             <div id="filespaceDiv">
                                 <Link to={{pathname: `/filespace/${boardID}/${fs.id}`, state: {boardID: boardID, id: fs.id}}}  style={{textDecoration: 'none', color: "black"}}>
@@ -454,8 +423,11 @@ export default function Board() {
                                         <Dropdown.Item onClick={() => deleteFilespace(fs.id)}><FontAwesomeIcon icon={faTrashAlt}/> Delete</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                            </div>
-                        )
+                            </div>  
+                        )}
+                        else {
+                            return (<p>sum, sum</p>)
+                        }
                     })
                     }
                 </Row>

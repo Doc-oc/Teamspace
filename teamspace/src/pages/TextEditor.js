@@ -15,7 +15,7 @@ import { faSave, faWindowClose, faArrowAltCircleLeft} from '@fortawesome/fontawe
 import '../styles/texteditor.css'
 import { io } from 'socket.io-client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Sidebar from "./EditorSideBar"
+import Sidebar from "../components/EditorSideBar"
 
 const SAVE_INTERVAL_MS = 5000
 const TOOLBAR_OPTIONS = [
@@ -130,7 +130,7 @@ export default function TextEditor(props){
     
   }, [socket, quill, files.fileID])
 
-  function saveFile(editedFileName){
+  async function saveFile(editedFileName){
     socket.emit("save-document", quill.getContents())
     updateActivity(editedFileName)
   }

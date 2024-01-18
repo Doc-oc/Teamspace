@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from "react";
 //import { AuthProvider, useAuth } from "../context/AuthContext";
-import Signup from "./Signup";
+import Signup from "./pages/Signup";
 import { BrowserRouter, Routes, Route, useNavigate, Link, useLocation, Router, Navigate, Outlet} from 'react-router-dom'
-import Home from "./Home"
-import Login from "./Login"
+import Home from "./pages/Home"
+import Login from "./pages/Login"
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from "../firebase";
-import Board from "./Board";
-import Filespace from "./Filespace";
-import TextEditor from "./TextEditor";
-import Profile from "./Profile";
-import Settings from "./Settings"
+import { auth } from "./firebase";
+import Board from "./pages/Board";
+import Filespace from "./pages/Filespace";
+import TextEditor from "./pages/TextEditor";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings"
 
 
 function App() {

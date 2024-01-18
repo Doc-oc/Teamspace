@@ -117,3 +117,36 @@
 #navlink:hover {
     color: #4176FF
 }
+
+@media screen and (max-width: 480px){
+    #naviBar {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    #boardHeader {
+        width: 200px;
+    }
+
+    #filespaceHeader {
+        width: 350px;
+    }
+
+    #backButton {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    #editFilespaceButton {
+        visibility: hidden;
+        position: absolute; 
+    }
+
+    #hamburger {
+        visibility: "visible";
+    }
+}
+
+@media screen and (max-width: 768px){
+
+}

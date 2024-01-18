@@ -11,6 +11,9 @@ import { auth, logout, storage} from '../firebase';
 import db from '../firebase'
 import boardData from './Board';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import empty from '../img/empty.png';
+
+
 
 
 export default function Home() {
@@ -256,8 +259,11 @@ export default function Home() {
                   </div>
                 </Row>
                 <Row>
-                {boards == null?
-                    <p className="" style={{textAlign: "center", verticalAlign: "middle"}}>You are not a member of any boards.</p>
+                {boards == null? 
+                    <Col className="col-sm-12 mt-2 ml-3 text-center" style={{opacity: "40%", fontSize: "10px"}}>
+                    <img src={empty}></img>
+                    <p>You have not joined any boards</p>
+                    </Col>
                   :
                     boards.map(function (board) {
                         if(board.members != null){
